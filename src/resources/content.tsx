@@ -1,22 +1,22 @@
-import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
+import type { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
 import { Line, Row, Text } from "@once-ui-system/core";
 
 const person: Person = {
-  firstName: "Selene",
-  lastName: "Yu",
-  name: `Selene Yu`,
-  role: "Design Engineer",
+  firstName: "Talal",
+  lastName: "Kadli",
+  name: "Talal Kadli",
+  role: "Student",
   avatar: "/images/avatar.jpg",
   email: "example@gmail.com",
-  location: "Asia/Jakarta", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
-  languages: ["English", "Bahasa"], // optional: Leave the array empty if you don't want to display languages
+  location: "Asia/Dubai", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
+  languages: ["English", "Arabic"], // optional: Leave the array empty if you don't want to display languages
   locale: "en", // BCP 47 language tag for the HTML lang attribute, e.g., 'en', 'ja', 'zh-TW'
 };
 
 const newsletter: Newsletter = {
-  display: true,
+  display: false, // set to false to hide this section
   title: <>Subscribe to {person.firstName}'s Newsletter</>,
-  description: <>My weekly newsletter about creativity and engineering</>,
+  description: <>Nothing here</>,
 };
 
 const social: Social = [
@@ -26,14 +26,14 @@ const social: Social = [
   {
     name: "GitHub",
     icon: "github",
-    link: "https://github.com/once-ui-system",
+    link: "https://github.com/nousernameavailable1",
     essential: true,
   },
   {
     name: "LinkedIn",
     icon: "linkedin",
     link: "https://www.linkedin.com/company/once-ui/",
-    essential: true,
+    essential: false,
   },
   {
     name: "Instagram",
@@ -45,7 +45,7 @@ const social: Social = [
     name: "Threads",
     icon: "threads",
     link: "https://www.threads.com/@once_ui",
-    essential: true,
+    essential: false,
   },
   {
     name: "Email",
@@ -61,12 +61,12 @@ const home: Home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Building bridges between design and code</>,
+  headline: <>Doomscrolling reddit...</>,
   featured: {
     display: true,
     title: (
       <Row gap="12" vertical="center">
-        <strong className="ml-4">Once UI</strong>{" "}
+        <strong className="ml-4">Oracle cloud</strong>{" "}
         <Line background="brand-alpha-strong" vert height="20" />
         <Text marginRight="4" onBackground="brand-medium">
           Featured work
@@ -78,7 +78,7 @@ const home: Home = {
   subline: (
     <>
       I'm {person.firstName}, a {person.role.toLowerCase()} at{" "}
-      <Text as="span" size="xl" weight="strong">ONCE UI</Text>, where I craft intuitive <br /> user experiences. After hours, I build my own projects.
+      <Text as="span" size="xl" weight="strong">Al Diyafah</Text>, where I study. <br /> After hours, I do basically nothing.
     </>
   ),
 };
@@ -104,9 +104,7 @@ const about: About = {
     title: "Introduction",
     description: (
       <>
-        {person.firstName} is a {person.location.split("/")[1]?.replace("_", " ")}-based {person.role.toLowerCase()} with a passion for transforming complex challenges
-        into simple, elegant design solutions. Their work spans digital interfaces, interactive
-        experiences, and the convergence of design and technology.
+        {person.firstName} is a {person.location.split("/")[1]?.replace("_", " ")}-based {person.role.toLowerCase()} with a passion for being bored.
       </>
     ),
   },
@@ -115,18 +113,14 @@ const about: About = {
     title: "Work Experience",
     experiences: [
       {
-        company: "FLY",
-        timeframe: "2022 - Present",
-        role: "Senior Design Engineer",
+        company: "Modo technologies",
+        timeframe: "2026 - 2026",
+        role: "Intern",
         achievements: [
-          <>
-            Redesigned the UI/UX for the FLY platform, resulting in a 20% increase in user
-            engagement and 30% faster load times.
-          </>,
-          <>
-            Spearheaded the integration of AI tools into design workflows, enabling designers to
-            iterate 50% faster.
-          </>,
+          <span key="sales-or-something">Did some sales or something.</span>,
+          <span key="cold-mailing">
+            SpEarHeDead tHe UsE oF cOlD mAilInG aS a OpTIoN tO iNcREaSe CusTomEr bAsE.
+          </span>,
         ],
         images: [
           // optional: leave the array empty if you don't want to display images
@@ -139,18 +133,12 @@ const about: About = {
         ],
       },
       {
-        company: "Creativ3",
-        timeframe: "2018 - 2022",
-        role: "Lead Designer",
+        company: "-",
+        timeframe: "2008 - 2026",
+        role: "what exactly do you expect a child to be doing...",
         achievements: [
-          <>
-            Developed a design system that unified the brand across multiple platforms, improving
-            design consistency by 40%.
-          </>,
-          <>
-            Led a cross-functional team to launch a new product line, contributing to a 15% increase
-            in overall company revenue.
-          </>,
+          <span key="never-broken-bone">never broken a bone.</span>,
+          <span key="sleep-14-hours">slept for 14 hours in one day.</span>,
         ],
         images: [],
       },
@@ -161,12 +149,12 @@ const about: About = {
     title: "Studies",
     institutions: [
       {
-        name: "University of Jakarta",
-        description: <>Studied software engineering.</>,
+        name: "Al Diyafah High School",
+        description: <>High school qualifications, notably igcse and A-levels.</>,
       },
       {
-        name: "Build the Future",
-        description: <>Studied online marketing and personal branding.</>,
+        name: "Who can say....",
+        description: <>Inshallah...</>,
       },
     ],
   },
@@ -175,14 +163,14 @@ const about: About = {
     title: "Technical skills",
     skills: [
       {
-        title: "Figma",
+        title: "Oracle cloud infrastructure",
         description: (
-          <>Able to prototype in Figma with Once UI with unnatural speed.</>
+          <>Able to navigate oci interface and manage basic cloud resources.</>
         ),
         tags: [
           {
-            name: "Figma",
-            icon: "figma",
+            name: "OCI",
+            icon: "Oracle",
           },
         ],
         // optional: leave the array empty if you don't want to display images
@@ -202,22 +190,26 @@ const about: About = {
         ],
       },
       {
-        title: "Next.js",
+        title: "Linux server management",
         description: (
-          <>Building next gen apps with Next.js + Once UI + Supabase.</>
+          <>Maintaining and optimizing Linux servers for running vpns, private cloud, minecraft servers, website infrastructure and prob some more things i cant remember.</>
         ),
         tags: [
           {
-            name: "JavaScript",
-            icon: "javascript",
+            name: "Ubuntu",
+            icon: "ubuntu",
           },
           {
-            name: "Next.js",
-            icon: "nextjs",
+            name: "OpenVPN",
+            icon: "openvpn",
           },
           {
-            name: "Supabase",
-            icon: "supabase",
+            name: "Wireguard",
+            icon: "wireguard",
+          },
+          {
+            name: "Seafile",
+            icon: "seafile",
           },
         ],
         // optional: leave the array empty if you don't want to display images
@@ -237,7 +229,7 @@ const about: About = {
 const blog: Blog = {
   path: "/blog",
   label: "Blog",
-  title: "Writing about design and tech...",
+  title: "Writing about absoulutely nothing...",
   description: `Read what ${person.name} has been up to recently`,
   // Create new blog posts by adding a new .mdx file to app/blog/posts
   // All posts will be listed on the /blog route
