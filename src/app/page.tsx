@@ -9,12 +9,12 @@ import {
   Row,
   Schema,
   Meta,
-  Line,
+  // Line,
 } from "@once-ui-system/core";
 import { home, about, person, baseURL, routes } from "@/resources";
-import { Mailchimp } from "@/components";
-import { Projects } from "@/components/work/Projects";
-import { Posts } from "@/components/blog/Posts";
+// import { Mailchimp } from "@/components";
+// import { Projects } from "@/components/work/Projects";
+// import { Posts } from "@/components/blog/Posts";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -100,10 +100,14 @@ export default function Home() {
           </RevealFx>
         </Column>
       </Column>
-      <RevealFx translateY="16" delay={0.6}>
+
+      {/* --- PROJECTS (FIRST SECTION) --- */}
+      {/* <RevealFx translateY="16" delay={0.6}>
         <Projects range={[1, 1]} />
-      </RevealFx>
-      {routes["/blog"] && (
+      </RevealFx> */}
+
+      {/* --- BLOG SECTION --- */}
+      {/* {routes["/blog"] && (
         <Column fillWidth gap="24" marginBottom="l">
           <Row fillWidth paddingRight="64">
             <Line maxWidth={48} />
@@ -122,9 +126,13 @@ export default function Home() {
             <Line maxWidth={48} />
           </Row>
         </Column>
-      )}
-      <Projects range={[2]} />
-      <Mailchimp />
+      )} */}
+
+      {/* --- PROJECTS (SECOND SECTION) --- */}
+      {/* <Projects range={[2]} /> */}
+
+      {/* --- NEWSLETTER SECTION --- */}
+      {/* <Mailchimp /> */}
     </Column>
   );
 }

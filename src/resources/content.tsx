@@ -6,10 +6,10 @@ const person: Person = {
   lastName: "Kadli",
   name: "Talal Kadli",
   role: "Student",
-  avatar: "/images/avatar.jpg",
-  email: "example@gmail.com",
+  avatar: "/images/profilepic.png",
+  email: "talal@kadli.org",
   location: "Asia/Dubai", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
-  languages: ["English", "Arabic"], // optional: Leave the array empty if you don't want to display languages
+  languages: ["English"], // optional: Leave the array empty if you don't want to display languages
   locale: "en", // BCP 47 language tag for the HTML lang attribute, e.g., 'en', 'ja', 'zh-TW'
 };
 
@@ -59,7 +59,7 @@ const home: Home = {
   path: "/",
   image: "/images/og/home.jpg",
   label: "Home",
-  title: `${person.name}'s Portfolio`,
+  title: `${person.name}`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
   headline: <>Doomscrolling reddit...</>,
   featured: {
@@ -78,7 +78,7 @@ const home: Home = {
   subline: (
     <>
       I'm {person.firstName}, a {person.role.toLowerCase()} at{" "}
-      <Text as="span" size="xl" weight="strong">Al Diyafah</Text>, where I study. <br /> After hours, I do basically nothing.
+      <Text as="span" size="xl" weight="strong">Al Diyafah</Text>. <br /> **This site still contains the original template content** <br /> ***Most of the descriptions and text are pregenerated and irrelevant.*** 
     </>
   ),
 };
@@ -96,7 +96,7 @@ const about: About = {
     display: true,
   },
   calendar: {
-    display: true,
+    display: false,
     link: "https://cal.com",
   },
   intro: {
@@ -170,7 +170,7 @@ const about: About = {
         tags: [
           {
             name: "OCI",
-            icon: "Oracle",
+            icon: "oracle",
           },
         ],
         // optional: leave the array empty if you don't want to display images
