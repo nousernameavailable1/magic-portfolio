@@ -68,24 +68,38 @@ export function AnonBoard() {
   };
 
   return (
-    <Column maxWidth="m" fillWidth gap="xl" paddingY="24">
-      <Column gap="12" maxWidth="s">
-        <Heading as="h1" variant="display-strong-l">Say it anonymously.</Heading>
-        <Text variant="heading-default-l" onBackground="neutral-weak">
-          Feedback, a thought, or a confession—shared without a name.
-        </Text>
-      </Column>
+    <Column className={styles.board} maxWidth="m" fillWidth gap="xl" paddingY="32">
+      <Row className={styles.hero} fillWidth gap="24" vertical="end" s={{ direction: "column", vertical: "start" }}>
+        <Column flex={1} gap="12">
+          <Text className={styles.eyebrow} variant="label-default-s">ANON / MESSAGE WALL</Text>
+          <Heading as="h1" variant="display-strong-l">Say it anonymously.</Heading>
+          <Text variant="heading-default-l" onBackground="neutral-weak">
+            A feedback, a thought, an insult or complement, or literally anything else
+          </Text>
+        </Column>
+        <Column className={styles.heroNote} gap="4">
+          <Text variant="label-default-s" onBackground="brand-strong">COMPLETELY ANONYMOUS (MOSTLY)</Text>
+          <Text variant="body-default-s" onBackground="neutral-weak">Messages are moderated to keep things civilized.</Text>
+        </Column>
+      </Row>
 
       <form onSubmit={submit}>
-        <Column fillWidth gap="12" padding="20" background="surface" border="neutral-alpha-weak" radius="l">
+        <Column className={styles.composer} fillWidth gap="20" padding="24" background="surface" border="brand-alpha-medium" radius="l" shadow="l">
+          <Row fillWidth horizontal="between" vertical="end" gap="12" s={{ direction: "column", horizontal: "start", vertical: "start" }}>
+            <Column gap="4">
+              <Heading as="h2" variant="heading-strong-l">Drop a message</Heading>
+              <Text variant="body-default-s" onBackground="neutral-weak">Say whatever, feel free to rant or ragebait. You can name yourself if you want.</Text>
+            </Column>
+            <Text className={styles.composerMark} variant="label-default-s">ANONYMOUS</Text>
+          </Row>
           <Textarea
             id="anon-message"
-            label="What&apos;s on your mind?"
-            placeholder="Write freely, but don&apos;t include names, contact details, or anything sensitive."
+            label="Your message"
+            placeholder="What&apos;s on your mind?"
             value={body}
             onChange={(event) => setBody(event.target.value)}
             maxLength={2000}
-            lines={7}
+            lines={6}
             characterCount
             required
             resize="vertical"
@@ -101,30 +115,37 @@ export function AnonBoard() {
           />
           <Row fillWidth horizontal="between" vertical="center" gap="12" s={{ direction: "column", horizontal: "start", vertical: "start" }}>
             <Text variant="body-default-s" onBackground="neutral-weak">
-              No account required. Submissions are moderated before publishing.
+              No account required. Your message is submitted without a name.
             </Text>
-            <Button type="submit" loading={submitting} disabled={!body.trim()} variant="primary">
-              Send anonymously
+            <Button type="submit" loading={submitting} disabled={!body.trim()} variant="primary" size="l">
+              Send message
             </Button>
           </Row>
         </Column>
       </form>
 
-      <Column fillWidth gap="16">
-        <Row fillWidth horizontal="between" vertical="center">
-          <Heading as="h2" variant="display-strong-s">Published thoughts</Heading>
-          <Button variant="ghost" size="s" onClick={() => void loadSubmissions()} loading={loading}>Refresh</Button>
+      <Column className={styles.feed} fillWidth gap="16">
+        <Row className={styles.feedHeader} fillWidth horizontal="between" vertical="center" gap="16" s={{ direction: "column", horizontal: "start", vertical: "start" }}>
+          <Row gap="12" vertical="center">
+            <Heading as="h2" variant="display-strong-s">Published messages</Heading>
+            <Text className={styles.messageCount} variant="label-default-s">{submissions.length}</Text>
+          </Row>
+          <Button className={styles.refreshButton} variant="secondary" size="s" onClick={() => void loadSubmissions()} loading={loading}>Refresh</Button>
         </Row>
         {!loading && submissions.length === 0 && (
-          <Text onBackground="neutral-weak">Nothing has been published yet.</Text>
+          <Column className={styles.emptyState} fillWidth gap="8" padding="24" background="surface" border="neutral-alpha-weak" radius="l">
+            <Heading as="h3" variant="heading-strong-l">The wall is quiet.</Heading>
+            <Text onBackground="neutral-weak">Be the first to leave a message.</Text>
+          </Column>
         )}
         <Column fillWidth gap="12">
           {submissions.map((submission) => (
-            <Column key={submission.id} fillWidth gap="8" padding="20" background="surface" border="neutral-alpha-weak" radius="l">
+            <Column key={submission.id} className={styles.messageCard} fillWidth gap="16" padding="24" background="surface" border="neutral-alpha-weak" radius="l">
               <Text className={styles.message} variant="body-default-l">{submission.body}</Text>
-              <Text variant="body-default-s" onBackground="neutral-weak">
-                Anonymous · {formatDate(submission.publishedAt ?? submission.createdAt)}
-              </Text>
+              <Row className={styles.messageMeta} fillWidth horizontal="between" vertical="center" gap="12">
+                <Text variant="label-default-s" onBackground="brand-strong">ANONYMOUS</Text>
+                <Text variant="body-default-s" onBackground="neutral-weak">{formatDate(submission.publishedAt ?? submission.createdAt)}</Text>
+              </Row>
             </Column>
           ))}
         </Column>

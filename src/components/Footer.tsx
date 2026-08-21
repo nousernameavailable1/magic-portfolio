@@ -40,7 +40,7 @@ export const Footer = () => {
         <Row gap="16">
           {social.map(
             (item) =>
-              item.link && (
+              item.link && !["LinkedIn", "Instagram", "Threads"].includes(item.name) && (
                 <IconButton
                   key={item.name}
                   href={item.link}

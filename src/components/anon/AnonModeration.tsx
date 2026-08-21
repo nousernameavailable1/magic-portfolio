@@ -107,6 +107,7 @@ export function AnonModeration() {
               {item.label}
             </Button>
           ))}
+          <span aria-hidden="true" className={styles.filterDivider} />
           <Button
             size="s"
             variant="secondary"
@@ -138,7 +139,7 @@ export function AnonModeration() {
                   <Button size="s" variant="success" loading={busy} onClick={() => void changeStatus(submission, "approved")}>Approve</Button>
                 )}
                 {submission.status !== "rejected" && (
-                  <Button size="s" variant="secondary" loading={busy} onClick={() => void changeStatus(submission, "rejected")}>Reject</Button>
+                  <Button size="s" variant="danger" loading={busy} onClick={() => void changeStatus(submission, "rejected")}>Reject</Button>
                 )}
                 {submission.status === "approved" && (
                   <Button size="s" variant="secondary" loading={busy} onClick={() => void togglePin(submission)}>
@@ -148,7 +149,9 @@ export function AnonModeration() {
                 {submission.status !== "pending" && (
                   <Button size="s" variant="secondary" loading={busy} onClick={() => void changeStatus(submission, "pending")}>Move to pending</Button>
                 )}
-                <Button size="s" variant="danger" loading={busy} onClick={() => void remove(submission)}>Delete</Button>
+                {status !== "pending" && (
+                  <Button size="s" variant="danger" loading={busy} onClick={() => void remove(submission)}>Delete</Button>
+                )}
               </Row>
             </Column>
           );

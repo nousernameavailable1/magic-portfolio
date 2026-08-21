@@ -4,7 +4,15 @@ import { isSubmissionRateLimited } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
-export async function GET() {
+function hasPageAccess(request: NextRequest) {
+  return request.cookies.get("authToken")?.value === "authenticated";
+}
+
+export async function GET(request: NextRequest) {
+  if (!hasPageAccess(request)) {
+    return NextResponse.json({ error: "Password required." }, { status: 401 });
+  }
+
   try {
     return NextResponse.json({ submissions: await getPublishedSubmissions() });
   } catch {
@@ -13,6 +21,10 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  if (!hasPageAccess(request)) {
+    return NextResponse.json({ error: "Password required." }, { status: 401 });
+  }
+
   let payload: { body?: unknown; website?: unknown };
   try {
     payload = await request.json();

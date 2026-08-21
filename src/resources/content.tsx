@@ -73,7 +73,7 @@ const home: Home = {
         </Text>
       </Row>
     ),
-    href: "/work/building-once-ui-a-customizable-design-system",
+    href: "/projects/building-once-ui-a-customizable-design-system",
   },
   subline: (
     <>
@@ -236,12 +236,12 @@ const blog: Blog = {
 };
 
 const work: Work = {
-  path: "/work",
-  label: "Work",
+  path: "/projects",
+  label: "Projects",
   title: `Projects – ${person.name}`,
   description: `Design and dev projects by ${person.name}`,
   // Create new project pages by adding a new .mdx file to app/blog/posts
-  // All projects will be listed on the /home and /work routes
+  // All projects will be listed on the /home and /projects routes
 };
 
 const gallery: Gallery = {

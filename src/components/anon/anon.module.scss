@@ -6,12 +6,103 @@
   display: none;
 }
 
+.board {
+  padding-bottom: var(--static-space-64);
+}
+
+.hero {
+  border-bottom: 1px solid var(--neutral-alpha-weak);
+  padding-bottom: var(--static-space-32);
+}
+
+.eyebrow {
+  color: var(--brand-on-background-strong);
+  letter-spacing: 0.12em;
+}
+
+.heroNote {
+  border-left: 1px solid var(--brand-alpha-medium);
+  max-width: 17rem;
+  padding-left: var(--static-space-16);
+}
+
+.composer {
+  position: relative;
+}
+
+.composerMark {
+  color: var(--brand-on-background-strong);
+  letter-spacing: 0.1em;
+}
+
+.feed {
+  margin-top: var(--static-space-16);
+}
+
+.feedHeader {
+  border-bottom: 1px solid var(--neutral-alpha-weak);
+  padding-bottom: var(--static-space-12);
+}
+
+.messageCount {
+  align-items: center;
+  background: var(--brand-alpha-medium);
+  border: 1px solid var(--brand-border-medium);
+  border-radius: 999px;
+  color: var(--brand-on-background-strong);
+  display: inline-flex;
+  height: 1.5rem;
+  justify-content: center;
+  min-width: 1.5rem;
+  padding: 0 var(--static-space-8);
+}
+
+.refreshButton {
+  background: var(--brand-alpha-weak) !important;
+  border-color: var(--brand-border-medium) !important;
+  color: var(--brand-on-background-strong) !important;
+}
+
+.emptyState {
+  border-style: dashed;
+}
+
+.messageCard {
+  border-left: 2px solid var(--brand-border-medium);
+  transition: var(--transition-micro-medium);
+}
+
+.messageCard:hover {
+  border-left-color: var(--brand-border-strong);
+  transform: translateX(var(--static-space-4));
+}
+
+.messageMeta {
+  border-top: 1px solid var(--neutral-alpha-weak);
+  padding-top: var(--static-space-12);
+}
+
 .pageTitle,
 .pageDescription {
   white-space: nowrap;
 }
 
+.filterDivider {
+  align-self: center;
+  background: var(--neutral-alpha-strong);
+  height: 1.5rem;
+  width: 1px;
+}
+
 @media (max-width: 48rem) {
+  .heroNote {
+    border-left: 0;
+    border-top: 1px solid var(--brand-alpha-medium);
+    max-width: none;
+    padding-left: 0;
+    padding-top: var(--static-space-12);
+  }
+
   .pageTitle,
   .pageDescription {
     white-space: normal;

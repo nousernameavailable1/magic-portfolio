@@ -1,6 +1,6 @@
 import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
 import { baseURL, about, person, work } from "@/resources";
-import { Projects } from "@/components/work/Projects";
+import { Projects } from "@/components/projects/Projects";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -12,7 +12,7 @@ export async function generateMetadata() {
   });
 }
 
-export default function Work() {
+export default function ProjectsPage() {
   return (
     <Column maxWidth="m" paddingTop="24">
       <Schema
