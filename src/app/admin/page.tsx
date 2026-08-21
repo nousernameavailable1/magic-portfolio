@@ -6,7 +6,7 @@ export default async function AdminPage() {
   const cookieStore = await cookies();
   redirect(
     isValidAdminSession(cookieStore.get(ADMIN_SESSION_COOKIE)?.value)
-      ? "/admin/anon"
+      ? "/admin/wall"
       : "/admin/login",
   );
 }

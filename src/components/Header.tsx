@@ -166,18 +166,22 @@ export const Header = () => {
                   </Row>
                 </>
               )}
-              {routes["/anon"] && (
+              {routes["/wall"] && (
                 <>
                   <Row s={{ hide: true }}>
                     <ToggleButton
-                      prefixIcon="mail"
-                      href="/anon"
-                      label="Anon"
-                      selected={pathname === "/anon"}
+                      prefixIcon="stickyNote"
+                      href="/wall"
+                      label="Wall"
+                      selected={pathname === "/wall"}
                     />
                   </Row>
                   <Row hide s={{ hide: false }}>
-                    <ToggleButton prefixIcon="mail" href="/anon" selected={pathname === "/anon"} />
+                    <ToggleButton
+                      prefixIcon="stickyNote"
+                      href="/wall"
+                      selected={pathname === "/wall"}
+                    />
                   </Row>
                 </>
               )}

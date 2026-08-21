@@ -1,7 +1,5 @@
 import { Pool } from "pg";
 
-type Queryable = Pick<Pool, "query">;
-
 declare global {
   // eslint-disable-next-line no-var
   var portfolioDatabasePool: Pool | undefined;
@@ -32,46 +30,55 @@ function getPool() {
   return global.portfolioDatabasePool;
 }
 
-async function applyMigrations(database: Queryable) {
-  await database.query(`
-    CREATE TABLE IF NOT EXISTS schema_migrations (
-      name TEXT PRIMARY KEY,
-      applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    );
-  `);
-
-  const migrationName = "001_create_anon_submissions";
-  const existingMigration = await database.query(
-    "SELECT 1 FROM schema_migrations WHERE name = $1",
-    [migrationName],
-  );
-
-  if (existingMigration.rowCount) return;
-
-  await database.query("BEGIN");
+async function applyMigrations(pool: Pool) {
+  const client = await pool.connect();
   try {
-    await database.query(`
-      CREATE TABLE IF NOT EXISTS anon_submissions (
-        id BIGSERIAL PRIMARY KEY,
-        body TEXT NOT NULL CHECK (char_length(body) BETWEEN 1 AND 2000),
-        status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
-        pinned BOOLEAN NOT NULL DEFAULT FALSE,
-        admin_note TEXT,
-        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-        reviewed_at TIMESTAMPTZ,
-        published_at TIMESTAMPTZ
+    await client.query("BEGIN");
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS schema_migrations (
+        name TEXT PRIMARY KEY,
+        applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       );
-
-      CREATE INDEX IF NOT EXISTS anon_submissions_public_feed_idx
-        ON anon_submissions (status, pinned DESC, published_at DESC);
-      CREATE INDEX IF NOT EXISTS anon_submissions_moderation_idx
-        ON anon_submissions (status, created_at DESC);
     `);
-    await database.query("INSERT INTO schema_migrations (name) VALUES ($1)", [migrationName]);
-    await database.query("COMMIT");
+
+    const migrationName = "001_create_wall_submissions";
+    const [existingMigration, table] = await Promise.all([
+      client.query("SELECT 1 FROM schema_migrations WHERE name = $1", [migrationName]),
+      client.query<{ table_name: string | null }>(
+        "SELECT to_regclass('public.wall_submissions') AS table_name",
+      ),
+    ]);
+
+    if (!existingMigration.rowCount || table.rows[0]?.table_name !== "wall_submissions") {
+      await client.query(`
+        CREATE TABLE IF NOT EXISTS wall_submissions (
+          id BIGSERIAL PRIMARY KEY,
+          body TEXT NOT NULL CHECK (char_length(body) BETWEEN 1 AND 2000),
+          status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
+          pinned BOOLEAN NOT NULL DEFAULT FALSE,
+          admin_note TEXT,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          reviewed_at TIMESTAMPTZ,
+          published_at TIMESTAMPTZ
+        );
+
+        CREATE INDEX IF NOT EXISTS wall_submissions_public_feed_idx
+          ON wall_submissions (status, pinned DESC, published_at DESC);
+        CREATE INDEX IF NOT EXISTS wall_submissions_moderation_idx
+          ON wall_submissions (status, created_at DESC);
+      `);
+      await client.query(
+        "INSERT INTO schema_migrations (name) VALUES ($1) ON CONFLICT (name) DO NOTHING",
+        [migrationName],
+      );
+    }
+
+    await client.query("COMMIT");
   } catch (error) {
-    await database.query("ROLLBACK");
+    await client.query("ROLLBACK");
     throw error;
+  } finally {
+    client.release();
   }
 }
 

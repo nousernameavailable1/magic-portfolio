@@ -1,9 +1,11 @@
-import { createSubmission, getPublishedSubmissions } from "@/lib/anon";
 import { PAGE_SESSION_COOKIE, isValidPageSession } from "@/lib/page-auth";
 import { isSubmissionRateLimited } from "@/lib/rate-limit";
+import { createSubmission, getPublishedSubmissions } from "@/lib/wall";
 import { type NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
+
+// Serves the password-protected public message wall.
 
 function hasPageAccess(request: NextRequest) {
   return isValidPageSession(request.cookies.get(PAGE_SESSION_COOKIE)?.value);

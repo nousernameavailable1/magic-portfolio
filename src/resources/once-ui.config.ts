@@ -23,7 +23,7 @@ const routes: RoutesConfig = {
   "/projects": true,
   "/blog": true,
   "/gallery": true,
-  "/anon": true,
+  "/wall": true,
 };
 
 const display: DisplayConfig = {

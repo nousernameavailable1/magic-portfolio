@@ -43,6 +43,7 @@ import {
   FaLinkedin,
   FaPinterest,
   FaReddit,
+  FaRegNoteSticky,
   FaTelegram,
   FaThreads,
   FaWhatsapp,
@@ -83,6 +84,7 @@ export const iconLibrary: Record<string, IconType> = {
   reddit: FaReddit,
   telegram: FaTelegram,
   instagram: FaInstagram,
+  stickyNote: FaRegNoteSticky,
 
   // Custom Tech Icons
   oracle: GrOracle,

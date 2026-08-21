@@ -1,11 +1,21 @@
 "use client";
 
-import type { AnonStatus, AnonSubmission } from "@/lib/anon";
-import { Button, Column, Heading, Row, Text, useToast } from "@once-ui-system/core";
-import { useCallback, useEffect, useState } from "react";
-import styles from "./anon.module.scss";
+import type { WallStatus, WallSubmission } from "@/lib/wall";
+import { person } from "@/resources";
+import {
+  Avatar,
+  Button,
+  Column,
+  Heading,
+  Row,
+  Text,
+  Textarea,
+  useToast,
+} from "@once-ui-system/core";
+import { useCallback, useEffect, useRef, useState } from "react";
+import styles from "./wall.module.scss";
 
-const statuses: Array<{ value: AnonStatus; label: string }> = [
+const statuses: Array<{ value: WallStatus; label: string }> = [
   { value: "pending", label: "Pending" },
   { value: "approved", label: "Approved" },
   { value: "rejected", label: "Rejected" },
@@ -17,23 +27,26 @@ function formatDate(value: string) {
   );
 }
 
-export function AnonModeration() {
-  const [status, setStatus] = useState<AnonStatus>("pending");
-  const [submissions, setSubmissions] = useState<AnonSubmission[]>([]);
+export function WallModeration() {
+  const [status, setStatus] = useState<WallStatus>("pending");
+  const [submissions, setSubmissions] = useState<WallSubmission[]>([]);
+  const [approvalComments, setApprovalComments] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<number | null>(null);
   const { addToast } = useToast();
+  const addToastRef = useRef(addToast);
+  addToastRef.current = addToast;
 
   const loadSubmissions = useCallback(
     async (nextStatus = status) => {
       setLoading(true);
       try {
-        const response = await fetch(`/api/admin/anon?status=${nextStatus}`, { cache: "no-store" });
-        const data = (await response.json()) as { submissions?: AnonSubmission[]; error?: string };
+        const response = await fetch(`/api/admin/wall?status=${nextStatus}`, { cache: "no-store" });
+        const data = (await response.json()) as { submissions?: WallSubmission[]; error?: string };
         if (!response.ok) throw new Error(data.error);
         setSubmissions(data.submissions ?? []);
       } catch (error) {
-        addToast({
+        addToastRef.current({
           variant: "danger",
           message: error instanceof Error ? error.message : "Could not load submissions.",
         });
@@ -41,26 +54,36 @@ export function AnonModeration() {
         setLoading(false);
       }
     },
-    [addToast, status],
+    [status],
   );
 
   useEffect(() => {
     void loadSubmissions();
   }, [loadSubmissions]);
 
-  const changeStatus = async (submission: AnonSubmission, nextStatus: AnonStatus) => {
+  const changeStatus = async (
+    submission: WallSubmission,
+    nextStatus: WallStatus,
+    comment?: string,
+  ) => {
     setBusyId(submission.id);
     try {
-      const response = await fetch("/api/admin/anon", {
+      const response = await fetch("/api/admin/wall", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: submission.id, status: nextStatus, pinned: submission.pinned }),
+        body: JSON.stringify({
+          id: submission.id,
+          status: nextStatus,
+          pinned: submission.pinned,
+          comment: nextStatus === "approved" ? comment : undefined,
+        }),
       });
       const data = (await response.json()) as { error?: string };
       if (!response.ok) throw new Error(data.error);
+      setApprovalComments((current) => ({ ...current, [submission.id]: "" }));
       await loadSubmissions();
     } catch (error) {
-      addToast({
+      addToastRef.current({
         variant: "danger",
         message: error instanceof Error ? error.message : "Could not update this submission.",
       });
@@ -69,10 +92,10 @@ export function AnonModeration() {
     }
   };
 
-  const togglePin = async (submission: AnonSubmission) => {
+  const togglePin = async (submission: WallSubmission) => {
     setBusyId(submission.id);
     try {
-      const response = await fetch("/api/admin/anon", {
+      const response = await fetch("/api/admin/wall", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -85,7 +108,7 @@ export function AnonModeration() {
       if (!response.ok) throw new Error(data.error);
       await loadSubmissions();
     } catch (error) {
-      addToast({
+      addToastRef.current({
         variant: "danger",
         message: error instanceof Error ? error.message : "Could not update this submission.",
       });
@@ -94,15 +117,15 @@ export function AnonModeration() {
     }
   };
 
-  const remove = async (submission: AnonSubmission) => {
+  const remove = async (submission: WallSubmission) => {
     setBusyId(submission.id);
     try {
-      const response = await fetch(`/api/admin/anon?id=${submission.id}`, { method: "DELETE" });
+      const response = await fetch(`/api/admin/wall?id=${submission.id}`, { method: "DELETE" });
       const data = (await response.json()) as { error?: string };
       if (!response.ok) throw new Error(data.error);
       await loadSubmissions();
     } catch (error) {
-      addToast({
+      addToastRef.current({
         variant: "danger",
         message: error instanceof Error ? error.message : "Could not delete this submission.",
       });
@@ -111,7 +134,7 @@ export function AnonModeration() {
     }
   };
 
-  const selectStatus = (nextStatus: AnonStatus) => {
+  const selectStatus = (nextStatus: WallStatus) => {
     setStatus(nextStatus);
   };
 
@@ -126,7 +149,7 @@ export function AnonModeration() {
       >
         <Column flex={1} gap="8">
           <Heading className={styles.pageTitle} as="h1" variant="display-strong-l">
-            Anonymous submissions
+            Wall submissions
           </Heading>
           <Text className={styles.pageDescription} onBackground="neutral-weak">
             Review posts before they appear publicly.
@@ -166,6 +189,7 @@ export function AnonModeration() {
       <Column fillWidth gap="12">
         {submissions.map((submission) => {
           const busy = busyId === submission.id;
+          const approvalComment = approvalComments[submission.id] ?? "";
           return (
             <Column
               key={submission.id}
@@ -184,13 +208,53 @@ export function AnonModeration() {
                   Submitted {formatDate(submission.createdAt)}
                 </Text>
               </Column>
+              {status === "pending" && (
+                <Column className={styles.commentComposer} gap="8">
+                  <Textarea
+                    id={`approval-comment-${submission.id}`}
+                    label="Comment for the published wall (optional)"
+                    placeholder="Add a moderator comment..."
+                    value={approvalComment}
+                    onChange={(event) =>
+                      setApprovalComments((current) => ({
+                        ...current,
+                        [submission.id]: event.target.value,
+                      }))
+                    }
+                    maxLength={1000}
+                    lines={3}
+                    characterCount
+                    resize="vertical"
+                  />
+                </Column>
+              )}
+              {status === "approved" && submission.comment && (
+                <Column
+                  className={styles.moderationComment}
+                  gap="8"
+                  padding="12"
+                  background="brand-alpha-weak"
+                  borderLeft="brand-alpha-medium"
+                  radius="s"
+                >
+                  <Row className={styles.commentHeader} gap="8" vertical="center">
+                    <Text className={styles.commentLabel} variant="label-default-s">
+                      Comment
+                    </Text>
+                    <Avatar aria-label={`Comment by ${person.name}`} size="s" src={person.avatar} />
+                  </Row>
+                  <Text className={styles.comment} variant="body-default-m">
+                    {submission.comment}
+                  </Text>
+                </Column>
+              )}
               <Row gap="8" wrap>
                 {submission.status !== "approved" && (
                   <Button
                     size="s"
                     variant="success"
                     loading={busy}
-                    onClick={() => void changeStatus(submission, "approved")}
+                    onClick={() => void changeStatus(submission, "approved", approvalComment)}
                   >
                     Approve
                   </Button>

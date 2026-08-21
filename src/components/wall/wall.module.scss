@@ -1,5 +1,7 @@
 .message {
+  overflow-wrap: anywhere;
   white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .honeypot {
@@ -7,12 +9,17 @@
 }
 
 .board {
+  max-width: 100rem;
   padding-bottom: var(--static-space-64);
 }
 
 .hero {
   border-bottom: 1px solid var(--neutral-alpha-weak);
-  padding-bottom: var(--static-space-32);
+  padding-bottom: var(--static-space-16);
+}
+
+.heroContent {
+  max-width: 56rem;
 }
 
 .eyebrow {
@@ -20,14 +27,15 @@
   letter-spacing: 0.12em;
 }
 
-.heroNote {
-  border-left: 1px solid var(--brand-alpha-medium);
-  max-width: 17rem;
-  padding-left: var(--static-space-16);
+.wallLayout {
+  align-items: flex-start;
 }
 
-.composer {
-  position: relative;
+.composerForm {
+  flex: 0 0 25rem;
+  min-width: 0;
+  position: sticky;
+  top: var(--static-space-80);
 }
 
 .composerMark {
@@ -36,7 +44,9 @@
 }
 
 .feed {
-  margin-top: var(--static-space-16);
+  flex: 1 1 0;
+  margin-top: 0;
+  min-width: 0;
 }
 
 .feedHeader {
@@ -82,6 +92,34 @@
   padding-top: var(--static-space-12);
 }
 
+.commentComposer {
+  border-top: 1px solid var(--neutral-alpha-weak);
+  padding-top: var(--static-space-16);
+}
+
+.publishedComment {
+  margin-top: var(--static-space-4);
+}
+
+.moderationComment {
+  margin-top: var(--static-space-4);
+}
+
+.commentHeader {
+  min-width: 0;
+}
+
+.commentLabel {
+  color: var(--brand-on-background-strong);
+  letter-spacing: 0.1em;
+}
+
+.comment {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 .pageTitle,
 .pageDescription {
   white-space: nowrap;
@@ -94,15 +132,23 @@
   width: 1px;
 }
 
-@media (max-width: 48rem) {
-  .heroNote {
-    border-left: 0;
-    border-top: 1px solid var(--brand-alpha-medium);
-    max-width: none;
-    padding-left: 0;
-    padding-top: var(--static-space-12);
+@media (max-width: 62rem) {
+  .wallLayout {
+    flex-direction: column;
   }
 
+  .composerForm,
+  .feed {
+    flex: initial;
+    width: 100%;
+  }
+
+  .composerForm {
+    position: static;
+  }
+}
+
+@media (max-width: 48rem) {
   .pageTitle,
   .pageDescription {
     white-space: normal;

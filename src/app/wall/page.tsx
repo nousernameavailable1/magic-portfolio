@@ -1,4 +1,4 @@
-import { AnonBoard } from "@/components/anon/AnonBoard";
+import { WallBoard } from "@/components/wall/WallBoard";
 import { baseURL } from "@/resources";
 import { Meta } from "@once-ui-system/core";
 
@@ -7,10 +7,10 @@ export async function generateMetadata() {
     title: "Anonymous thoughts",
     description: "Share anonymous feedback, thoughts, or confessions.",
     baseURL,
-    path: "/anon",
+    path: "/wall",
   });
 }
 
-export default function AnonPage() {
-  return <AnonBoard />;
+export default function WallPage() {
+  return <WallBoard />;
 }

@@ -1,4 +1,4 @@
-import { AdminLoginForm } from "@/components/anon/AdminLoginForm";
+import { AdminLoginForm } from "@/components/wall/AdminLoginForm";
 import { Column, Heading, Text } from "@once-ui-system/core";
 
 export const metadata = { title: "Admin sign in" };

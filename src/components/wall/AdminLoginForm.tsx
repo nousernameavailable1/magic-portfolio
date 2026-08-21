@@ -19,7 +19,7 @@ export function AdminLoginForm() {
       });
       const data = (await response.json()) as { error?: string };
       if (!response.ok) throw new Error(data.error);
-      window.location.assign("/admin/anon");
+      window.location.assign("/admin/wall");
     } catch (error) {
       addToast({
         variant: "danger",

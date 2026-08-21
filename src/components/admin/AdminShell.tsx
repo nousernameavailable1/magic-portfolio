@@ -1,6 +1,6 @@
 "use client";
 
-import { AdminLogoutButton } from "@/components/anon/AdminLogoutButton";
+import { AdminLogoutButton } from "@/components/wall/AdminLogoutButton";
 import { Column, Text, ToggleButton } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
 import styles from "./admin.module.scss";
@@ -19,17 +19,23 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         padding="12"
         gap="16"
       >
-        <Text variant="heading-strong-l">Admin</Text>
+        <Text className={styles.sidebarTitle} variant="heading-strong-l">
+          Admin
+        </Text>
         <Column gap="4">
           <ToggleButton
+            aria-label="Wall moderation"
+            className={styles.navButton}
             fillWidth
             horizontal="start"
-            href="/admin/anon"
-            label="Anon moderation"
+            href="/admin/wall"
+            label="Wall moderation"
             prefixIcon="mail"
-            selected={pathname === "/admin/anon"}
+            selected={pathname === "/admin/wall"}
           />
           <ToggleButton
+            aria-label="VPN"
+            className={styles.navButton}
             fillWidth
             horizontal="start"
             href="/admin/vpn"
@@ -39,7 +45,12 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           />
         </Column>
         <div className={styles.signOut}>
-          <AdminLogoutButton />
+          <div className={styles.desktopSignOut}>
+            <AdminLogoutButton />
+          </div>
+          <div className={styles.mobileSignOut}>
+            <AdminLogoutButton compact />
+          </div>
         </div>
       </Column>
       <main className={styles.content}>{children}</main>
