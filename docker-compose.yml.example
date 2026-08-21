@@ -1,0 +1,68 @@
+services:
+  portfolio:
+    image: ghcr.io/nousernameavailable1/magic-portfolio:latest
+    container_name: magic-portfolio
+    restart: unless-stopped
+    init: true
+    mem_limit: 450m
+    environment:
+      PAGE_ACCESS_PASSWORD: ${PAGE_ACCESS_PASSWORD}
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_NAME: portfolio
+      DB_USER: portfolio
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      ADMIN_SESSION_SECRET: ${ADMIN_SESSION_SECRET}
+    expose:
+      - "3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    container_name: portfolio-postgres
+    restart: unless-stopped
+    init: true
+    mem_limit: 256m
+    command:
+      - postgres
+      - -c
+      - shared_buffers=64MB
+      - -c
+      - max_connections=20
+    environment:
+      POSTGRES_DB: portfolio
+      POSTGRES_USER: portfolio
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - portfolio_postgres_data:/var/lib/postgresql/data
+    expose:
+      - "5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: portfolio-caddy
+    restart: unless-stopped
+    init: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - portfolio
+
+volumes:
+  caddy_data:
+  caddy_config:
+  portfolio_postgres_data:
