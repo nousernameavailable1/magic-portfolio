@@ -1,19 +1,9 @@
-import { getPosts } from "@/utils/utils";
+import { isPageAccessRoute } from "@/lib/page-access-routes";
 import { baseURL, routes as routesConfig } from "@/resources";
 
 export default async function sitemap() {
-  const blogs = getPosts(["src", "app", "blog", "posts"]).map((post) => ({
-    url: `${baseURL}/blog/${post.slug}`,
-    lastModified: post.metadata.publishedAt,
-  }));
-
-  const projects = getPosts(["src", "app", "projects", "projects"]).map((post) => ({
-    url: `${baseURL}/projects/${post.slug}`,
-    lastModified: post.metadata.publishedAt,
-  }));
-
   const activeRoutes = Object.keys(routesConfig).filter(
-    (route) => routesConfig[route as keyof typeof routesConfig],
+    (route) => routesConfig[route as keyof typeof routesConfig] && !isPageAccessRoute(route),
   );
 
   const routes = activeRoutes.map((route) => ({
@@ -21,5 +11,5 @@ export default async function sitemap() {
     lastModified: new Date().toISOString().split("T")[0],
   }));
 
-  return [...routes, ...blogs, ...projects];
+  return routes;
 }

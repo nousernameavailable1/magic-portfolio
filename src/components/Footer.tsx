@@ -1,5 +1,5 @@
-import { Row, IconButton, SmartLink, Text } from "@once-ui-system/core";
 import { person, social } from "@/resources";
+import { IconButton, Row, SmartLink, Text } from "@once-ui-system/core";
 import styles from "./Footer.module.scss";
 
 export const Footer = () => {
@@ -40,7 +40,8 @@ export const Footer = () => {
         <Row gap="16">
           {social.map(
             (item) =>
-              item.link && !["LinkedIn", "Instagram", "Threads"].includes(item.name) && (
+              item.link &&
+              !["LinkedIn", "Instagram", "Threads"].includes(item.name) && (
                 <IconButton
                   key={item.name}
                   href={item.link}

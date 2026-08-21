@@ -25,14 +25,14 @@ npm install
 npm run dev
 ```
 
-**4. Edit config**
+**4. Edit site configuration**
 ```
-src/resources/once-ui.config.js
+src/resources/once-ui.config.ts
 ```
 
 **5. Edit content**
 ```
-src/resources/content.js
+src/resources/content.tsx
 ```
 
 **6. Create blog posts / projects**
@@ -88,6 +88,18 @@ Distributed under the CC BY-NC 4.0 License.
 
 See `LICENSE.txt` for more information.
 
-## Deploy with Vercel
+## Self-hosted deployment
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fmagic-portfolio&project-name=portfolio&repository-name=portfolio&redirect-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fmagic-portfolio&demo-title=Magic%20Portfolio&demo-description=Showcase%20your%20designers%20or%20developer%20portfolio&demo-url=https%3A%2F%2Fdemo.magic-portfolio.com&demo-image=%2F%2Fraw.githubusercontent.com%2Fonce-ui-system%2Fmagic-portfolio%2Fmain%2Fpublic%2Fimages%2Fog%2Fhome.jpg)
+The production setup is designed for Docker, PostgreSQL, and Caddy on the OCI VM.
+
+```sh
+cp docker-compose.yml.example docker-compose.yml
+cp Caddyfile.example Caddyfile
+cp .env.example .env
+```
+
+Set strong values in `.env`, confirm the hostname in `Caddyfile`, then start the stack:
+
+```sh
+docker compose up -d
+```

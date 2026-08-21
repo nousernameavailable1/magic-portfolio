@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
 import {
   ADMIN_SESSION_COOKIE,
   adminSessionCookie,
   createAdminSession,
   isValidAdminPassword,
 } from "@/lib/admin-auth";
+import { type NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
-  const payload = await request.json().catch(() => null) as { password?: unknown } | null;
+  const payload = (await request.json().catch(() => null)) as { password?: unknown } | null;
   const password = typeof payload?.password === "string" ? payload.password : "";
 
   if (!isValidAdminPassword(password)) {

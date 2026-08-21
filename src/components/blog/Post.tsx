@@ -1,11 +1,12 @@
 "use client";
 
-import { Card, Column, Media, Row, Avatar, Text } from "@once-ui-system/core";
-import { formatDate } from "@/utils/formatDate";
 import { person } from "@/resources";
+import { formatDate } from "@/utils/formatDate";
+import type { MDXPost } from "@/utils/utils";
+import { Avatar, Card, Column, Media, Row, Text } from "@once-ui-system/core";
 
 interface PostProps {
-  post: any;
+  post: MDXPost;
   thumbnail: boolean;
   direction?: "row" | "column";
 }
@@ -33,7 +34,7 @@ export default function Post({ post, thumbnail, direction }: PostProps) {
           cursor="interactive"
           radius="l"
           src={post.metadata.image}
-          alt={"Thumbnail of " + post.metadata.title}
+          alt={`Thumbnail of ${post.metadata.title}`}
           aspectRatio="16 / 9"
         />
       )}

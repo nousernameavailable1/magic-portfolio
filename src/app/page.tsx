@@ -1,17 +1,17 @@
+import { about, baseURL, home, person, routes } from "@/resources";
 import {
-  Heading,
-  Text,
-  Button,
   Avatar,
-  RevealFx,
-  Column,
   Badge,
+  Button,
+  Column,
+  Heading,
+  Meta,
+  RevealFx,
   Row,
   Schema,
-  Meta,
+  Text,
   // Line,
 } from "@once-ui-system/core";
-import { home, about, person, baseURL, routes } from "@/resources";
 // import { Mailchimp } from "@/components";
 // import { Projects } from "@/components/projects/Projects";
 // import { Posts } from "@/components/blog/Posts";

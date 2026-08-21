@@ -1,3 +1,4 @@
+import { pageAccessRoutes } from "@/lib/page-access-routes";
 import { baseURL } from "@/resources";
 
 export default function robots() {
@@ -5,6 +6,7 @@ export default function robots() {
     rules: [
       {
         userAgent: "*",
+        disallow: [...pageAccessRoutes],
       },
     ],
     sitemap: `${baseURL}/sitemap.xml`,

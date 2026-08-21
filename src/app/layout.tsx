@@ -4,19 +4,10 @@ import "@/resources/custom.css";
 
 import classNames from "classnames";
 
-import {
-  Background,
-  Column,
-  Flex,
-  Meta,
-  RevealFx,
-} from "@once-ui-system/core";
-import type {
-  Opacity,
-  SpacingToken,
-} from "@once-ui-system/core";
-import { Footer, Header, RouteGuard, Providers } from "@/components";
-import { baseURL, effects, fonts, style, dataStyle, home, person } from "@/resources";
+import { Footer, Header, Providers, RouteGuard } from "@/components";
+import { baseURL, dataStyle, effects, fonts, home, person, style } from "@/resources";
+import { Background, Column, Flex, Meta, RevealFx } from "@once-ui-system/core";
+import type { Opacity, SpacingToken } from "@once-ui-system/core";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -54,7 +45,7 @@ export default async function RootLayout({
               (function() {
                 try {
                   const root = document.documentElement;
-                  const defaultTheme = 'system';
+                  const defaultTheme = ${JSON.stringify(style.theme)};
                   
                   // Set defaults from config
                   const config = ${JSON.stringify({
@@ -85,7 +76,7 @@ export default async function RootLayout({
                   
                   // Apply saved theme
                   const savedTheme = localStorage.getItem('data-theme');
-                  const resolvedTheme = resolveTheme(savedTheme);
+                  const resolvedTheme = resolveTheme(savedTheme || defaultTheme);
                   root.setAttribute('data-theme', resolvedTheme);
                   
                   // Apply any saved style overrides

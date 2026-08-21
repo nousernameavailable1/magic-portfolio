@@ -1,8 +1,12 @@
+import { ADMIN_SESSION_COOKIE, isValidAdminSession } from "@/lib/admin-auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { ADMIN_SESSION_COOKIE, isValidAdminSession } from "@/lib/admin-auth";
 
 export default async function AdminPage() {
   const cookieStore = await cookies();
-  redirect(isValidAdminSession(cookieStore.get(ADMIN_SESSION_COOKIE)?.value) ? "/admin/anon" : "/admin/login");
+  redirect(
+    isValidAdminSession(cookieStore.get(ADMIN_SESSION_COOKIE)?.value)
+      ? "/admin/anon"
+      : "/admin/login",
+  );
 }

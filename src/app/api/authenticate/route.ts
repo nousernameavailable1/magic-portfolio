@@ -1,32 +1,27 @@
-import { NextRequest, NextResponse } from "next/server";
-import * as cookie from "cookie";
+import {
+  PAGE_SESSION_COOKIE,
+  createPageSession,
+  isValidPagePassword,
+  pageSessionCookie,
+} from "@/lib/page-auth";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
-  const body = await request.json();
-  const { password } = body;
-  const correctPassword = process.env.PAGE_ACCESS_PASSWORD;
+  const payload = (await request.json().catch(() => null)) as { password?: unknown } | null;
+  const password = typeof payload?.password === "string" ? payload.password : "";
+  const session = createPageSession();
 
-  if (!correctPassword) {
+  if (!session) {
     console.error("PAGE_ACCESS_PASSWORD environment variable is not set");
     return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 
-  if (password === correctPassword) {
-    const response = NextResponse.json({ success: true }, { status: 200 });
-
-    response.headers.set(
-      "Set-Cookie",
-      cookie.serialize("authToken", "authenticated", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 60 * 60,
-        sameSite: "strict",
-        path: "/",
-      }),
-    );
-
-    return response;
-  } else {
+  if (!isValidPagePassword(password)) {
     return NextResponse.json({ message: "Incorrect password" }, { status: 401 });
   }
+
+  const response = NextResponse.json({ success: true });
+  response.cookies.set(PAGE_SESSION_COOKIE, session, pageSessionCookie);
+  return response;
 }

@@ -77,8 +77,8 @@ const home: Home = {
   },
   subline: (
     <>
-      I'm {person.firstName}, a {person.role.toLowerCase()} at{" "}
-      <Text as="span" size="xl" weight="strong">Al Diyafah</Text>. <br /> **This site still contains the original template content** <br /> ***Most of the descriptions and text are pregenerated and irrelevant.*** 
+      **This site still contains the original template content** <br /> ***Most of the descriptions
+      and text are pregenerated and irrelevant.***
     </>
   ),
 };
@@ -104,7 +104,8 @@ const about: About = {
     title: "Introduction",
     description: (
       <>
-        {person.firstName} is a {person.location.split("/")[1]?.replace("_", " ")}-based {person.role.toLowerCase()} with a passion for being bored.
+        {person.firstName} is a {person.location.split("/")[1]?.replace("_", " ")}-based{" "}
+        {person.role.toLowerCase()} with a passion for being bored.
       </>
     ),
   },
@@ -164,9 +165,7 @@ const about: About = {
     skills: [
       {
         title: "Oracle cloud infrastructure",
-        description: (
-          <>Able to navigate oci interface and manage basic cloud resources.</>
-        ),
+        description: <>Able to navigate oci interface and manage basic cloud resources.</>,
         tags: [
           {
             name: "OCI",
@@ -192,7 +191,10 @@ const about: About = {
       {
         title: "Linux server management",
         description: (
-          <>Maintaining and optimizing Linux servers for running vpns, private cloud, minecraft servers, website infrastructure and prob some more things i cant remember.</>
+          <>
+            Maintaining and optimizing Linux servers for running vpns, private cloud, minecraft
+            servers, website infrastructure and prob some more things i cant remember.
+          </>
         ),
         tags: [
           {
@@ -240,7 +242,7 @@ const work: Work = {
   label: "Projects",
   title: `Projects – ${person.name}`,
   description: `Design and dev projects by ${person.name}`,
-  // Create new project pages by adding a new .mdx file to app/blog/posts
+  // Create new project pages by adding an .mdx file to app/projects/projects.
   // All projects will be listed on the /home and /projects routes
 };
 

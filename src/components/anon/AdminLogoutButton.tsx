@@ -8,5 +8,9 @@ export function AdminLogoutButton() {
     window.location.assign("/admin/login");
   };
 
-  return <Button variant="secondary" onClick={() => void logout()}>Sign out</Button>;
+  return (
+    <Button variant="secondary" onClick={() => void logout()}>
+      Sign out
+    </Button>
+  );
 }

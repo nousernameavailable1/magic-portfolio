@@ -7,7 +7,7 @@ tag: "Magic Portfolio"
 
 ## Avatar
 
-Replace the `public/images/avatar.jpg` file with your own avatar image. It is used on the `/about` page as well as on the dynamically generated `open-graph` images.
+Replace the `public/images/profilepic.png` file with your own avatar image. It is used on the `/about` page as well as on the dynamically generated `open-graph` images.
 
 ## Favicon
 
@@ -15,7 +15,7 @@ Replace the `src/app/favicon.ico` file with your own favicon.
 
 ## Content
 
-Replace the content in the `resources/content.js` file with your own content. You can use custom components in most cases, since the props are usually declared as `ReactNode` instead of `string`, but it's important that you need to import them in the file.
+Replace the content in the `src/resources/content.tsx` file with your own content. You can use custom components in most cases, since the props are usually declared as `ReactNode` instead of `string`, but it's important that you need to import them in the file.
 
 <CodeBlock
     marginBottom="16"
@@ -30,7 +30,7 @@ const person = {
   ...
 };`,
     language: "tsx",
-    label: "src/app/resources/content.js"
+    label: "src/resources/content.tsx"
   }
 ]} />
 
@@ -58,7 +58,7 @@ Your personal details are used across the whole app to render personalized headi
     languages: ["English", "Bahasa"], // optional: Leave the array empty if you don't want to display languages
 };`,
     language: "tsx",
-    label: "src/app/resources/content.js"
+    label: "src/resources/content.tsx"
   }
 ]} />
 
@@ -84,7 +84,7 @@ Social links are rendered on the `/about` page and in the footer based on the ar
     },
 ];`,
     language: "tsx",
-    label: "src/app/resources/content.js"
+    label: "src/resources/content.tsx"
   }
 ]} />
 
@@ -110,7 +110,7 @@ Each page have it's own object that manages the personalized content, such as he
     ),
 };`,
     language: "tsx",
-    label: "src/app/resources/content.js"
+    label: "src/resources/content.tsx"
   }
 ]} />
 

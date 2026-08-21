@@ -1,0 +1,3 @@
+talal.kadli.org {
+  reverse_proxy portfolio:3000
+}

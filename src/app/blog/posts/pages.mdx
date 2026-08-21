@@ -8,7 +8,7 @@ tag: "Magic Portfolio"
 
 ## Enable or disable pages
 
-Magic Portfolio's `RouteGuard` component takes care of conditionally rendering pages based on the `routes` object in the `resources/config.js` file.
+Magic Portfolio's `RouteGuard` component takes care of conditionally rendering pages based on the `routes` object in the `src/resources/once-ui.config.ts` file.
 
 <CodeBlock
     marginBottom="16"
@@ -24,7 +24,7 @@ Magic Portfolio's `RouteGuard` component takes care of conditionally rendering p
     '/gallery': false,
 };`,
     language: "tsx",
-    label: "src/app/resources/config.js"
+    label: "src/resources/once-ui.config.ts"
   }
 ]} />
 
@@ -32,7 +32,7 @@ The code above will ensure that the `/gallery` page is not accessible and is not
 
 ## Add new pages
 
-When creating a new page, it needs to be added to the `routes` object in the `resources/config.js` file.
+When creating a new page, it needs to be added to the `routes` object in the `src/resources/once-ui.config.ts` file.
 
 <CodeBlock
     marginBottom="16"
@@ -49,7 +49,7 @@ When creating a new page, it needs to be added to the `routes` object in the `re
     '/music': true,
 };`,
     language: "tsx",
-    label: "src/app/resources/config.js"
+    label: "src/resources/once-ui.config.ts"
   }
 ]} />
 

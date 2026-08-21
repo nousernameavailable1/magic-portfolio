@@ -1,11 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
 import { createSubmission, getPublishedSubmissions } from "@/lib/anon";
+import { PAGE_SESSION_COOKIE, isValidPageSession } from "@/lib/page-auth";
 import { isSubmissionRateLimited } from "@/lib/rate-limit";
+import { type NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
 function hasPageAccess(request: NextRequest) {
-  return request.cookies.get("authToken")?.value === "authenticated";
+  return isValidPageSession(request.cookies.get(PAGE_SESSION_COOKIE)?.value);
 }
 
 export async function GET(request: NextRequest) {
@@ -16,7 +17,10 @@ export async function GET(request: NextRequest) {
   try {
     return NextResponse.json({ submissions: await getPublishedSubmissions() });
   } catch {
-    return NextResponse.json({ error: "The anonymous feed is unavailable right now." }, { status: 503 });
+    return NextResponse.json(
+      { error: "The anonymous feed is unavailable right now." },
+      { status: 503 },
+    );
   }
 }
 
@@ -42,13 +46,19 @@ export async function POST(request: NextRequest) {
   }
 
   if (isSubmissionRateLimited(request.headers.get("x-forwarded-for"))) {
-    return NextResponse.json({ error: "Please wait a little before submitting again." }, { status: 429 });
+    return NextResponse.json(
+      { error: "Please wait a little before submitting again." },
+      { status: 429 },
+    );
   }
 
   try {
     await createSubmission(body);
     return NextResponse.json({ ok: true }, { status: 201 });
   } catch {
-    return NextResponse.json({ error: "Your submission could not be saved. Please try again." }, { status: 503 });
+    return NextResponse.json(
+      { error: "Your submission could not be saved. Please try again." },
+      { status: 503 },
+    );
   }
 }

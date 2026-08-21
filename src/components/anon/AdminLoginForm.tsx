@@ -1,7 +1,7 @@
 "use client";
 
-import { FormEvent, useState } from "react";
 import { Button, Column, PasswordInput, Text, useToast } from "@once-ui-system/core";
+import { type FormEvent, useState } from "react";
 
 export function AdminLoginForm() {
   const [password, setPassword] = useState("");
@@ -17,11 +17,14 @@ export function AdminLoginForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
       });
-      const data = await response.json() as { error?: string };
+      const data = (await response.json()) as { error?: string };
       if (!response.ok) throw new Error(data.error);
       window.location.assign("/admin/anon");
     } catch (error) {
-      addToast({ variant: "danger", message: error instanceof Error ? error.message : "Could not sign in." });
+      addToast({
+        variant: "danger",
+        message: error instanceof Error ? error.message : "Could not sign in.",
+      });
     } finally {
       setSubmitting(false);
     }
@@ -29,7 +32,15 @@ export function AdminLoginForm() {
 
   return (
     <form onSubmit={submit} style={{ width: "100%" }}>
-      <Column fillWidth gap="16" padding="20" background="surface" border="neutral-alpha-weak" radius="l" horizontal="center">
+      <Column
+        fillWidth
+        gap="16"
+        padding="20"
+        background="surface"
+        border="neutral-alpha-weak"
+        radius="l"
+        horizontal="center"
+      >
         <PasswordInput
           id="admin-password"
           label="Admin password"
@@ -38,8 +49,12 @@ export function AdminLoginForm() {
           autoComplete="current-password"
           required
         />
-        <Text align="center" variant="body-default-s" onBackground="neutral-weak">This area is private.</Text>
-        <Button type="submit" loading={submitting} disabled={!password}>Sign in</Button>
+        <Text align="center" variant="body-default-s" onBackground="neutral-weak">
+          This area is private.
+        </Text>
+        <Button type="submit" loading={submitting} disabled={!password}>
+          Sign in
+        </Button>
       </Column>
     </form>
   );

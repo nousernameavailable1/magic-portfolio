@@ -1,6 +1,6 @@
-import { Meta } from "@once-ui-system/core";
 import { AnonBoard } from "@/components/anon/AnonBoard";
 import { baseURL } from "@/resources";
+import { Meta } from "@once-ui-system/core";
 
 export async function generateMetadata() {
   return Meta.generate({

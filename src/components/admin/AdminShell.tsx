@@ -1,8 +1,8 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { Column, Text, ToggleButton } from "@once-ui-system/core";
 import { AdminLogoutButton } from "@/components/anon/AdminLogoutButton";
+import { Column, Text, ToggleButton } from "@once-ui-system/core";
+import { usePathname } from "next/navigation";
 import styles from "./admin.module.scss";
 
 export function AdminShell({ children }: { children: React.ReactNode }) {

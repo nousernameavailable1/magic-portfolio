@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import { ADMIN_SESSION_COOKIE, isValidAdminSession } from "@/lib/admin-auth";
 import {
   deleteSubmission,
   getModerationSubmissions,
   isAnonStatus,
   updateSubmission,
 } from "@/lib/anon";
-import { ADMIN_SESSION_COOKIE, isValidAdminSession } from "@/lib/admin-auth";
+import { type NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
@@ -38,7 +38,11 @@ export async function GET(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   if (!isAuthorized(request)) return unauthorized();
-  const payload = await request.json().catch(() => null) as { id?: unknown; status?: unknown; pinned?: unknown } | null;
+  const payload = (await request.json().catch(() => null)) as {
+    id?: unknown;
+    status?: unknown;
+    pinned?: unknown;
+  } | null;
   if (!validId(payload?.id) || !isAnonStatus(payload?.status)) {
     return NextResponse.json({ error: "Invalid update." }, { status: 400 });
   }
@@ -61,7 +65,7 @@ export async function DELETE(request: NextRequest) {
   }
 
   try {
-    return await deleteSubmission(id)
+    return (await deleteSubmission(id))
       ? NextResponse.json({ ok: true })
       : NextResponse.json({ error: "Submission not found." }, { status: 404 });
   } catch {

@@ -1,15 +1,15 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import matter from "gray-matter";
 
-type Team = {
+export type Team = {
   name: string;
   role: string;
   avatar: string;
   linkedIn: string;
 };
 
-type Metadata = {
+export type PostMetadata = {
   title: string;
   subtitle?: string;
   publishedAt: string;
@@ -19,6 +19,12 @@ type Metadata = {
   tag?: string;
   team: Team[];
   link?: string;
+};
+
+export type MDXPost = {
+  metadata: PostMetadata;
+  slug: string;
+  content: string;
 };
 
 import { notFound } from "next/navigation";
@@ -39,14 +45,14 @@ function readMDXFile(filePath: string) {
   const rawContent = fs.readFileSync(filePath, "utf-8");
   const { data, content } = matter(rawContent);
 
-  const metadata: Metadata = {
+  const metadata: PostMetadata = {
     title: data.title || "",
     subtitle: data.subtitle || "",
     publishedAt: data.publishedAt,
     summary: data.summary || "",
     image: data.image || "",
     images: data.images || [],
-    tag: data.tag || [],
+    tag: data.tag || undefined,
     team: data.team || [],
     link: data.link || "",
   };
@@ -54,7 +60,7 @@ function readMDXFile(filePath: string) {
   return { metadata, content };
 }
 
-function getMDXData(dir: string) {
+function getMDXData(dir: string): MDXPost[] {
   const mdxFiles = getMDXFiles(dir);
   return mdxFiles.map((file) => {
     const { metadata, content } = readMDXFile(path.join(dir, file));

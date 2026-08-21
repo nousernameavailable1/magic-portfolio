@@ -1,30 +1,33 @@
-import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
-import React, { ReactNode } from "react";
+import type { MDXComponents } from "mdx/types";
+import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote/rsc";
+import { isValidElement } from "react";
+import type React from "react";
+import type { ReactNode } from "react";
 import { slugify as transliterate } from "transliteration";
 
 import {
-  Heading,
-  HeadingLink,
-  Text,
-  InlineCode,
-  CodeBlock,
-  TextProps,
-  MediaProps,
   Accordion,
   AccordionGroup,
-  Table,
-  Feedback,
   Button,
   Card,
-  Grid,
-  Row,
+  CodeBlock,
   Column,
+  Feedback,
+  Grid,
+  Heading,
+  HeadingLink,
   Icon,
-  Media,
-  SmartLink,
+  InlineCode,
+  Line,
   List,
   ListItem,
-  Line,
+  Media,
+  type MediaProps,
+  Row,
+  SmartLink,
+  Table,
+  Text,
+  type TextProps,
 } from "@once-ui-system/core";
 
 type CustomLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -121,10 +124,23 @@ function createInlineCode({ children }: { children: ReactNode }) {
   return <InlineCode>{children}</InlineCode>;
 }
 
-function createCodeBlock(props: any) {
-  // For pre tags that contain code blocks
-  if (props.children && props.children.props && props.children.props.className) {
-    const { className, children } = props.children.props;
+type CodeBlockProps = React.ComponentPropsWithoutRef<"pre">;
+type CodeChild = React.ReactElement<{ className: string; children?: ReactNode }>;
+
+function getCodeChild(children: ReactNode): CodeChild | null {
+  if (!isValidElement<{ className: string; children?: ReactNode }>(children)) {
+    return null;
+  }
+
+  return typeof children.props.className === "string" ? children : null;
+}
+
+function createCodeBlock({ children, ...props }: CodeBlockProps) {
+  const codeChild = getCodeChild(children);
+
+  // MDX wraps fenced code in a code element inside a pre element.
+  if (codeChild && typeof codeChild.props.children === "string") {
+    const { className, children: code } = codeChild.props;
 
     // Extract language from className (format: language-xxx)
     const language = className.replace("language-", "");
@@ -136,7 +152,7 @@ function createCodeBlock(props: any) {
         marginBottom="16"
         codes={[
           {
-            code: children,
+            code,
             language,
             label,
           },
@@ -147,7 +163,7 @@ function createCodeBlock(props: any) {
   }
 
   // Fallback for other pre tags or empty code blocks
-  return <pre {...props} />;
+  return <pre {...props}>{children}</pre>;
 }
 
 function createList(as: "ul" | "ol") {
@@ -171,21 +187,21 @@ function createHR() {
 }
 
 const components = {
-  p: createParagraph as any,
-  h1: createHeading("h1") as any,
-  h2: createHeading("h2") as any,
-  h3: createHeading("h3") as any,
-  h4: createHeading("h4") as any,
-  h5: createHeading("h5") as any,
-  h6: createHeading("h6") as any,
-  img: createImage as any,
-  a: CustomLink as any,
-  code: createInlineCode as any,
-  pre: createCodeBlock as any,
-  ol: createList("ol") as any,
-  ul: createList("ul") as any,
-  li: createListItem as any,
-  hr: createHR as any,
+  p: createParagraph,
+  h1: createHeading("h1"),
+  h2: createHeading("h2"),
+  h3: createHeading("h3"),
+  h4: createHeading("h4"),
+  h5: createHeading("h5"),
+  h6: createHeading("h6"),
+  img: createImage,
+  a: CustomLink,
+  code: createInlineCode,
+  pre: createCodeBlock,
+  ol: createList("ol"),
+  ul: createList("ul"),
+  li: createListItem,
+  hr: createHR,
   Heading,
   Text,
   CodeBlock,
@@ -202,12 +218,20 @@ const components = {
   Icon,
   Media,
   SmartLink,
-};
+  // Once UI components intentionally accept a wider prop surface than MDX intrinsic elements.
+  // This boundary keeps that mapping explicit without weakening the individual component types.
+} as unknown as MDXComponents;
 
-type CustomMDXProps = MDXRemoteProps & {
-  components?: typeof components;
+type CustomMDXProps = Omit<MDXRemoteProps, "components"> & {
+  components?: MDXComponents;
 };
 
 export function CustomMDX(props: CustomMDXProps) {
-  return <MDXRemote options={{ blockJS: false }} {...props} components={{ ...components, ...(props.components || {}) }} />;
+  return (
+    <MDXRemote
+      options={{ blockJS: false }}
+      {...props}
+      components={{ ...components, ...(props.components || {}) }}
+    />
+  );
 }
