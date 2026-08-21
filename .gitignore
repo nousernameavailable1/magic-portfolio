@@ -31,6 +31,7 @@ yarn-error.log*
 
 # server-specific Compose configuration
 docker-compose.yml
+docker-compose.dev.yml
 
 # vercel
 .vercel

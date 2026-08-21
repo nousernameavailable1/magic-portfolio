@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { routes, protectedRoutes } from "@/resources";
-import { Flex, Spinner, Button, Heading, Column, PasswordInput } from "@once-ui-system/core";
+import { Flex, Spinner, Button, Heading, Column, PasswordInput, Text } from "@once-ui-system/core";
 import NotFound from "@/app/not-found";
 
 interface RouteGuardProps {
@@ -31,6 +31,10 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
 
         if (pathname in routes) {
           return routes[pathname as keyof typeof routes];
+        }
+
+        if (pathname.startsWith("/admin")) {
+          return true;
         }
 
         const dynamicRoutes = ["/blog", "/work"] as const;
@@ -90,19 +94,47 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
 
   if (isPasswordRequired && !isAuthenticated) {
     return (
-      <Column paddingY="128" maxWidth={24} gap="24" center>
-        <Heading align="center" wrap="balance">
-          This page is password protected
-        </Heading>
-        <Column fillWidth gap="8" horizontal="center">
-          <PasswordInput
-            id="password"
-            label="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            errorMessage={error}
-          />
-          <Button onClick={handlePasswordSubmit}>Submit</Button>
+      <Column fillWidth paddingY="104" horizontal="center">
+        <Column
+          fillWidth
+          maxWidth="s"
+          gap="32"
+          padding="32"
+          background="surface"
+          border="brand-alpha-medium"
+          radius="xl"
+          shadow="l"
+        >
+          <Column gap="12" horizontal="center" align="center">
+            <Heading align="center" variant="display-strong-m" wrap="balance">
+              This page is for invited eyes only.
+            </Heading>
+            <Text align="center" variant="body-default-l" onBackground="neutral-weak">
+              Enter the access password to continue.
+            </Text>
+          </Column>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              void handlePasswordSubmit();
+            }}
+            style={{ width: "100%" }}
+          >
+            <Column fillWidth gap="16" horizontal="center">
+              <PasswordInput
+                id="password"
+                label="Access password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                errorMessage={error}
+                autoComplete="current-password"
+              />
+              <Button type="submit" fillWidth size="l">Unlock page</Button>
+            </Column>
+          </form>
+          <Text align="center" variant="body-default-s" onBackground="neutral-weak">
+            Don&apos;t have access? Womp womp.
+          </Text>
         </Column>
       </Column>
     );

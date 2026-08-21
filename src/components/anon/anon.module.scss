@@ -1,0 +1,19 @@
+.message {
+  white-space: pre-wrap;
+}
+
+.honeypot {
+  display: none;
+}
+
+.pageTitle,
+.pageDescription {
+  white-space: nowrap;
+}
+
+@media (max-width: 48rem) {
+  .pageTitle,
+  .pageDescription {
+    white-space: normal;
+  }
+}

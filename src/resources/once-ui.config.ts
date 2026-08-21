@@ -14,7 +14,7 @@ import type {
 import { home, person, social } from "./content";
 
 // IMPORTANT: Replace with your own domain address - it's used for SEO in meta tags and schema
-const baseURL = "http://localhost:3000";
+const baseURL = "https://talal.kadli.org";
 
 const routes: RoutesConfig = {
   "/": true,
@@ -22,6 +22,7 @@ const routes: RoutesConfig = {
   "/work": true,
   "/blog": true,
   "/gallery": true,
+  "/anon": true,
 };
 
 const display: DisplayConfig = {

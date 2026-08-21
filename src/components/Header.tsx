@@ -166,6 +166,25 @@ export const Header = () => {
                   </Row>
                 </>
               )}
+              {routes["/anon"] && (
+                <>
+                  <Row s={{ hide: true }}>
+                    <ToggleButton
+                      prefixIcon="mail"
+                      href="/anon"
+                      label="Anon"
+                      selected={pathname === "/anon"}
+                    />
+                  </Row>
+                  <Row hide s={{ hide: false }}>
+                    <ToggleButton
+                      prefixIcon="mail"
+                      href="/anon"
+                      selected={pathname === "/anon"}
+                    />
+                  </Row>
+                </>
+              )}
               {display.themeSwitcher && (
                 <>
                   <Line background="neutral-alpha-medium" vert maxHeight="24" />
