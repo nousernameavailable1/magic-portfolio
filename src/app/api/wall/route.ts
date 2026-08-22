@@ -1,6 +1,8 @@
 import { PAGE_SESSION_COOKIE, isValidPageSession } from "@/lib/page-auth";
 import { isSubmissionRateLimited } from "@/lib/rate-limit";
-import { createSubmission, getPublishedSubmissions } from "@/lib/wall";
+import { getSiteText } from "@/lib/site-text";
+import { createSubmission, getPublishedSubmissions, prepareSubmission } from "@/lib/wall";
+import { getReactionVisitor, setReactionVisitorCookie } from "@/lib/wall-reaction-visitor";
 import { type NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
@@ -17,7 +19,20 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    return NextResponse.json({ submissions: await getPublishedSubmissions() });
+    const visitor = getReactionVisitor(request);
+    const [submissions, text] = await Promise.all([
+      getPublishedSubmissions(visitor.visitorId),
+      getSiteText(),
+    ]);
+    const response = NextResponse.json({
+      submissions,
+      text: {
+        heading: text["wall.heading"],
+        description: text["wall.description"],
+      },
+    });
+    if (visitor.created) setReactionVisitorCookie(response, visitor.visitorId);
+    return response;
   } catch {
     return NextResponse.json(
       { error: "The anonymous feed is unavailable right now." },
@@ -42,7 +57,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true }, { status: 202 });
   }
 
-  const body = typeof payload.body === "string" ? payload.body.trim() : "";
+  const requestedBody = typeof payload.body === "string" ? payload.body.trim() : "";
+  const { body, publishImmediately } = await prepareSubmission(requestedBody);
   if (!body || body.length > 2000) {
     return NextResponse.json({ error: "Write between 1 and 2,000 characters." }, { status: 400 });
   }
@@ -55,8 +71,8 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    await createSubmission(body);
-    return NextResponse.json({ ok: true }, { status: 201 });
+    await createSubmission(body, publishImmediately);
+    return NextResponse.json({ ok: true, published: publishImmediately }, { status: 201 });
   } catch {
     return NextResponse.json(
       { error: "Your submission could not be saved. Please try again." },

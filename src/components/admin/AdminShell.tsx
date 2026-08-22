@@ -43,6 +43,26 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             prefixIcon="openvpn"
             selected={pathname === "/admin/vpn"}
           />
+          <ToggleButton
+            aria-label="Status"
+            className={styles.navButton}
+            fillWidth
+            horizontal="start"
+            href="/admin/status"
+            label="Status"
+            prefixIcon="globe"
+            selected={pathname === "/admin/status"}
+          />
+          <ToggleButton
+            aria-label="Text"
+            className={styles.navButton}
+            fillWidth
+            horizontal="start"
+            href="/admin/text"
+            label="Text"
+            prefixIcon="text"
+            selected={pathname === "/admin/text"}
+          />
         </Column>
         <div className={styles.signOut}>
           <div className={styles.desktopSignOut}>

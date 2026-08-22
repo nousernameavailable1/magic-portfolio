@@ -1,3 +1,4 @@
+import { getSiteText } from "@/lib/site-text";
 import { about, baseURL, home, person, routes } from "@/resources";
 import {
   Avatar,
@@ -16,7 +17,9 @@ import {
 // import { Projects } from "@/components/projects/Projects";
 // import { Posts } from "@/components/blog/Posts";
 
-export async function generateMetadata() {
+export const dynamic = "force-dynamic";
+
+export function generateMetadata() {
   return Meta.generate({
     title: home.title,
     description: home.description,
@@ -26,7 +29,8 @@ export async function generateMetadata() {
   });
 }
 
-export default function Home() {
+export default async function Home() {
+  const text = await getSiteText();
   return (
     <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
       <Schema
@@ -67,12 +71,12 @@ export default function Home() {
           )}
           <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
             <Heading wrap="balance" variant="display-strong-l">
-              {home.headline}
+              {text["home.headline"]}
             </Heading>
           </RevealFx>
           <RevealFx translateY="8" delay={0.2} fillWidth horizontal="center" paddingBottom="32">
             <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
-              {home.subline}
+              {text["home.subline"]}
             </Text>
           </RevealFx>
           <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">

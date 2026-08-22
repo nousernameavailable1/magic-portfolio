@@ -92,6 +92,23 @@
   padding-top: var(--static-space-12);
 }
 
+.reactionButton {
+  align-self: flex-start;
+}
+
+.heart {
+  color: #ef4444;
+}
+
+.reactionCount {
+  margin-left: var(--static-space-4);
+}
+
+.moderationLikeCount {
+  align-items: center;
+  display: inline-flex;
+}
+
 .commentComposer {
   border-top: 1px solid var(--neutral-alpha-weak);
   padding-top: var(--static-space-16);
@@ -107,6 +124,10 @@
 
 .commentHeader {
   min-width: 0;
+}
+
+.comment {
+  margin-left: calc(var(--static-space-24) + var(--static-space-8));
 }
 
 .commentLabel {

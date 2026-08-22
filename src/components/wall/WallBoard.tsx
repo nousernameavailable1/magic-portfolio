@@ -19,12 +19,20 @@ function formatDate(value: string) {
   return new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(new Date(value));
 }
 
+const defaultText = {
+  heading: "Say it anonymously.",
+  description:
+    "A feedback, request, opinion, thought, insult, compliment or literally anything else",
+};
+
 export function WallBoard() {
   const [body, setBody] = useState("");
   const [website, setWebsite] = useState("");
   const [submissions, setSubmissions] = useState<WallSubmission[]>([]);
+  const [text, setText] = useState(defaultText);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [reactingId, setReactingId] = useState<number | null>(null);
   const { addToast } = useToast();
   const addToastRef = useRef(addToast);
   addToastRef.current = addToast;
@@ -33,9 +41,14 @@ export function WallBoard() {
     setLoading(true);
     try {
       const response = await fetch("/api/wall", { cache: "no-store" });
-      const data = (await response.json()) as { submissions?: WallSubmission[]; error?: string };
+      const data = (await response.json()) as {
+        submissions?: WallSubmission[];
+        text?: typeof defaultText;
+        error?: string;
+      };
       if (!response.ok) throw new Error(data.error);
       setSubmissions(data.submissions ?? []);
+      if (data.text) setText(data.text);
     } catch (error) {
       addToastRef.current({
         variant: "danger",
@@ -61,13 +74,14 @@ export function WallBoard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ body, website }),
       });
-      const data = (await response.json()) as { error?: string };
+      const data = (await response.json()) as { error?: string; published?: boolean };
       if (!response.ok) throw new Error(data.error);
       setBody("");
       setWebsite("");
+      if (data.published) await loadSubmissions();
       addToastRef.current({
         variant: "success",
-        message: "Sent. It will appear here after review.",
+        message: data.published ? "Published." : "Sent. It will appear here after review.",
       });
     } catch (error) {
       addToastRef.current({
@@ -79,6 +93,33 @@ export function WallBoard() {
     }
   };
 
+  const toggleReaction = async (submission: WallSubmission) => {
+    setReactingId(submission.id);
+    try {
+      const response = await fetch(`/api/wall/${submission.id}/reaction`, { method: "POST" });
+      const data = (await response.json()) as {
+        reaction?: { count: number; reacted: boolean };
+        error?: string;
+      };
+      const reaction = data.reaction;
+      if (!response.ok || !reaction) throw new Error(data.error);
+      setSubmissions((current) =>
+        current.map((item) =>
+          item.id === submission.id
+            ? { ...item, reactionCount: reaction.count, reacted: reaction.reacted }
+            : item,
+        ),
+      );
+    } catch (error) {
+      addToastRef.current({
+        variant: "danger",
+        message: error instanceof Error ? error.message : "Could not update the reaction.",
+      });
+    } finally {
+      setReactingId(null);
+    }
+  };
+
   return (
     <Column className={styles.board} maxWidth="100%" fillWidth gap="24" paddingY="16">
       <Row className={styles.hero} fillWidth>
@@ -87,10 +128,10 @@ export function WallBoard() {
             MESSAGE WALL
           </Text>
           <Heading as="h1" variant="display-strong-l">
-            Say it anonymously.
+            {text.heading}
           </Heading>
           <Text variant="heading-default-l" onBackground="neutral-weak">
-            A feedback, request, thought, insult, compliment or literally anything else
+            {text.description}
           </Text>
         </Column>
       </Row>
@@ -187,7 +228,7 @@ export function WallBoard() {
           >
             <Row gap="12" vertical="center">
               <Heading as="h2" variant="display-strong-s">
-                Published messages
+                Messages
               </Heading>
               <Text className={styles.messageCount} variant="label-default-s">
                 {submissions.length}
@@ -244,20 +285,31 @@ export function WallBoard() {
                     radius="s"
                   >
                     <Row className={styles.commentHeader} gap="8" vertical="center">
-                      <Text className={styles.commentLabel} variant="label-default-s">
-                        Comment
-                      </Text>
                       <Avatar
                         aria-label={`Comment by ${person.name}`}
                         size="s"
                         src={person.avatar}
                       />
+                      <Text className={styles.commentLabel} variant="label-default-s">
+                        Comment
+                      </Text>
                     </Row>
                     <Text className={styles.comment} variant="body-default-m">
                       {submission.comment}
                     </Text>
                   </Column>
                 )}
+                <Button
+                  aria-label={submission.reacted ? "Remove heart reaction" : "Add heart reaction"}
+                  className={styles.reactionButton}
+                  size="s"
+                  variant={submission.reacted ? "primary" : "secondary"}
+                  loading={reactingId === submission.id}
+                  onClick={() => void toggleReaction(submission)}
+                >
+                  <span className={styles.heart}>♥</span>
+                  <span className={styles.reactionCount}>{submission.reactionCount}</span>
+                </Button>
                 <Row
                   className={styles.messageMeta}
                   fillWidth

@@ -34,6 +34,7 @@ import {
 } from "react-icons/si";
 
 import { GrOracle } from "react-icons/gr";
+import { TbTxt } from "react-icons/tb";
 
 import {
   FaDiscord,
@@ -73,6 +74,7 @@ export const iconLibrary: Record<string, IconType> = {
   threads: FaThreads,
   arrowUpRightFromSquare: HiArrowTopRightOnSquare,
   document: HiOutlineDocument,
+  text: TbTxt,
   rocket: HiOutlineRocketLaunch,
   javascript: SiJavascript,
   nextjs: SiNextdotjs,

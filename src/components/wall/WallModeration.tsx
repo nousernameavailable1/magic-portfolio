@@ -13,6 +13,7 @@ import {
   useToast,
 } from "@once-ui-system/core";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { WallBypassSettings } from "./WallBypassSettings";
 import styles from "./wall.module.scss";
 
 const statuses: Array<{ value: WallStatus; label: string }> = [
@@ -134,6 +135,29 @@ export function WallModeration() {
     }
   };
 
+  const clearLikes = async (submission: WallSubmission) => {
+    setBusyId(submission.id);
+    try {
+      const response = await fetch(`/api/admin/wall/reactions?id=${submission.id}`, {
+        method: "DELETE",
+      });
+      const data = (await response.json()) as { cleared?: number; error?: string };
+      if (!response.ok) throw new Error(data.error);
+      await loadSubmissions();
+      addToastRef.current({
+        variant: "success",
+        message: data.cleared ? "Likes cleared." : "This message has no likes.",
+      });
+    } catch (error) {
+      addToastRef.current({
+        variant: "danger",
+        message: error instanceof Error ? error.message : "Could not clear likes.",
+      });
+    } finally {
+      setBusyId(null);
+    }
+  };
+
   const selectStatus = (nextStatus: WallStatus) => {
     setStatus(nextStatus);
   };
@@ -148,13 +172,19 @@ export function WallModeration() {
         s={{ direction: "column", horizontal: "start", vertical: "start" }}
       >
         <Column flex={1} gap="8">
-          <Heading className={styles.pageTitle} as="h1" variant="display-strong-l">
+          <Heading
+            className={styles.pageTitle}
+            as="h1"
+            variant="display-strong-l"
+            style={{ whiteSpace: "nowrap" }}
+          >
             Wall submissions
           </Heading>
           <Text className={styles.pageDescription} onBackground="neutral-weak">
             Review posts before they appear publicly.
           </Text>
         </Column>
+        <WallBypassSettings />
         <Row gap="8" wrap>
           {statuses.map((item) => (
             <Button
@@ -213,7 +243,7 @@ export function WallModeration() {
                   <Textarea
                     id={`approval-comment-${submission.id}`}
                     label="Comment for the published wall (optional)"
-                    placeholder="Add a moderator comment..."
+                    placeholder="Add a comment..."
                     value={approvalComment}
                     onChange={(event) =>
                       setApprovalComments((current) => ({
@@ -238,58 +268,77 @@ export function WallModeration() {
                   radius="s"
                 >
                   <Row className={styles.commentHeader} gap="8" vertical="center">
+                    <Avatar aria-label={`Comment by ${person.name}`} size="s" src={person.avatar} />
                     <Text className={styles.commentLabel} variant="label-default-s">
                       Comment
                     </Text>
-                    <Avatar aria-label={`Comment by ${person.name}`} size="s" src={person.avatar} />
                   </Row>
                   <Text className={styles.comment} variant="body-default-m">
                     {submission.comment}
                   </Text>
                 </Column>
               )}
-              <Row gap="8" wrap>
-                {submission.status !== "approved" && (
-                  <Button
-                    size="s"
-                    variant="success"
-                    loading={busy}
-                    onClick={() => void changeStatus(submission, "approved", approvalComment)}
-                  >
-                    Approve
-                  </Button>
-                )}
-                {submission.status !== "rejected" && (
-                  <Button
-                    size="s"
-                    variant="danger"
-                    loading={busy}
-                    onClick={() => void changeStatus(submission, "rejected")}
-                  >
-                    Reject
-                  </Button>
-                )}
-                {submission.status === "approved" && (
-                  <Button
-                    size="s"
-                    variant="secondary"
-                    loading={busy}
-                    onClick={() => void togglePin(submission)}
-                  >
-                    {submission.pinned ? "Unpin" : "Pin"}
-                  </Button>
-                )}
+              <Row fillWidth horizontal="between" vertical="center" gap="8">
+                <Row gap="8" wrap>
+                  {submission.status !== "approved" && (
+                    <Button
+                      size="s"
+                      variant="success"
+                      loading={busy}
+                      onClick={() => void changeStatus(submission, "approved", approvalComment)}
+                    >
+                      Approve
+                    </Button>
+                  )}
+                  {submission.status === "pending" && (
+                    <Button
+                      size="s"
+                      variant="danger"
+                      loading={busy}
+                      onClick={() => void changeStatus(submission, "rejected")}
+                    >
+                      Reject
+                    </Button>
+                  )}
+                  {submission.status === "approved" && (
+                    <Button
+                      size="s"
+                      variant="secondary"
+                      loading={busy}
+                      onClick={() => void togglePin(submission)}
+                    >
+                      {submission.pinned ? "Unpin" : "Pin"}
+                    </Button>
+                  )}
+                  {submission.status !== "pending" && (
+                    <Button
+                      size="s"
+                      variant="secondary"
+                      loading={busy}
+                      onClick={() => void changeStatus(submission, "pending")}
+                    >
+                      Move to pending
+                    </Button>
+                  )}
+                  {submission.status === "approved" && (
+                    <Text className={styles.moderationLikeCount} variant="label-default-s">
+                      <span className={styles.heart}>♥</span>
+                      <span className={styles.reactionCount}>{submission.reactionCount}</span>
+                    </Text>
+                  )}
+                  {submission.status === "approved" && (
+                    <Button
+                      size="s"
+                      variant="secondary"
+                      loading={busy}
+                      disabled={submission.reactionCount === 0}
+                      onClick={() => void clearLikes(submission)}
+                    >
+                      Clear likes
+                    </Button>
+                  )}
+                </Row>
                 {submission.status !== "pending" && (
-                  <Button
-                    size="s"
-                    variant="secondary"
-                    loading={busy}
-                    onClick={() => void changeStatus(submission, "pending")}
-                  >
-                    Move to pending
-                  </Button>
-                )}
-                {status !== "pending" && (
                   <Button
                     size="s"
                     variant="danger"
