@@ -202,6 +202,10 @@ const about: About = {
             icon: "ubuntu",
           },
           {
+            name: "Node.js",
+            icon: "nodejs",
+          },
+          {
             name: "OpenVPN",
             icon: "openvpn",
           },

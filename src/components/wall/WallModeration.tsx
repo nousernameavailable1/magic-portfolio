@@ -22,6 +22,8 @@ const statuses: Array<{ value: WallStatus; label: string }> = [
   { value: "rejected", label: "Rejected" },
 ];
 
+type ModerationAction = "approve" | "reject" | "pin" | "move-to-pending" | "clear-likes" | "delete";
+
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short" }).format(
     new Date(value),
@@ -33,7 +35,10 @@ export function WallModeration() {
   const [submissions, setSubmissions] = useState<WallSubmission[]>([]);
   const [approvalComments, setApprovalComments] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(true);
-  const [busyId, setBusyId] = useState<number | null>(null);
+  const [busyAction, setBusyAction] = useState<{
+    id: number;
+    action: ModerationAction;
+  } | null>(null);
   const { addToast } = useToast();
   const addToastRef = useRef(addToast);
   addToastRef.current = addToast;
@@ -65,9 +70,10 @@ export function WallModeration() {
   const changeStatus = async (
     submission: WallSubmission,
     nextStatus: WallStatus,
+    action: ModerationAction,
     comment?: string,
   ) => {
-    setBusyId(submission.id);
+    setBusyAction({ id: submission.id, action });
     try {
       const response = await fetch("/api/admin/wall", {
         method: "PATCH",
@@ -89,12 +95,12 @@ export function WallModeration() {
         message: error instanceof Error ? error.message : "Could not update this submission.",
       });
     } finally {
-      setBusyId(null);
+      setBusyAction(null);
     }
   };
 
   const togglePin = async (submission: WallSubmission) => {
-    setBusyId(submission.id);
+    setBusyAction({ id: submission.id, action: "pin" });
     try {
       const response = await fetch("/api/admin/wall", {
         method: "PATCH",
@@ -114,12 +120,12 @@ export function WallModeration() {
         message: error instanceof Error ? error.message : "Could not update this submission.",
       });
     } finally {
-      setBusyId(null);
+      setBusyAction(null);
     }
   };
 
   const remove = async (submission: WallSubmission) => {
-    setBusyId(submission.id);
+    setBusyAction({ id: submission.id, action: "delete" });
     try {
       const response = await fetch(`/api/admin/wall?id=${submission.id}`, { method: "DELETE" });
       const data = (await response.json()) as { error?: string };
@@ -131,12 +137,12 @@ export function WallModeration() {
         message: error instanceof Error ? error.message : "Could not delete this submission.",
       });
     } finally {
-      setBusyId(null);
+      setBusyAction(null);
     }
   };
 
   const clearLikes = async (submission: WallSubmission) => {
-    setBusyId(submission.id);
+    setBusyAction({ id: submission.id, action: "clear-likes" });
     try {
       const response = await fetch(`/api/admin/wall/reactions?id=${submission.id}`, {
         method: "DELETE",
@@ -154,7 +160,7 @@ export function WallModeration() {
         message: error instanceof Error ? error.message : "Could not clear likes.",
       });
     } finally {
-      setBusyId(null);
+      setBusyAction(null);
     }
   };
 
@@ -218,7 +224,9 @@ export function WallModeration() {
       )}
       <Column fillWidth gap="12">
         {submissions.map((submission) => {
-          const busy = busyId === submission.id;
+          const busy = busyAction?.id === submission.id;
+          const isBusy = (action: ModerationAction) =>
+            busyAction?.id === submission.id && busyAction.action === action;
           const approvalComment = approvalComments[submission.id] ?? "";
           return (
             <Column
@@ -284,8 +292,11 @@ export function WallModeration() {
                     <Button
                       size="s"
                       variant="success"
-                      loading={busy}
-                      onClick={() => void changeStatus(submission, "approved", approvalComment)}
+                      loading={isBusy("approve")}
+                      disabled={busy}
+                      onClick={() =>
+                        void changeStatus(submission, "approved", "approve", approvalComment)
+                      }
                     >
                       Approve
                     </Button>
@@ -294,8 +305,9 @@ export function WallModeration() {
                     <Button
                       size="s"
                       variant="danger"
-                      loading={busy}
-                      onClick={() => void changeStatus(submission, "rejected")}
+                      loading={isBusy("reject")}
+                      disabled={busy}
+                      onClick={() => void changeStatus(submission, "rejected", "reject")}
                     >
                       Reject
                     </Button>
@@ -304,7 +316,8 @@ export function WallModeration() {
                     <Button
                       size="s"
                       variant="secondary"
-                      loading={busy}
+                      loading={isBusy("pin")}
+                      disabled={busy}
                       onClick={() => void togglePin(submission)}
                     >
                       {submission.pinned ? "Unpin" : "Pin"}
@@ -314,8 +327,9 @@ export function WallModeration() {
                     <Button
                       size="s"
                       variant="secondary"
-                      loading={busy}
-                      onClick={() => void changeStatus(submission, "pending")}
+                      loading={isBusy("move-to-pending")}
+                      disabled={busy}
+                      onClick={() => void changeStatus(submission, "pending", "move-to-pending")}
                     >
                       Move to pending
                     </Button>
@@ -330,8 +344,8 @@ export function WallModeration() {
                     <Button
                       size="s"
                       variant="secondary"
-                      loading={busy}
-                      disabled={submission.reactionCount === 0}
+                      loading={isBusy("clear-likes")}
+                      disabled={busy || submission.reactionCount === 0}
                       onClick={() => void clearLikes(submission)}
                     >
                       Clear likes
@@ -342,7 +356,8 @@ export function WallModeration() {
                   <Button
                     size="s"
                     variant="danger"
-                    loading={busy}
+                    loading={isBusy("delete")}
+                    disabled={busy}
                     onClick={() => void remove(submission)}
                   >
                     Delete

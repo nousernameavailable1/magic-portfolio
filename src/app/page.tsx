@@ -19,6 +19,18 @@ import {
 
 export const dynamic = "force-dynamic";
 
+function isAfterHours() {
+  const hour = Number(
+    new Intl.DateTimeFormat("en-GB", {
+      hour: "2-digit",
+      hourCycle: "h23",
+      timeZone: person.location,
+    }).format(new Date()),
+  );
+
+  return hour >= 1 && hour < 6;
+}
+
 export function generateMetadata() {
   return Meta.generate({
     title: home.title,
@@ -31,6 +43,9 @@ export function generateMetadata() {
 
 export default async function Home() {
   const text = await getSiteText();
+  const afterHours = isAfterHours();
+  const headline = afterHours ? text["home.afterHoursHeadline"] : text["home.headline"];
+  const subline = afterHours ? text["home.afterHoursDescription"] : text["home.subline"];
   return (
     <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
       <Schema
@@ -71,12 +86,12 @@ export default async function Home() {
           )}
           <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
             <Heading wrap="balance" variant="display-strong-l">
-              {text["home.headline"]}
+              {headline}
             </Heading>
           </RevealFx>
           <RevealFx translateY="8" delay={0.2} fillWidth horizontal="center" paddingBottom="32">
             <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
-              {text["home.subline"]}
+              {subline}
             </Text>
           </RevealFx>
           <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">

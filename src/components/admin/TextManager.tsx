@@ -7,17 +7,87 @@ type TextField = {
   key: string;
   label: string;
   description: string;
+  parentKey?: string;
   defaultValue: string;
   maxLength: number;
   lines: number;
   value: string;
 };
 
+type TextAction = "save" | "set-default" | "reset";
+
+type TextFieldEditorProps = {
+  field: TextField;
+  value: string;
+  busyAction: { key: string; action: TextAction } | null;
+  onValueChange: (key: string, value: string) => void;
+  onSave: (field: TextField) => void;
+  onSetDefault: (field: TextField) => void;
+  onReset: (field: TextField) => void;
+};
+
+function TextFieldEditor({
+  field,
+  value,
+  busyAction,
+  onValueChange,
+  onSave,
+  onSetDefault,
+  onReset,
+}: TextFieldEditorProps) {
+  const busy = busyAction?.key === field.key;
+
+  return (
+    <>
+      <Textarea
+        aria-label={field.label}
+        id={`text-${field.key.replace(".", "-")}`}
+        placeholder=" "
+        value={value}
+        onChange={(event) => onValueChange(field.key, event.target.value)}
+        maxLength={field.maxLength}
+        lines={field.lines}
+        characterCount
+        resize="vertical"
+      />
+      <Row gap="8" wrap>
+        <Button
+          size="s"
+          variant="primary"
+          loading={busyAction?.key === field.key && busyAction.action === "save"}
+          disabled={busy || !value.trim() || value.trim() === field.value}
+          onClick={() => onSave(field)}
+        >
+          Save
+        </Button>
+        <Button
+          size="s"
+          variant="secondary"
+          loading={busyAction?.key === field.key && busyAction.action === "set-default"}
+          disabled={busy || !value.trim() || value.trim() === field.defaultValue}
+          onClick={() => onSetDefault(field)}
+        >
+          Set default
+        </Button>
+        <Button
+          size="s"
+          variant="secondary"
+          loading={busyAction?.key === field.key && busyAction.action === "reset"}
+          disabled={busy || value.trim() === field.defaultValue}
+          onClick={() => onReset(field)}
+        >
+          Reset to default
+        </Button>
+      </Row>
+    </>
+  );
+}
+
 export function TextManager() {
   const [fields, setFields] = useState<TextField[]>([]);
   const [values, setValues] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
-  const [busyKey, setBusyKey] = useState<string | null>(null);
+  const [busyAction, setBusyAction] = useState<{ key: string; action: TextAction } | null>(null);
   const { addToast } = useToast();
   const addToastRef = useRef(addToast);
   addToastRef.current = addToast;
@@ -47,7 +117,7 @@ export function TextManager() {
   }, [loadFields]);
 
   const saveField = async (field: TextField) => {
-    setBusyKey(field.key);
+    setBusyAction({ key: field.key, action: "save" });
     try {
       const response = await fetch("/api/admin/text", {
         method: "PATCH",
@@ -67,12 +137,12 @@ export function TextManager() {
         message: error instanceof Error ? error.message : "Could not save this text.",
       });
     } finally {
-      setBusyKey(null);
+      setBusyAction(null);
     }
   };
 
   const resetField = async (field: TextField) => {
-    setBusyKey(field.key);
+    setBusyAction({ key: field.key, action: "reset" });
     try {
       const response = await fetch(`/api/admin/text?key=${encodeURIComponent(field.key)}`, {
         method: "DELETE",
@@ -90,12 +160,12 @@ export function TextManager() {
         message: error instanceof Error ? error.message : "Could not reset this text.",
       });
     } finally {
-      setBusyKey(null);
+      setBusyAction(null);
     }
   };
 
   const setDefaultField = async (field: TextField) => {
-    setBusyKey(field.key);
+    setBusyAction({ key: field.key, action: "set-default" });
     try {
       const response = await fetch("/api/admin/text", {
         method: "PUT",
@@ -115,7 +185,7 @@ export function TextManager() {
         message: error instanceof Error ? error.message : "Could not set this text as the default.",
       });
     } finally {
-      setBusyKey(null);
+      setBusyAction(null);
     }
   };
 
@@ -123,11 +193,13 @@ export function TextManager() {
     return <Text onBackground="neutral-weak">No editable text fields are configured.</Text>;
   }
 
+  const topLevelFields = fields.filter((field) => !field.parentKey);
+
   return (
     <Column fillWidth gap="16">
-      {fields.map((field) => {
-        const busy = busyKey === field.key;
+      {topLevelFields.map((field) => {
         const value = values[field.key] ?? "";
+        const nestedFields = fields.filter((candidate) => candidate.parentKey === field.key);
         return (
           <Column
             key={field.key}
@@ -144,48 +216,51 @@ export function TextManager() {
               </Heading>
               <Text onBackground="neutral-weak">{field.description}</Text>
             </Column>
-            <Textarea
-              aria-label={field.label}
-              id={`text-${field.key.replace(".", "-")}`}
-              placeholder=" "
+            <TextFieldEditor
+              field={field}
               value={value}
-              onChange={(event) =>
-                setValues((current) => ({ ...current, [field.key]: event.target.value }))
+              busyAction={busyAction}
+              onValueChange={(key, nextValue) =>
+                setValues((current) => ({ ...current, [key]: nextValue }))
               }
-              maxLength={field.maxLength}
-              lines={field.lines}
-              characterCount
-              resize="vertical"
+              onSave={(nextField) => void saveField(nextField)}
+              onSetDefault={(nextField) => void setDefaultField(nextField)}
+              onReset={(nextField) => void resetField(nextField)}
             />
-            <Row gap="8" wrap>
-              <Button
-                size="s"
-                variant="primary"
-                loading={busy}
-                disabled={!value.trim() || value.trim() === field.value}
-                onClick={() => void saveField(field)}
+            {nestedFields.length > 0 && (
+              <Column
+                fillWidth
+                gap="16"
+                padding="16"
+                background="neutral-alpha-weak"
+                border="neutral-alpha-weak"
+                radius="m"
               >
-                Save
-              </Button>
-              <Button
-                size="s"
-                variant="secondary"
-                loading={busy}
-                disabled={!value.trim() || value.trim() === field.defaultValue}
-                onClick={() => void setDefaultField(field)}
-              >
-                Set default
-              </Button>
-              <Button
-                size="s"
-                variant="secondary"
-                loading={busy}
-                disabled={value.trim() === field.defaultValue}
-                onClick={() => void resetField(field)}
-              >
-                Reset to default
-              </Button>
-            </Row>
+                <Column gap="4">
+                  <Heading as="h3" variant="heading-strong-m">
+                    {nestedFields.length === 1 ? nestedFields[0].label : "After-hours message"}
+                  </Heading>
+                  <Text onBackground="neutral-weak">
+                    Shown from 1:00 AM to 5:59 AM (Asia/Dubai).
+                  </Text>
+                </Column>
+                {nestedFields.map((nestedField) => (
+                  <Column key={nestedField.key} gap="8">
+                    <TextFieldEditor
+                      field={nestedField}
+                      value={values[nestedField.key] ?? ""}
+                      busyAction={busyAction}
+                      onValueChange={(key, nextValue) =>
+                        setValues((current) => ({ ...current, [key]: nextValue }))
+                      }
+                      onSave={(nextField) => void saveField(nextField)}
+                      onSetDefault={(nextField) => void setDefaultField(nextField)}
+                      onReset={(nextField) => void resetField(nextField)}
+                    />
+                  </Column>
+                ))}
+              </Column>
+            )}
           </Column>
         );
       })}

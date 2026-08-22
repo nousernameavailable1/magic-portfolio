@@ -8,11 +8,13 @@ type BypassSettings = {
   enabled: boolean;
 };
 
+type BypassAction = "save-suffix" | "toggle";
+
 export function WallBypassSettings() {
   const [settings, setSettings] = useState<BypassSettings | null>(null);
   const [suffix, setSuffix] = useState("");
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [savingAction, setSavingAction] = useState<BypassAction | null>(null);
   const { addToast } = useToast();
   const addToastRef = useRef(addToast);
   addToastRef.current = addToast;
@@ -40,8 +42,12 @@ export function WallBypassSettings() {
     void loadSettings();
   }, [loadSettings]);
 
-  const updateSettings = async (update: Partial<BypassSettings>, successMessage: string) => {
-    setSaving(true);
+  const updateSettings = async (
+    update: Partial<BypassSettings>,
+    action: BypassAction,
+    successMessage: string,
+  ) => {
+    setSavingAction(action);
     try {
       const response = await fetch("/api/admin/wall/bypass", {
         method: "PATCH",
@@ -60,12 +66,13 @@ export function WallBypassSettings() {
         message: error instanceof Error ? error.message : "Could not update bypass settings.",
       });
     } finally {
-      setSaving(false);
+      setSavingAction(null);
     }
   };
 
   const enabled = settings?.enabled ?? false;
   const canSaveSuffix = Boolean(suffix.trim() && suffix.trim() !== settings?.suffix);
+  const saving = savingAction !== null;
 
   return (
     <Row
@@ -94,20 +101,21 @@ export function WallBypassSettings() {
       <Button
         size="s"
         variant="secondary"
-        loading={saving}
-        disabled={loading || !canSaveSuffix}
-        onClick={() => void updateSettings({ suffix }, "Bypass suffix saved.")}
+        loading={savingAction === "save-suffix"}
+        disabled={loading || saving || !canSaveSuffix}
+        onClick={() => void updateSettings({ suffix }, "save-suffix", "Bypass suffix saved.")}
       >
         Save
       </Button>
       <Button
         size="s"
         variant={enabled ? "danger" : "success"}
-        loading={saving}
-        disabled={loading}
+        loading={savingAction === "toggle"}
+        disabled={loading || saving}
         onClick={() =>
           void updateSettings(
             { enabled: !enabled },
+            "toggle",
             enabled ? "Instant publishing disabled." : "Instant publishing enabled.",
           )
         }
