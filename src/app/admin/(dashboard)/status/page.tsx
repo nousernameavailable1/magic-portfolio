@@ -153,7 +153,7 @@ export default async function AdminStatusPage() {
           <Text onBackground="neutral-weak">
             {status.runtime.deploymentRevision
               ? "Reported by the running deployment."
-              : "Set DEPLOYMENT_COMMIT_SHA in the server environment to show the deployed commit."}
+              : "No deployment commit SHA was provided by the runtime."}
           </Text>
         </StatusCard>
       </div>

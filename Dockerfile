@@ -20,9 +20,11 @@ FROM node:22-alpine AS runner
 
 WORKDIR /app
 
+ARG DEPLOYMENT_COMMIT_SHA
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
+ENV DEPLOYMENT_COMMIT_SHA=$DEPLOYMENT_COMMIT_SHA
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./

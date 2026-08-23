@@ -33,6 +33,8 @@ jobs:
         with:
           context: .
           push: true
+          build-args: |
+            DEPLOYMENT_COMMIT_SHA=${{ github.sha }}
           tags: |
             ghcr.io/${{ github.repository }}:latest
             ghcr.io/${{ github.repository }}:${{ github.sha }}

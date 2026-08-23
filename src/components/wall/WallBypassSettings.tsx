@@ -13,6 +13,7 @@ type BypassAction = "save-suffix" | "toggle";
 export function WallBypassSettings() {
   const [settings, setSettings] = useState<BypassSettings | null>(null);
   const [suffix, setSuffix] = useState("");
+  const [hydrated, setHydrated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [savingAction, setSavingAction] = useState<BypassAction | null>(null);
   const { addToast } = useToast();
@@ -39,6 +40,7 @@ export function WallBypassSettings() {
   }, []);
 
   useEffect(() => {
+    setHydrated(true);
     void loadSettings();
   }, [loadSettings]);
 
@@ -73,6 +75,7 @@ export function WallBypassSettings() {
   const enabled = settings?.enabled ?? false;
   const canSaveSuffix = Boolean(suffix.trim() && suffix.trim() !== settings?.suffix);
   const saving = savingAction !== null;
+  const controlsDisabled = !hydrated || loading || saving;
 
   return (
     <Row
@@ -94,7 +97,7 @@ export function WallBypassSettings() {
         value={suffix}
         maxLength={80}
         height="xs"
-        disabled={loading || saving}
+        disabled={controlsDisabled}
         onChange={(event) => setSuffix(event.target.value)}
         style={{ minHeight: "2.25rem", width: "8rem" }}
       />
@@ -102,7 +105,7 @@ export function WallBypassSettings() {
         size="s"
         variant="secondary"
         loading={savingAction === "save-suffix"}
-        disabled={loading || saving || !canSaveSuffix}
+        disabled={controlsDisabled || !canSaveSuffix}
         onClick={() => void updateSettings({ suffix }, "save-suffix", "Bypass suffix saved.")}
       >
         Save
@@ -111,7 +114,7 @@ export function WallBypassSettings() {
         size="s"
         variant={enabled ? "danger" : "success"}
         loading={savingAction === "toggle"}
-        disabled={loading || saving}
+        disabled={controlsDisabled}
         onClick={() =>
           void updateSettings(
             { enabled: !enabled },
