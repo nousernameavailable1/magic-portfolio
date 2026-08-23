@@ -12,6 +12,7 @@
 # next.js
 /.next/
 /out/
+/public/site-code-metrics.json
 
 # production
 /build

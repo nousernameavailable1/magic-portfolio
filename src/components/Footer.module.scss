@@ -1,7 +1,31 @@
 @use "./breakpoints.scss" as breakpoints;
 
+.footerStart {
+    min-width: 0;
+}
+
+.statsLink {
+    color: var(--static-white);
+    display: inline-flex;
+    line-height: 1;
+    text-decoration: none;
+
+    svg {
+        height: 1.25rem;
+        width: 1.25rem;
+    }
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 @media (max-width: breakpoints.$s) {
     .mobile {
         text-align: center;
+    }
+
+    .footerStart {
+        justify-content: center;
     }
 }

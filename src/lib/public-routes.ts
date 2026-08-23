@@ -82,6 +82,7 @@ export const publicRoutes: PublicRoute[] = [
   { path: "/wall", label: "Wall", lockedByDefault: true },
   { path: "/jumpscare", label: "Jumpscare", lockedByDefault: false },
   { path: "/rickroll", label: "Rickroll", lockedByDefault: false },
+  { path: "/statistics", label: "Statistics", lockedByDefault: false },
 ];
 
 function getPublicRoute(path: string) {

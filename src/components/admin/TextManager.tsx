@@ -1,5 +1,6 @@
 "use client";
 
+import { FinanceVisibilityToggle } from "@/components/admin/FinanceVisibilityToggle";
 import { Button, Column, Heading, Row, Text, Textarea, useToast } from "@once-ui-system/core";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -193,13 +194,20 @@ export function TextManager() {
     return <Text onBackground="neutral-weak">No editable text fields are configured.</Text>;
   }
 
-  const topLevelFields = fields.filter((field) => !field.parentKey);
+  const topLevelFields = fields.filter(
+    (field) => !field.parentKey && field.key !== "about.financeVisible",
+  );
 
   return (
     <Column fillWidth gap="16">
       {topLevelFields.map((field) => {
         const value = values[field.key] ?? "";
         const nestedFields = fields.filter((candidate) => candidate.parentKey === field.key);
+        const isFinanceGroup = field.key === "about.finance";
+        const nestedTitle = isFinanceGroup ? "Card and bank fields" : "After-hours message";
+        const nestedDescription = isFinanceGroup
+          ? "Each saved change is reflected in the Finance section on the About page."
+          : "Shown from 1:00 AM to 5:59 AM (Asia/Dubai).";
         return (
           <Column
             key={field.key}
@@ -210,23 +218,37 @@ export function TextManager() {
             border="neutral-alpha-weak"
             radius="l"
           >
-            <Column gap="4">
-              <Heading as="h2" variant="heading-strong-l">
-                {field.label}
-              </Heading>
-              <Text onBackground="neutral-weak">{field.description}</Text>
-            </Column>
-            <TextFieldEditor
-              field={field}
-              value={value}
-              busyAction={busyAction}
-              onValueChange={(key, nextValue) =>
-                setValues((current) => ({ ...current, [key]: nextValue }))
-              }
-              onSave={(nextField) => void saveField(nextField)}
-              onSetDefault={(nextField) => void setDefaultField(nextField)}
-              onReset={(nextField) => void resetField(nextField)}
-            />
+            {isFinanceGroup ? (
+              <Column gap="4">
+                <Row fillWidth horizontal="between" vertical="center" gap="16">
+                  <Heading as="h2" variant="heading-strong-l">
+                    {field.label}
+                  </Heading>
+                  <FinanceVisibilityToggle />
+                </Row>
+                <Text onBackground="neutral-weak">{field.description}</Text>
+              </Column>
+            ) : (
+              <Column gap="4">
+                <Heading as="h2" variant="heading-strong-l">
+                  {field.label}
+                </Heading>
+                <Text onBackground="neutral-weak">{field.description}</Text>
+              </Column>
+            )}
+            {!isFinanceGroup && (
+              <TextFieldEditor
+                field={field}
+                value={value}
+                busyAction={busyAction}
+                onValueChange={(key, nextValue) =>
+                  setValues((current) => ({ ...current, [key]: nextValue }))
+                }
+                onSave={(nextField) => void saveField(nextField)}
+                onSetDefault={(nextField) => void setDefaultField(nextField)}
+                onReset={(nextField) => void resetField(nextField)}
+              />
+            )}
             {nestedFields.length > 0 && (
               <Column
                 fillWidth
@@ -238,14 +260,18 @@ export function TextManager() {
               >
                 <Column gap="4">
                   <Heading as="h3" variant="heading-strong-m">
-                    {nestedFields.length === 1 ? nestedFields[0].label : "After-hours message"}
+                    {nestedFields.length === 1 ? nestedFields[0].label : nestedTitle}
                   </Heading>
-                  <Text onBackground="neutral-weak">
-                    Shown from 1:00 AM to 5:59 AM (Asia/Dubai).
-                  </Text>
+                  <Text onBackground="neutral-weak">{nestedDescription}</Text>
                 </Column>
                 {nestedFields.map((nestedField) => (
                   <Column key={nestedField.key} gap="8">
+                    <Column gap="2">
+                      <Text variant="label-strong-s">{nestedField.label}</Text>
+                      <Text variant="body-default-xs" onBackground="neutral-weak">
+                        {nestedField.description}
+                      </Text>
+                    </Column>
                     <TextFieldEditor
                       field={nestedField}
                       value={values[nestedField.key] ?? ""}

@@ -27,6 +27,7 @@ ENV HOSTNAME=0.0.0.0
 ENV DEPLOYMENT_COMMIT_SHA=$DEPLOYMENT_COMMIT_SHA
 
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/src ./src
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 

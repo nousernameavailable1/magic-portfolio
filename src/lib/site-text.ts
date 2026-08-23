@@ -56,6 +56,95 @@ export const siteTextDefinitions = [
     maxLength: 300,
     lines: 3,
   },
+  {
+    key: "about.financeVisible",
+    label: "Finance visibility",
+    description: "Whether the Finance section appears on the About page.",
+    defaultValue: "true",
+    maxLength: 5,
+    lines: 1,
+  },
+  {
+    key: "about.finance",
+    label: "Finance details",
+    description:
+      "Update the card and banking details shown in the Finance section on the About page.",
+    defaultValue: "Finance",
+    maxLength: 20,
+    lines: 1,
+  },
+  {
+    key: "about.finance.bankName",
+    label: "Bank name",
+    description: "The bank name at the top of the card.",
+    parentKey: "about.finance",
+    defaultValue: "HSBC",
+    maxLength: 40,
+    lines: 1,
+  },
+  {
+    key: "about.finance.cardNumber",
+    label: "Card number",
+    description: "The formatted number displayed on the card.",
+    parentKey: "about.finance",
+    defaultValue: "3635 9255 7328 2369",
+    maxLength: 24,
+    lines: 1,
+  },
+  {
+    key: "about.finance.cardholder",
+    label: "Cardholder",
+    description: "The name shown on the card.",
+    parentKey: "about.finance",
+    defaultValue: "TALAL KADLI",
+    maxLength: 80,
+    lines: 1,
+  },
+  {
+    key: "about.finance.cvv",
+    label: "CVV",
+    description: "The CVV field shown on the card.",
+    parentKey: "about.finance",
+    defaultValue: "418",
+    maxLength: 4,
+    lines: 1,
+  },
+  {
+    key: "about.finance.validThru",
+    label: "Valid thru",
+    description: "The expiry value shown on the card.",
+    parentKey: "about.finance",
+    defaultValue: "09/30",
+    maxLength: 8,
+    lines: 1,
+  },
+  {
+    key: "about.finance.account",
+    label: "Account",
+    description: "The account value shown beside the card.",
+    parentKey: "about.finance",
+    defaultValue: "042 918 375",
+    maxLength: 40,
+    lines: 1,
+  },
+  {
+    key: "about.finance.iban",
+    label: "IBAN",
+    description: "The IBAN value shown beside the card.",
+    parentKey: "about.finance",
+    defaultValue: "AE45 0742 4693 1962 5396 205",
+    maxLength: 48,
+    lines: 1,
+  },
+  {
+    key: "about.finance.swift",
+    label: "SWIFT",
+    description: "The SWIFT value shown beside the card.",
+    parentKey: "about.finance",
+    defaultValue: "HSBCAE74",
+    maxLength: 20,
+    lines: 1,
+  },
 ] as const;
 
 export type SiteTextKey = (typeof siteTextDefinitions)[number]["key"];
@@ -117,6 +206,24 @@ export const getSiteTextState = cache(async (): Promise<SiteTextState> => {
 export const getSiteText = cache(async (): Promise<SiteTextValues> => {
   return (await getSiteTextState()).values;
 });
+
+export async function getFinanceVisibility() {
+  return (await getSiteText())["about.financeVisible"] !== "false";
+}
+
+export async function getFinanceDetails() {
+  const text = await getSiteText();
+  return {
+    account: text["about.finance.account"],
+    bankName: text["about.finance.bankName"],
+    cardholder: text["about.finance.cardholder"],
+    cardNumber: text["about.finance.cardNumber"],
+    cvv: text["about.finance.cvv"],
+    iban: text["about.finance.iban"],
+    swift: text["about.finance.swift"],
+    validThru: text["about.finance.validThru"],
+  };
+}
 
 export async function saveSiteText(key: SiteTextKey, value: string) {
   const definition = getSiteTextDefinition(key);

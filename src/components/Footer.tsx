@@ -1,5 +1,6 @@
 import { person, social } from "@/resources";
 import { IconButton, Row, SmartLink, Text } from "@once-ui-system/core";
+import { FaChartColumn } from "react-icons/fa6";
 import styles from "./Footer.module.scss";
 
 export const Footer = () => {
@@ -21,22 +22,35 @@ export const Footer = () => {
           align: "center",
         }}
       >
-        <Text variant="body-default-s" onBackground="neutral-strong">
-          <Text onBackground="neutral-weak">© {currentYear} /</Text>
-          <Text
-            as="a"
-            href="/admin/login"
-            paddingX="4"
-            style={{ color: "inherit", textDecoration: "none" }}
+        <Row className={styles.footerStart} gap="8" vertical="center">
+          <a
+            className={styles.statsLink}
+            href="/statistics"
+            aria-label="View site statistics"
+            title="Statistics"
           >
-            {person.name}
+            <FaChartColumn aria-hidden="true" />
+          </a>
+          <Text aria-hidden="true" onBackground="neutral-weak">
+            |
           </Text>
-          <Text onBackground="neutral-weak">
-            {/* Usage of this template requires attribution. Please don't remove the link to Once UI unless you have a Pro license. */}
-            / Build your portfolio with{" "}
-            <SmartLink href="https://once-ui.com/products/magic-portfolio">Once UI</SmartLink>
+          <Text variant="body-default-s" onBackground="neutral-strong">
+            <Text onBackground="neutral-weak">© {currentYear} /</Text>
+            <Text
+              as="a"
+              href="/admin/login"
+              paddingX="4"
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
+              {person.name}
+            </Text>
+            <Text onBackground="neutral-weak">
+              {/* Usage of this template requires attribution. Please don't remove the link to Once UI unless you have a Pro license. */}
+              / Build your portfolio with{" "}
+              <SmartLink href="https://once-ui.com/products/magic-portfolio">Once UI</SmartLink>
+            </Text>
           </Text>
-        </Text>
+        </Row>
         <Row gap="16">
           {social.map(
             (item) =>

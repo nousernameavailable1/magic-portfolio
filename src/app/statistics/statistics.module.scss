@@ -1,0 +1,35 @@
+.statsGrid {
+  display: grid;
+  gap: var(--static-space-16);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.structureCard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.structureMetrics {
+  align-self: stretch;
+  border-left: 1px solid var(--neutral-alpha-weak);
+  padding-left: var(--static-space-20);
+}
+
+@media (max-width: 32rem) {
+  .structureCard {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .structureMetrics {
+    border-left: 0;
+    border-top: 1px solid var(--neutral-alpha-weak);
+    padding-left: 0;
+    padding-top: var(--static-space-12);
+  }
+}
+
+@media (max-width: 48rem) {
+  .statsGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

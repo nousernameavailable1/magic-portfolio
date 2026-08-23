@@ -8,6 +8,7 @@ import {
   setSiteTextDefault,
   siteTextDefinitions,
 } from "@/lib/site-text";
+import { revalidatePath } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
@@ -18,6 +19,10 @@ function isAuthorized(request: NextRequest) {
 
 function unauthorized() {
   return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+}
+
+function revalidateFinance(key: string) {
+  if (key.startsWith("about.finance.")) revalidatePath("/about");
 }
 
 async function getFields() {
@@ -65,6 +70,7 @@ export async function PATCH(request: NextRequest) {
 
   try {
     await saveSiteText(payload.key, value);
+    revalidateFinance(payload.key);
     return NextResponse.json({ field: { ...definition, value } });
   } catch {
     return NextResponse.json({ error: "Could not save this text." }, { status: 503 });
@@ -97,6 +103,7 @@ export async function PUT(request: NextRequest) {
 
   try {
     await setSiteTextDefault(payload.key, value);
+    revalidateFinance(payload.key);
     return NextResponse.json({
       field: { ...definition, defaultValue: value, value },
     });
@@ -116,6 +123,7 @@ export async function DELETE(request: NextRequest) {
   try {
     const definition = getSiteTextDefinition(key);
     await resetSiteText(key);
+    revalidateFinance(key);
     const text = await getSiteTextState();
     return NextResponse.json({
       field: {

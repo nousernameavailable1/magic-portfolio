@@ -1,5 +1,6 @@
 import TableOfContents from "@/components/about/TableOfContents";
 import styles from "@/components/about/about.module.scss";
+import { getFinanceDetails, getFinanceVisibility } from "@/lib/site-text";
 import { about, baseURL, person, social } from "@/resources";
 import {
   Avatar,
@@ -16,6 +17,7 @@ import {
   Text,
 } from "@once-ui-system/core";
 import React from "react";
+import { HiOutlineCreditCard } from "react-icons/hi2";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -27,7 +29,9 @@ export async function generateMetadata() {
   });
 }
 
-export default function About() {
+export default async function About() {
+  const financeVisible = await getFinanceVisibility();
+  const finance = await getFinanceDetails();
   const structure = [
     {
       title: about.intro.title,
@@ -48,6 +52,11 @@ export default function About() {
       title: about.technical.title,
       display: about.technical.display,
       items: about.technical.skills.map((skill) => skill.title),
+    },
+    {
+      title: "Finance",
+      display: financeVisible,
+      items: [],
     },
   ];
   return (
@@ -334,6 +343,66 @@ export default function About() {
                 ))}
               </Column>
             </>
+          )}
+
+          {financeVisible && (
+            <section id="Finance" className={styles.paymentSection} aria-labelledby="finance-title">
+              <Heading as="h2" id="finance-title" variant="display-strong-s">
+                Finance
+              </Heading>
+              <div className={styles.financeGrid}>
+                <div className={styles.paymentCard}>
+                  <Row vertical="center">
+                    <Row gap="8" vertical="center">
+                      <HiOutlineCreditCard className={styles.cardBrandIcon} aria-hidden="true" />
+                      <Text variant="label-strong-s">{finance.bankName}</Text>
+                    </Row>
+                  </Row>
+                  <div className={styles.cardChip} aria-hidden="true" />
+                  <Text className={styles.cardNumber} variant="heading-strong-l">
+                    {finance.cardNumber}
+                  </Text>
+                  <Row className={styles.cardFooter} horizontal="between" vertical="end">
+                    <Column gap="2">
+                      <Text className={styles.cardCaption} variant="label-default-xs">
+                        CARDHOLDER
+                      </Text>
+                      <Text variant="label-strong-s">{finance.cardholder}</Text>
+                    </Column>
+                    <Column gap="2" align="center">
+                      <Text className={styles.cardCaption} variant="label-default-xs">
+                        CVV
+                      </Text>
+                      <Text variant="label-strong-s">{finance.cvv}</Text>
+                    </Column>
+                    <Column gap="2" align="end">
+                      <Text className={styles.cardCaption} variant="label-default-xs">
+                        VALID THRU
+                      </Text>
+                      <Text variant="label-strong-s">{finance.validThru}</Text>
+                    </Column>
+                  </Row>
+                </div>
+                <dl className={styles.bankDetails}>
+                  <div>
+                    <dt>Bank</dt>
+                    <dd>{finance.bankName}</dd>
+                  </div>
+                  <div>
+                    <dt>Account</dt>
+                    <dd>{finance.account}</dd>
+                  </div>
+                  <div>
+                    <dt>IBAN</dt>
+                    <dd>{finance.iban}</dd>
+                  </div>
+                  <div>
+                    <dt>SWIFT</dt>
+                    <dd>{finance.swift}</dd>
+                  </div>
+                </dl>
+              </div>
+            </section>
           )}
         </Column>
       </Row>

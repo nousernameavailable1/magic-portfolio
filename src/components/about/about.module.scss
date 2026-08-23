@@ -8,6 +8,127 @@
     }
 }
 
+.paymentSection {
+    display: grid;
+    gap: var(--static-space-20);
+    margin-top: var(--static-space-40);
+}
+
+.financeGrid {
+    align-items: stretch;
+    display: grid;
+    gap: var(--static-space-16);
+    grid-template-columns: minmax(0, 1.8fr) minmax(11rem, 0.8fr);
+}
+
+.paymentCard {
+    background:
+        radial-gradient(circle at top right, var(--brand-alpha-medium), transparent 42%),
+        linear-gradient(135deg, var(--neutral-background-medium), var(--page-background));
+    border: 1px solid var(--brand-alpha-medium);
+    border-radius: var(--radius-l);
+    box-shadow: 0 1rem 2.5rem color-mix(in srgb, var(--brand-alpha-medium) 36%, transparent);
+    color: var(--neutral-on-background-strong);
+    display: grid;
+    gap: var(--static-space-16);
+    min-height: 14rem;
+    overflow: hidden;
+    padding: var(--static-space-24);
+    position: relative;
+}
+
+.paymentCard::after {
+    background: repeating-linear-gradient(
+        -45deg,
+        transparent 0,
+        transparent 0.5rem,
+        var(--static-white-medium) 0.5rem,
+        var(--static-white-medium) 0.5625rem
+    );
+    content: "";
+    height: 10rem;
+    opacity: 0.08;
+    position: absolute;
+    right: -3rem;
+    top: -5rem;
+    transform: rotate(20deg);
+    width: 14rem;
+}
+
+.paymentCard > * {
+    position: relative;
+    z-index: 1;
+}
+
+.cardBrandIcon {
+    color: var(--brand-on-background-strong);
+    height: 1.125rem;
+    width: 1.125rem;
+}
+
+.cardCaption {
+    color: var(--neutral-on-background-weak);
+    letter-spacing: 0.08em;
+}
+
+.cardChip {
+    background:
+        linear-gradient(90deg, transparent 48%, var(--static-black-medium) 48%, var(--static-black-medium) 52%, transparent 52%),
+        linear-gradient(var(--static-white-medium), var(--static-white-medium));
+    border: 1px solid var(--static-white-medium);
+    border-radius: var(--radius-s);
+    height: 2.25rem;
+    width: 3.25rem;
+}
+
+.cardNumber {
+    font-family: var(--font-code);
+    font-size: clamp(1.125rem, 3vw, 1.5rem);
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+}
+
+.cardFooter {
+    margin-top: auto;
+}
+
+.bankDetails {
+    background: color-mix(in srgb, var(--surface-background) 88%, transparent);
+    border: 1px solid var(--neutral-border-medium);
+    border-radius: var(--radius-l);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0;
+    padding: var(--static-space-12) var(--static-space-20);
+}
+
+.bankDetails div {
+    align-content: center;
+    border-bottom: 1px solid var(--neutral-alpha-weak);
+    display: grid;
+    gap: var(--static-space-4);
+    min-width: 0;
+    padding: var(--static-space-12) 0;
+}
+
+.bankDetails div:last-child {
+    border-bottom: 0;
+}
+
+.bankDetails dt {
+    color: var(--neutral-on-background-weak);
+    font-size: var(--font-size-label-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.bankDetails dd {
+    font-family: var(--font-code);
+    font-size: var(--font-size-body-m);
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
 @media (max-width: breakpoints.$s) {
     .textAlign {
         text-align: center;
@@ -15,5 +136,14 @@
 
     .blockAlign {
         align-self: center;
+    }
+
+    .paymentCard {
+        min-height: 13rem;
+        padding: var(--static-space-20);
+    }
+
+    .financeGrid {
+        grid-template-columns: minmax(0, 1fr);
     }
 }
