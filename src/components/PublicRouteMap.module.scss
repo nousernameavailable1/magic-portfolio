@@ -1,8 +1,21 @@
 .section {
+  animation: reveal-map 2s ease-in-out both;
   display: grid;
   gap: 1rem;
   margin-top: 4rem;
   width: 100%;
+}
+
+@keyframes reveal-map {
+  from {
+    clip-path: inset(0 0 100% 0);
+    filter: blur(1rem);
+  }
+
+  to {
+    clip-path: inset(0);
+    filter: blur(0);
+  }
 }
 
 .heading {
@@ -212,5 +225,11 @@
 
   .node {
     width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section {
+    animation: none;
   }
 }

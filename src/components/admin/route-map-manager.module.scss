@@ -13,6 +13,18 @@
   gap: 0.5rem;
 }
 
+.headingRow {
+  align-items: end;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.headingRow > div:first-child {
+  display: grid;
+  gap: 0.5rem;
+}
+
 .manager h1 {
   font-size: clamp(2rem, 5vw, 3.5rem);
   margin: 0;
@@ -20,6 +32,49 @@
 
 .manager header span {
   color: var(--neutral-on-background-weak);
+}
+
+.viewToggle {
+  background: color-mix(in srgb, var(--surface-background) 88%, transparent);
+  border: 1px solid var(--neutral-border-medium);
+  border-radius: 999px;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.25rem;
+  margin: 0;
+  min-inline-size: 0;
+  padding: 0.25rem;
+}
+
+.srOnly {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.viewToggle button {
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  color: var(--neutral-on-background-weak);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--font-size-label-s);
+  font-weight: 700;
+  padding: 0.5rem 0.75rem;
+}
+
+.viewToggle button:hover {
+  color: var(--brand-on-background-strong);
+}
+
+.viewToggle .activeView {
+  background: var(--brand-solid-strong);
+  color: var(--brand-on-solid-strong);
 }
 
 .routes {
@@ -122,6 +177,18 @@
   position: relative;
 }
 
+.adminRoute {
+  color: inherit;
+  text-decoration: none;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.adminRoute:hover {
+  background: var(--surface-background);
+  border-color: var(--brand-on-background-strong);
+  transform: translateY(-2px);
+}
+
 .routeDetails {
   display: grid;
   gap: 0.25rem;
@@ -196,6 +263,11 @@
 }
 
 @media (max-width: 48rem) {
+  .headingRow {
+    align-items: start;
+    flex-direction: column;
+  }
+
   .branches {
     margin-left: 0.75rem;
     padding-left: 1.5rem;

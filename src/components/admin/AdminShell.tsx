@@ -34,6 +34,16 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             selected={pathname === "/admin/wall"}
           />
           <ToggleButton
+            aria-label="Fakemail"
+            className={styles.navButton}
+            fillWidth
+            horizontal="start"
+            href="/admin/fakemail"
+            label="Fakemail"
+            prefixIcon="email"
+            selected={pathname === "/admin/fakemail"}
+          />
+          <ToggleButton
             aria-label="VPN"
             className={styles.navButton}
             fillWidth

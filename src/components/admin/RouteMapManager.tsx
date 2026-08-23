@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import styles from "./route-map-manager.module.scss";
 
@@ -14,6 +15,24 @@ type PublicRouteState = {
 type RouteUpdate = Pick<PublicRouteState, "locked" | "listed">;
 type RouteSetting = keyof RouteUpdate;
 type SavingRoute = { path: string; setting: RouteSetting } | null;
+type MapView = "public" | "admin";
+
+type AdminRoute = {
+  path: string;
+  label: string;
+  parent?: string;
+};
+
+const adminRoutes: AdminRoute[] = [
+  { path: "/admin", label: "Admin" },
+  { path: "/admin/login", label: "Login", parent: "/admin" },
+  { path: "/admin/wall", label: "Wall moderation", parent: "/admin" },
+  { path: "/admin/fakemail", label: "Fakemail", parent: "/admin" },
+  { path: "/admin/vpn", label: "VPN", parent: "/admin" },
+  { path: "/admin/status", label: "Status", parent: "/admin" },
+  { path: "/admin/text", label: "Text", parent: "/admin" },
+  { path: "/admin/map", label: "Map", parent: "/admin" },
+];
 
 function RouteBranch({
   route,
@@ -96,11 +115,35 @@ function RouteBranch({
   );
 }
 
+function AdminRouteBranch({ route, routes }: { route: AdminRoute; routes: AdminRoute[] }) {
+  const children = routes.filter((child) => child.parent === route.path);
+
+  return (
+    <li className={styles.branch}>
+      <Link className={`${styles.route} ${styles.adminRoute}`} href={route.path}>
+        <div className={styles.routeDetails}>
+          <strong>{route.label}</strong>
+          <code>{route.path}</code>
+        </div>
+      </Link>
+      {children.length > 0 && (
+        <ul className={styles.children}>
+          {children.map((child) => (
+            <AdminRouteBranch key={child.path} route={child} routes={routes} />
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+}
+
 export function RouteMapManager({ initialRoutes }: { initialRoutes: PublicRouteState[] }) {
   const [routes, setRoutes] = useState(initialRoutes);
   const [savingRoute, setSavingRoute] = useState<SavingRoute>(null);
   const [error, setError] = useState<string | null>(null);
+  const [view, setView] = useState<MapView>("public");
   const topLevelRoutes = routes.filter((route) => route.path === "/" || !route.parent);
+  const topLevelAdminRoutes = adminRoutes.filter((route) => !route.parent);
 
   const updateRoute = async (path: string, update: Partial<RouteUpdate>) => {
     const setting = update.locked === undefined ? "listed" : "locked";
@@ -127,25 +170,57 @@ export function RouteMapManager({ initialRoutes }: { initialRoutes: PublicRouteS
   return (
     <section className={styles.manager} aria-labelledby="route-map-title">
       <header>
-        <h1 id="route-map-title">Site map</h1>
-        <span>
-          Manage public access and map visibility. Changes take effect immediately for visitors
-          without an active access session.
-        </span>
+        <div className={styles.headingRow}>
+          <div>
+            <h1 id="route-map-title">Site map</h1>
+            <span>
+              {view === "public"
+                ? "Manage public access and map visibility. Changes take effect immediately for visitors without an active access session."
+                : "Browse every admin page and jump directly to it."}
+            </span>
+          </div>
+          <fieldset className={styles.viewToggle}>
+            <legend className={styles.srOnly}>Map view</legend>
+            <button
+              aria-pressed={view === "public"}
+              className={view === "public" ? styles.activeView : undefined}
+              onClick={() => setView("public")}
+              type="button"
+            >
+              Public pages
+            </button>
+            <button
+              aria-pressed={view === "admin"}
+              className={view === "admin" ? styles.activeView : undefined}
+              onClick={() => setView("admin")}
+              type="button"
+            >
+              Admin pages
+            </button>
+          </fieldset>
+        </div>
       </header>
-      {error && <p className={styles.error}>{error}</p>}
+      {view === "public" && error && <p className={styles.error}>{error}</p>}
       <div className={styles.routes}>
-        <ul className={styles.branches}>
-          {topLevelRoutes.map((route) => (
-            <RouteBranch
-              key={route.path}
-              route={route}
-              routes={routes}
-              savingRoute={savingRoute}
-              updateRoute={updateRoute}
-            />
-          ))}
-        </ul>
+        {view === "public" ? (
+          <ul className={styles.branches}>
+            {topLevelRoutes.map((route) => (
+              <RouteBranch
+                key={route.path}
+                route={route}
+                routes={routes}
+                savingRoute={savingRoute}
+                updateRoute={updateRoute}
+              />
+            ))}
+          </ul>
+        ) : (
+          <ul className={styles.branches}>
+            {topLevelAdminRoutes.map((route) => (
+              <AdminRouteBranch key={route.path} route={route} routes={adminRoutes} />
+            ))}
+          </ul>
+        )}
       </div>
     </section>
   );

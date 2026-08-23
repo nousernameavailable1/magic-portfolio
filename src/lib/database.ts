@@ -1,7 +1,7 @@
 import type { PoolClient } from "pg";
 import { Pool } from "pg";
 
-const CURRENT_SCHEMA_VERSION = 8;
+const CURRENT_SCHEMA_VERSION = 9;
 
 declare global {
   // eslint-disable-next-line no-var
@@ -185,6 +185,32 @@ async function applyMigrations(pool: Pool) {
       `
         ALTER TABLE public_route_locks
         ADD COLUMN IF NOT EXISTS listed BOOLEAN NOT NULL DEFAULT TRUE;
+      `,
+    );
+
+    await applyMigration(
+      client,
+      "009_create_fakemail_aliases",
+      "fakemail_aliases",
+      `
+        CREATE TABLE IF NOT EXISTS fakemail_aliases (
+          id BIGSERIAL PRIMARY KEY,
+          local_part TEXT NOT NULL CHECK (char_length(local_part) BETWEEN 1 AND 64),
+          email TEXT NOT NULL,
+          cloudflare_rule_id TEXT NOT NULL,
+          expires_at TIMESTAMPTZ,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          deleted_at TIMESTAMPTZ,
+          CHECK (expires_at IS NULL OR expires_at > created_at)
+        );
+
+        CREATE UNIQUE INDEX IF NOT EXISTS fakemail_aliases_active_email_idx
+          ON fakemail_aliases (email)
+          WHERE deleted_at IS NULL;
+
+        CREATE INDEX IF NOT EXISTS fakemail_aliases_active_expiry_idx
+          ON fakemail_aliases (expires_at)
+          WHERE deleted_at IS NULL AND expires_at IS NOT NULL;
       `,
     );
 

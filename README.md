@@ -103,3 +103,11 @@ Set strong values in `.env`, confirm the hostname in `Caddyfile`, then start the
 ```sh
 docker compose up -d
 ```
+
+### Fakemail
+
+The admin Fakemail page creates `kadli.org` aliases through Cloudflare Email Routing and forwards
+them to one verified destination address. Configure `CLOUDFLARE_API_TOKEN`,
+`CLOUDFLARE_ZONE_ID`, `FAKEMAIL_DOMAIN`, `FAKEMAIL_FORWARD_TO`, and
+`FAKEMAIL_CLEANUP_SECRET` in `.env`. The API token needs **Zone / Email Routing Rules: Edit**.
+The `fakemail-cleanup` service removes expired aliases within five minutes.

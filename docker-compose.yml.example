@@ -14,11 +14,34 @@ services:
       DB_PASSWORD: ${POSTGRES_PASSWORD}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       ADMIN_SESSION_SECRET: ${ADMIN_SESSION_SECRET}
+      CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN}
+      CLOUDFLARE_ZONE_ID: ${CLOUDFLARE_ZONE_ID}
+      FAKEMAIL_DOMAIN: ${FAKEMAIL_DOMAIN}
+      FAKEMAIL_FORWARD_TO: ${FAKEMAIL_FORWARD_TO}
+      FAKEMAIL_CLEANUP_SECRET: ${FAKEMAIL_CLEANUP_SECRET}
     expose:
       - "3000"
     depends_on:
       db:
         condition: service_healthy
+
+  fakemail-cleanup:
+    image: curlimages/curl:8.21.0
+    container_name: magic-portfolio-fakemail-cleanup
+    restart: unless-stopped
+    init: true
+    environment:
+      FAKEMAIL_CLEANUP_SECRET: ${FAKEMAIL_CLEANUP_SECRET}
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      while true; do
+        curl --fail --silent --show-error \
+          --header "Authorization: Bearer $$FAKEMAIL_CLEANUP_SECRET" \
+          http://portfolio:3000/api/internal/fakemail/cleanup || true
+        sleep 300
+      done
+    depends_on:
+      - portfolio
 
   db:
     image: postgres:16-alpine

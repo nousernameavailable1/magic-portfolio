@@ -1,0 +1,28 @@
+.configurationError {
+  background: color-mix(in srgb, #f59e0b 18%, transparent);
+  border: 1px solid color-mix(in srgb, #f59e0b 60%, transparent);
+  border-radius: 0.5rem;
+  color: var(--neutral-on-background-strong);
+  padding: 0.75rem;
+}
+
+.domain,
+.address {
+  font-family: var(--font-code);
+}
+
+.domain {
+  color: var(--neutral-on-background-weak);
+  font-size: var(--font-size-body-s);
+}
+
+.alias {
+  background: color-mix(in srgb, var(--surface-background) 88%, transparent);
+  border: 1px solid var(--neutral-border-medium);
+  border-radius: 0.75rem;
+}
+
+.address {
+  color: var(--brand-on-background-strong);
+  overflow-wrap: anywhere;
+}
