@@ -1,5 +1,5 @@
 import { ProjectCard } from "@/components";
-import { getPosts } from "@/utils/utils";
+import { getProjectPosts } from "@/utils/utils";
 import { Column } from "@once-ui-system/core";
 
 interface ProjectsProps {
@@ -8,7 +8,7 @@ interface ProjectsProps {
 }
 
 export function Projects({ range, exclude }: ProjectsProps) {
-  let allProjects = getPosts(["src", "app", "projects", "projects"]);
+  let allProjects = getProjectPosts();
 
   // Exclude by slug (exact match)
   if (exclude && exclude.length > 0) {

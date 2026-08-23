@@ -1,7 +1,7 @@
 import { PAGE_SESSION_COOKIE, isValidPageSession } from "@/lib/page-auth";
 import { isPublicRouteLocked } from "@/lib/public-routes";
 import { baseURL, blog, person } from "@/resources";
-import { getPosts } from "@/utils/utils";
+import { getBlogPosts } from "@/utils/utils";
 import { type NextRequest, NextResponse } from "next/server";
 
 function escapeXml(value: string) {
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Password required." }, { status: 401 });
   }
 
-  const posts = getPosts(["src", "app", "blog", "posts"]);
+  const posts = getBlogPosts();
 
   // Sort posts by date (newest first)
   const sortedPosts = posts.sort((a, b) => {

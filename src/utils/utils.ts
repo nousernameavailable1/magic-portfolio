@@ -1,3 +1,5 @@
+import "server-only";
+
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
@@ -74,7 +76,13 @@ function getMDXData(dir: string): MDXPost[] {
   });
 }
 
-export function getPosts(customPath = ["", "", "", ""]) {
-  const postsDir = path.join(process.cwd(), ...customPath);
-  return getMDXData(postsDir);
+const blogPostsDirectory = path.join(process.cwd(), "src", "app", "blog", "posts");
+const projectPostsDirectory = path.join(process.cwd(), "src", "app", "projects", "projects");
+
+export function getBlogPosts() {
+  return getMDXData(blogPostsDirectory);
+}
+
+export function getProjectPosts() {
+  return getMDXData(projectPostsDirectory);
 }
