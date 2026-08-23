@@ -33,13 +33,14 @@ services:
     environment:
       FAKEMAIL_CLEANUP_SECRET: ${FAKEMAIL_CLEANUP_SECRET}
     entrypoint: ["/bin/sh", "-c"]
-    command: |
-      while true; do
-        curl --fail --silent --show-error \
-          --header "Authorization: Bearer $$FAKEMAIL_CLEANUP_SECRET" \
-          http://portfolio:3000/api/internal/fakemail/cleanup || true
-        sleep 300
-      done
+    command:
+      - |
+        while true; do
+          curl --fail --silent --show-error \
+            --header "Authorization: Bearer $$FAKEMAIL_CLEANUP_SECRET" \
+            http://portfolio:3000/api/internal/fakemail/cleanup || true
+          sleep 300
+        done
     depends_on:
       - portfolio
 

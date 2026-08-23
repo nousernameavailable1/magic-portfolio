@@ -164,8 +164,8 @@ export function FakemailManager() {
           )}
           <SegmentedControl
             buttons={[
-              { value: "random", label: "Random alias" },
-              { value: "custom", label: "Custom alias" },
+              { value: "random", label: "Random alias", type: "button" },
+              { value: "custom", label: "Custom alias", type: "button" },
             ]}
             fillWidth={false}
             onToggle={(value) => setMode(value === "custom" ? "custom" : "random")}
