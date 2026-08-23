@@ -1,0 +1,235 @@
+.manager {
+  --connector: color-mix(in srgb, var(--neutral-border-medium) 88%, transparent);
+  --branch-midpoint: 2.75rem;
+
+  display: grid;
+  gap: 1.5rem;
+  max-width: 68rem;
+  padding-block: 1.5rem;
+}
+
+.manager header {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.manager h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin: 0;
+}
+
+.manager header span {
+  color: var(--neutral-on-background-weak);
+}
+
+.routes {
+  margin-top: 0.5rem;
+  position: relative;
+}
+
+.routes::before {
+  border-left: 1px solid var(--connector);
+  content: "";
+  height: 0.75rem;
+  left: 1rem;
+  position: absolute;
+  top: -0.75rem;
+}
+
+.branches,
+.children {
+  display: grid;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.branches {
+  gap: 0.75rem;
+  margin-left: 1rem;
+  padding: 0 0 1.5rem 2.25rem;
+}
+
+.branch {
+  display: grid;
+  gap: 0.75rem;
+  position: relative;
+}
+
+.branch::before {
+  border-top: 1px solid var(--connector);
+  content: "";
+  left: -2.25rem;
+  position: absolute;
+  top: var(--branch-midpoint);
+  width: 2.25rem;
+}
+
+.branches > .branch::after,
+.children > .branch::after {
+  border-left: 1px solid var(--connector);
+  content: "";
+  left: -2.25rem;
+  position: absolute;
+  top: 0;
+}
+
+.branches > .branch:not(:last-child)::after {
+  bottom: -0.75rem;
+}
+
+.branches > .branch:last-child::after {
+  height: var(--branch-midpoint);
+}
+
+.children {
+  gap: 0.5rem;
+  margin: 0.125rem 0 0.25rem 1.5rem;
+  padding-left: 2rem;
+}
+
+.children .branch {
+  gap: 0.5rem;
+}
+
+.children .branch::before {
+  left: -2rem;
+  width: 2rem;
+}
+
+.children > .branch::after {
+  left: -2rem;
+}
+
+.children > .branch:not(:last-child)::after {
+  bottom: -0.5rem;
+}
+
+.children > .branch:last-child::after {
+  height: var(--branch-midpoint);
+}
+
+.route {
+  align-items: center;
+  background: color-mix(in srgb, var(--surface-background) 88%, transparent);
+  border: 1px solid var(--neutral-border-medium);
+  border-radius: 0.75rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  min-height: calc(var(--branch-midpoint) * 2);
+  padding: 0.75rem 1rem;
+  position: relative;
+}
+
+.routeDetails {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.routeDetails code {
+  color: var(--neutral-on-background-weak);
+  font-family: var(--font-code);
+  font-size: var(--font-size-body-s);
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: end;
+}
+
+.actions button {
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--font-size-label-s);
+  font-weight: 700;
+  min-width: 4.75rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.locked {
+  background: #b91c1c;
+}
+
+.unlocked {
+  background: #047857;
+}
+
+.listed {
+  background: #075985;
+}
+
+.hidden {
+  background: #4b5563;
+}
+
+.inherited {
+  background: #4b5563;
+}
+
+.actions button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.actions .hidden:disabled,
+.actions .inherited:disabled {
+  background: #4b5563;
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.error {
+  background: #7f1d1d;
+  border-radius: 0.5rem;
+  color: #fff;
+  margin: 0;
+  padding: 0.75rem;
+}
+
+@media (max-width: 48rem) {
+  .branches {
+    margin-left: 0.75rem;
+    padding-left: 1.5rem;
+  }
+
+  .branch::before {
+    left: -1.5rem;
+    width: 1.5rem;
+  }
+
+  .branches > .branch::after {
+    left: -1.5rem;
+  }
+
+  .children {
+    margin-left: 1rem;
+    padding-left: 1.5rem;
+  }
+
+  .children .branch::before {
+    left: -1.5rem;
+    width: 1.5rem;
+  }
+
+  .children > .branch::after {
+    left: -1.5rem;
+  }
+
+  .route {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .actions {
+    justify-content: start;
+  }
+}

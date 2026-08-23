@@ -1,0 +1,16 @@
+.page {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: 70svh;
+  width: 100%;
+}
+
+.video {
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 0.75rem;
+  box-shadow: 0 1.5rem 4rem rgb(0 0 0 / 35%);
+  max-width: 100%;
+  width: min(90vw, 96rem);
+}

@@ -4,6 +4,7 @@ import {
   createAdminSession,
   isValidAdminPassword,
 } from "@/lib/admin-auth";
+import { clearVisitorCookie, getExistingVisitorId, removeVisitor } from "@/lib/visitor-analytics";
 import { type NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
@@ -23,6 +24,17 @@ export async function POST(request: NextRequest) {
 
   const response = NextResponse.json({ ok: true });
   response.cookies.set(ADMIN_SESSION_COOKIE, session, adminSessionCookie);
+
+  const visitorId = getExistingVisitorId(request);
+  if (visitorId) {
+    try {
+      await removeVisitor(visitorId);
+    } catch {
+      // Admin access must not be blocked by a non-essential analytics cleanup failure.
+    }
+  }
+  clearVisitorCookie(response);
+
   return response;
 }
 

@@ -4,7 +4,7 @@ import "@/resources/custom.css";
 
 import classNames from "classnames";
 
-import { Footer, Header, Providers, RouteGuard } from "@/components";
+import { Footer, Header, Providers, RouteGuard, VisitorTracker } from "@/components";
 import { baseURL, dataStyle, effects, fonts, home, person, style } from "@/resources";
 import { Background, Column, Flex, Meta, RevealFx } from "@once-ui-system/core";
 import type { Opacity, SpacingToken } from "@once-ui-system/core";
@@ -150,6 +150,7 @@ export default async function RootLayout({
           </RevealFx>
           <Flex fillWidth minHeight="16" s={{ hide: true }} />
           <Header />
+          <VisitorTracker />
           <Flex zIndex={0} fillWidth padding="l" horizontal="center" flex={1}>
             <Flex horizontal="center" fillWidth minHeight="0">
               <RouteGuard>{children}</RouteGuard>

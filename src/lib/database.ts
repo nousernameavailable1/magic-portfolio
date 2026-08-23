@@ -1,7 +1,7 @@
 import type { PoolClient } from "pg";
 import { Pool } from "pg";
 
-const CURRENT_SCHEMA_VERSION = 5;
+const CURRENT_SCHEMA_VERSION = 8;
 
 declare global {
   // eslint-disable-next-line no-var
@@ -140,6 +140,51 @@ async function applyMigrations(pool: Pool) {
           enabled BOOLEAN NOT NULL DEFAULT TRUE,
           updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
+      `,
+    );
+
+    await applyMigration(
+      client,
+      "006_create_visitor_analytics",
+      "site_visitors",
+      `
+        CREATE TABLE IF NOT EXISTS site_visitors (
+          id UUID PRIMARY KEY,
+          first_seen_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          last_seen_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+
+        CREATE TABLE IF NOT EXISTS site_visits (
+          id BIGSERIAL PRIMARY KEY,
+          visitor_id UUID NOT NULL REFERENCES site_visitors (id) ON DELETE CASCADE,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+
+        CREATE INDEX IF NOT EXISTS site_visits_created_at_idx
+          ON site_visits (created_at DESC);
+      `,
+    );
+
+    await applyMigration(
+      client,
+      "007_create_public_route_locks",
+      "public_route_locks",
+      `
+        CREATE TABLE IF NOT EXISTS public_route_locks (
+          path TEXT PRIMARY KEY,
+          locked BOOLEAN NOT NULL,
+          updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+      `,
+    );
+
+    await applyMigration(
+      client,
+      "008_add_public_route_listing",
+      "public_route_locks",
+      `
+        ALTER TABLE public_route_locks
+        ADD COLUMN IF NOT EXISTS listed BOOLEAN NOT NULL DEFAULT TRUE;
       `,
     );
 

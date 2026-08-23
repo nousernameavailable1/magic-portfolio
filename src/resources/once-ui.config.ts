@@ -24,6 +24,8 @@ const routes: RoutesConfig = {
   "/blog": true,
   "/gallery": true,
   "/wall": true,
+  "/jumpscare": true,
+  "/rickroll": true,
 };
 
 const display: DisplayConfig = {

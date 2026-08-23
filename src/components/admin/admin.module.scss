@@ -54,15 +54,14 @@
   }
 
   .sidebar {
-    align-self: start;
     grid-column: 1;
-    left: auto;
+    left: 1rem;
     height: fit-content;
     min-height: 0;
     padding: var(--static-space-8);
-    position: sticky;
-    top: var(--static-space-12);
-    transform: none;
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
     width: 4rem;
   }
 

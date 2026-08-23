@@ -27,6 +27,10 @@ type DatabaseStatus =
         approved: number;
         rejected: number;
       };
+      visitors: {
+        total: number;
+        today: number;
+      };
     }
   | {
       available: false;
@@ -74,13 +78,20 @@ async function getDatabaseStatus(): Promise<DatabaseStatus> {
       pending: string;
       approved: string;
       rejected: string;
+      visitors_total: string;
+      visits_today: string;
     }>(`
       SELECT
-        COUNT(*) AS total,
-        COUNT(*) FILTER (WHERE status = 'pending') AS pending,
-        COUNT(*) FILTER (WHERE status = 'approved') AS approved,
-        COUNT(*) FILTER (WHERE status = 'rejected') AS rejected
-      FROM wall_submissions;
+        (SELECT COUNT(*) FROM wall_submissions) AS total,
+        (SELECT COUNT(*) FROM wall_submissions WHERE status = 'pending') AS pending,
+        (SELECT COUNT(*) FROM wall_submissions WHERE status = 'approved') AS approved,
+        (SELECT COUNT(*) FROM wall_submissions WHERE status = 'rejected') AS rejected,
+        (SELECT COUNT(*) FROM site_visitors) AS visitors_total,
+        (
+          SELECT COUNT(*)
+          FROM site_visits
+          WHERE created_at >= date_trunc('day', NOW() AT TIME ZONE 'Asia/Dubai') AT TIME ZONE 'Asia/Dubai'
+        ) AS visits_today;
     `);
     const counts = result.rows[0];
 
@@ -91,6 +102,10 @@ async function getDatabaseStatus(): Promise<DatabaseStatus> {
         pending: Number(counts?.pending ?? 0),
         approved: Number(counts?.approved ?? 0),
         rejected: Number(counts?.rejected ?? 0),
+      },
+      visitors: {
+        total: Number(counts?.visitors_total ?? 0),
+        today: Number(counts?.visits_today ?? 0),
       },
     };
   } catch {

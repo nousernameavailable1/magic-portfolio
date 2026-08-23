@@ -85,6 +85,21 @@ export default async function AdminStatusPage() {
           )}
         </StatusCard>
 
+        <StatusCard title="Visitors">
+          {database.available ? (
+            <Column gap="4">
+              <Text variant="heading-strong-m">{database.visitors.total} total visitors</Text>
+              <Text onBackground="neutral-weak">
+                {database.visitors.today} visits today (Asia/Dubai)
+              </Text>
+            </Column>
+          ) : (
+            <Text onBackground="neutral-weak">
+              Visitor counts are unavailable while PostgreSQL cannot be reached.
+            </Text>
+          )}
+        </StatusCard>
+
         <StatusCard title="GitHub">
           <Row gap="8" vertical="center">
             <StatusIndicator

@@ -1,0 +1,46 @@
+.page {
+  min-height: 100svh;
+}
+
+.scare {
+  align-items: center;
+  background: #000;
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  position: fixed;
+  z-index: 100;
+}
+
+.scare {
+  animation: flash 100ms steps(2, end) 4, shake 95ms steps(2, end) 8;
+}
+
+.face {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+@keyframes flash {
+  50% {
+    filter: contrast(1.8) brightness(1.5);
+  }
+}
+
+@keyframes shake {
+  25% {
+    transform: translate(-1.5vw, 1vh);
+  }
+
+  75% {
+    transform: translate(1.5vw, -1vh);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .countdown,
+  .scare {
+    animation: none;
+  }
+}

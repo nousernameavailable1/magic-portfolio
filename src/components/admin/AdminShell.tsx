@@ -63,6 +63,16 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             prefixIcon="text"
             selected={pathname === "/admin/text"}
           />
+          <ToggleButton
+            aria-label="Map"
+            className={styles.navButton}
+            fillWidth
+            horizontal="start"
+            href="/admin/map"
+            label="Map"
+            prefixIcon="map"
+            selected={pathname === "/admin/map"}
+          />
         </Column>
         <div className={styles.signOut}>
           <div className={styles.desktopSignOut}>
