@@ -12,24 +12,28 @@ type PublicRouteState = {
 };
 
 type RouteUpdate = Pick<PublicRouteState, "locked" | "listed">;
+type RouteSetting = keyof RouteUpdate;
+type SavingRoute = { path: string; setting: RouteSetting } | null;
 
 function RouteBranch({
   route,
   routes,
-  savingPath,
+  savingRoute,
   updateRoute,
   hiddenByParent = false,
   lockedByParent = false,
 }: {
   route: PublicRouteState;
   routes: PublicRouteState[];
-  savingPath: string | null;
+  savingRoute: SavingRoute;
   updateRoute: (path: string, update: Partial<RouteUpdate>) => Promise<void>;
   hiddenByParent?: boolean;
   lockedByParent?: boolean;
 }) {
   const children = routes.filter((child) => child.parent === route.path);
-  const isSaving = savingPath === route.path;
+  const isSaving = savingRoute?.path === route.path;
+  const isSavingLock = isSaving && savingRoute?.setting === "locked";
+  const isSavingVisibility = isSaving && savingRoute?.setting === "listed";
   const visibilityDisabled = isSaving || hiddenByParent;
   const lockDisabled = isSaving || lockedByParent;
 
@@ -55,7 +59,7 @@ function RouteBranch({
             onClick={() => void updateRoute(route.path, { locked: !route.locked })}
             type="button"
           >
-            {isSaving ? "Saving…" : route.locked || lockedByParent ? "Locked" : "Public"}
+            {isSavingLock ? "Saving…" : route.locked || lockedByParent ? "Locked" : "Public"}
           </button>
           <button
             aria-label={
@@ -69,7 +73,7 @@ function RouteBranch({
             onClick={() => void updateRoute(route.path, { listed: !route.listed })}
             type="button"
           >
-            {isSaving ? "Saving…" : route.listed && !hiddenByParent ? "In map" : "Hidden"}
+            {isSavingVisibility ? "Saving…" : route.listed && !hiddenByParent ? "In map" : "Hidden"}
           </button>
         </div>
       </article>
@@ -80,7 +84,7 @@ function RouteBranch({
               key={child.path}
               route={child}
               routes={routes}
-              savingPath={savingPath}
+              savingRoute={savingRoute}
               updateRoute={updateRoute}
               hiddenByParent={hiddenByParent || !route.listed}
               lockedByParent={lockedByParent || route.locked}
@@ -94,12 +98,13 @@ function RouteBranch({
 
 export function RouteMapManager({ initialRoutes }: { initialRoutes: PublicRouteState[] }) {
   const [routes, setRoutes] = useState(initialRoutes);
-  const [savingPath, setSavingPath] = useState<string | null>(null);
+  const [savingRoute, setSavingRoute] = useState<SavingRoute>(null);
   const [error, setError] = useState<string | null>(null);
   const topLevelRoutes = routes.filter((route) => route.path === "/" || !route.parent);
 
   const updateRoute = async (path: string, update: Partial<RouteUpdate>) => {
-    setSavingPath(path);
+    const setting = update.locked === undefined ? "listed" : "locked";
+    setSavingRoute({ path, setting });
     setError(null);
 
     try {
@@ -115,7 +120,7 @@ export function RouteMapManager({ initialRoutes }: { initialRoutes: PublicRouteS
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Could not update this route.");
     } finally {
-      setSavingPath(null);
+      setSavingRoute(null);
     }
   };
 
@@ -136,7 +141,7 @@ export function RouteMapManager({ initialRoutes }: { initialRoutes: PublicRouteS
               key={route.path}
               route={route}
               routes={routes}
-              savingPath={savingPath}
+              savingRoute={savingRoute}
               updateRoute={updateRoute}
             />
           ))}

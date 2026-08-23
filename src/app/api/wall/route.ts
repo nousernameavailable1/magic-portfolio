@@ -1,4 +1,5 @@
 import { PAGE_SESSION_COOKIE, isValidPageSession } from "@/lib/page-auth";
+import { isPublicRouteLocked } from "@/lib/public-routes";
 import { isSubmissionRateLimited } from "@/lib/rate-limit";
 import { getSiteText } from "@/lib/site-text";
 import { createSubmission, getPublishedSubmissions, prepareSubmission } from "@/lib/wall";
@@ -7,14 +8,15 @@ import { type NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-// Serves the password-protected public message wall.
+// Serves the public message wall, with the page password required only while /wall is locked.
 
-function hasPageAccess(request: NextRequest) {
+async function hasWallAccess(request: NextRequest) {
+  if (!(await isPublicRouteLocked("/wall"))) return true;
   return isValidPageSession(request.cookies.get(PAGE_SESSION_COOKIE)?.value);
 }
 
 export async function GET(request: NextRequest) {
-  if (!hasPageAccess(request)) {
+  if (!(await hasWallAccess(request))) {
     return NextResponse.json({ error: "Password required." }, { status: 401 });
   }
 
@@ -42,7 +44,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  if (!hasPageAccess(request)) {
+  if (!(await hasWallAccess(request))) {
     return NextResponse.json({ error: "Password required." }, { status: 401 });
   }
 

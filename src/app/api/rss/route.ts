@@ -1,4 +1,5 @@
 import { PAGE_SESSION_COOKIE, isValidPageSession } from "@/lib/page-auth";
+import { isPublicRouteLocked } from "@/lib/public-routes";
 import { baseURL, blog, person } from "@/resources";
 import { getPosts } from "@/utils/utils";
 import { type NextRequest, NextResponse } from "next/server";
@@ -21,7 +22,9 @@ function toCdata(value: string) {
 }
 
 export async function GET(request: NextRequest) {
-  if (!isValidPageSession(request.cookies.get(PAGE_SESSION_COOKIE)?.value)) {
+  const blogIsLocked = await isPublicRouteLocked("/blog");
+  const hasPageSession = isValidPageSession(request.cookies.get(PAGE_SESSION_COOKIE)?.value);
+  if (blogIsLocked && !hasPageSession) {
     return NextResponse.json({ error: "Password required." }, { status: 401 });
   }
 
