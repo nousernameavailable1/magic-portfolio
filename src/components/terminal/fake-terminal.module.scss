@@ -1,0 +1,110 @@
+.page {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: min(48rem, calc(100svh - 10rem));
+  padding-block: 2rem;
+  width: 100%;
+}
+
+.terminal {
+  background: #061118;
+  border: 1px solid #16475b;
+  border-radius: 0.65rem;
+  box-shadow: 0 1.5rem 4rem rgb(0 10 16 / 55%);
+  color: #f7f7f7;
+  cursor: text;
+  font-family: var(--font-code), "Ubuntu Mono", Consolas, monospace;
+  font-size: clamp(0.85rem, 1.8vw, 1rem);
+  line-height: 1.55;
+  max-width: 76rem;
+  overflow: hidden;
+  width: 100%;
+}
+
+.titleBar {
+  align-items: center;
+  background: #0b2430;
+  border-bottom: 1px solid #16475b;
+  color: #d6f3ff;
+  display: grid;
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  grid-template-columns: 1fr auto 1fr;
+  min-height: 2.35rem;
+  padding-inline: 0.75rem;
+  text-align: center;
+}
+
+.windowControls {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.windowControls span {
+  background: #69808a;
+  border-radius: 50%;
+  display: block;
+  height: 0.65rem;
+  width: 0.65rem;
+}
+
+.windowControls span:first-child {
+  background: #e95420;
+}
+
+.titleSpacer {
+  display: block;
+}
+
+.screen {
+  min-height: min(41rem, calc(100svh - 13rem));
+  overflow-wrap: anywhere;
+  padding: 1rem 1.15rem;
+}
+
+.historyEntry {
+  margin-bottom: 0.7rem;
+}
+
+.prompt {
+  color: #8ae234;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.commandLine {
+  align-items: baseline;
+  display: flex;
+  gap: 0.55rem;
+}
+
+.commandInput {
+  background: transparent;
+  border: 0;
+  caret-color: #f7f7f7;
+  color: inherit;
+  flex: 1;
+  font: inherit;
+  min-width: 0;
+  outline: 0;
+  padding: 0;
+}
+
+@media (max-width: 34rem) {
+  .page {
+    align-items: stretch;
+    min-height: 34rem;
+    padding-block: 0;
+  }
+
+  .terminal {
+    border-radius: 0.4rem;
+  }
+
+  .screen {
+    min-height: 27rem;
+    padding: 0.85rem;
+  }
+}

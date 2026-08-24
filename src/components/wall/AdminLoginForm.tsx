@@ -1,9 +1,10 @@
 "use client";
 
-import { Button, Column, PasswordInput, Text, useToast } from "@once-ui-system/core";
+import { Button, Column, Input, PasswordInput, Text, useToast } from "@once-ui-system/core";
 import { type FormEvent, useState } from "react";
 
 export function AdminLoginForm() {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const { addToast } = useToast();
@@ -15,7 +16,7 @@ export function AdminLoginForm() {
       const response = await fetch("/api/admin/session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ username, password }),
       });
       const data = (await response.json()) as { error?: string };
       if (!response.ok) throw new Error(data.error);
@@ -41,8 +42,18 @@ export function AdminLoginForm() {
         radius="l"
         horizontal="center"
       >
+        <Input
+          id="admin-username"
+          name="username"
+          label="Username"
+          value={username}
+          onChange={(event) => setUsername(event.target.value)}
+          autoComplete="username"
+          required
+        />
         <PasswordInput
           id="admin-password"
+          name="password"
           label="Admin password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
@@ -52,7 +63,7 @@ export function AdminLoginForm() {
         <Text align="center" variant="body-default-s" onBackground="neutral-weak">
           This area is private.
         </Text>
-        <Button type="submit" loading={submitting} disabled={!password}>
+        <Button type="submit" loading={submitting} disabled={!username || !password}>
           Sign in
         </Button>
       </Column>

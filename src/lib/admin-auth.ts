@@ -1,6 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
 export const ADMIN_SESSION_COOKIE = "portfolio_admin_session";
+export const ADMIN_USERNAME = "Talal Kadli";
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 
 function equalsSecret(value: string, secret: string) {
@@ -16,6 +17,10 @@ function sign(value: string, secret: string) {
 export function isValidAdminPassword(password: string) {
   const configuredPassword = process.env.ADMIN_PASSWORD;
   return Boolean(configuredPassword && equalsSecret(password, configuredPassword));
+}
+
+export function isValidAdminUsername(username: string) {
+  return username === ADMIN_USERNAME;
 }
 
 export function createAdminSession() {

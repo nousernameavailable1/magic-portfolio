@@ -7,7 +7,7 @@ import type { Metadata } from "next";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Status",
+  title: "Dashboard",
 };
 
 function formatDate(date: Date) {
@@ -42,7 +42,7 @@ function StatusCard({
   );
 }
 
-export default async function AdminStatusPage() {
+export default async function AdminDashboardPage() {
   const status = await getSiteStatus();
   const database = status.database;
   const github = status.github;
@@ -52,10 +52,10 @@ export default async function AdminStatusPage() {
       <Row fillWidth horizontal="between" vertical="end" s={{ direction: "column", gap: "12" }}>
         <Column gap="8">
           <Heading as="h1" variant="display-strong-l">
-            Status
+            Dashboard
           </Heading>
           <Text variant="heading-default-l" onBackground="neutral-weak">
-            A live snapshot of the portfolio and its supporting services.
+            A live snapshot of the website and its supporting services.
           </Text>
         </Column>
         <StatusRefreshButton />

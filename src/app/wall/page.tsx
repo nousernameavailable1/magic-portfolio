@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata() {
   const text = await getSiteText();
   return Meta.generate({
-    title: "Anonymous thoughts",
+    title: "Wall",
     description: text["wall.description"],
     baseURL,
     path: "/wall",

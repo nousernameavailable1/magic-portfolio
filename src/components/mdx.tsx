@@ -4,6 +4,8 @@ import { isValidElement } from "react";
 import type React from "react";
 import type { ReactNode } from "react";
 import { slugify as transliterate } from "transliteration";
+import { AiGeneratedNotice } from "./projects/AiGeneratedNotice";
+import { MagicPortfolioArchitecture } from "./projects/MagicPortfolioArchitecture";
 
 import {
   Accordion,
@@ -104,6 +106,21 @@ function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
   CustomHeading.displayName = `${as}`;
 
   return CustomHeading;
+}
+
+function createPlainHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
+  const PlainHeading = ({
+    children,
+    ...props
+  }: Omit<React.ComponentProps<typeof Heading>, "as">) => (
+    <Heading marginTop="24" marginBottom="12" as={as} {...props}>
+      {children}
+    </Heading>
+  );
+
+  PlainHeading.displayName = `${as}`;
+
+  return PlainHeading;
 }
 
 function createParagraph({ children }: TextProps) {
@@ -218,20 +235,36 @@ const components = {
   Icon,
   Media,
   SmartLink,
+  AiGeneratedNotice,
+  MagicPortfolioArchitecture,
   // Once UI components intentionally accept a wider prop surface than MDX intrinsic elements.
   // This boundary keeps that mapping explicit without weakening the individual component types.
 } as unknown as MDXComponents;
 
+const plainHeadingComponents = {
+  h1: createPlainHeading("h1"),
+  h2: createPlainHeading("h2"),
+  h3: createPlainHeading("h3"),
+  h4: createPlainHeading("h4"),
+  h5: createPlainHeading("h5"),
+  h6: createPlainHeading("h6"),
+} as unknown as MDXComponents;
+
 type CustomMDXProps = Omit<MDXRemoteProps, "components"> & {
   components?: MDXComponents;
+  headingLinks?: boolean;
 };
 
-export function CustomMDX(props: CustomMDXProps) {
+export function CustomMDX({ components: customComponents, headingLinks = true, ...props }: CustomMDXProps) {
   return (
     <MDXRemote
       options={{ blockJS: false }}
       {...props}
-      components={{ ...components, ...(props.components || {}) }}
+      components={{
+        ...components,
+        ...(headingLinks ? {} : plainHeadingComponents),
+        ...(customComponents || {}),
+      }}
     />
   );
 }

@@ -54,14 +54,14 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             selected={pathname === "/admin/vpn"}
           />
           <ToggleButton
-            aria-label="Status"
+            aria-label="Dashboard"
             className={styles.navButton}
             fillWidth
             horizontal="start"
-            href="/admin/status"
-            label="Status"
+            href="/admin/dashboard"
+            label="Dashboard"
             prefixIcon="globe"
-            selected={pathname === "/admin/status"}
+            selected={pathname === "/admin/dashboard"}
           />
           <ToggleButton
             aria-label="Text"

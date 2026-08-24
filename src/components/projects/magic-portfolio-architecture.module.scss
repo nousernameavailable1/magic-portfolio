@@ -1,0 +1,207 @@
+.diagrams {
+  display: grid;
+  gap: 1.5rem;
+  margin-block: 1.5rem;
+}
+
+.diagram {
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--brand-background-strong) 9%, transparent),
+      transparent 46%
+    ),
+    color-mix(in srgb, var(--neutral-background-strong) 48%, transparent);
+  border: 1px solid var(--neutral-border-medium);
+  border-radius: var(--radius-m);
+  margin: 0;
+  overflow: hidden;
+}
+
+.diagram figcaption {
+  align-items: center;
+  border-bottom: 1px solid var(--neutral-border-medium);
+  color: var(--neutral-on-background-strong);
+  display: flex;
+  font-family: var(--font-label);
+  font-size: var(--font-size-s);
+  font-weight: 600;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+}
+
+.diagram figcaption small {
+  color: var(--neutral-on-background-weak);
+  font-size: var(--font-size-xs);
+  font-weight: 400;
+}
+
+.structureTree {
+  padding: 1rem;
+}
+
+.structureRoot {
+  background: color-mix(in srgb, var(--brand-background-strong) 19%, transparent);
+  border: 1px solid var(--brand-border-strong);
+  border-radius: var(--radius-s);
+  display: grid;
+  gap: 0.18rem;
+  margin-inline: auto;
+  padding: 0.75rem 1rem;
+  text-align: center;
+  width: fit-content;
+}
+
+.structureRoot span,
+.stepType,
+.serviceNode > span,
+.servicesLabel {
+  color: var(--brand-on-background-weak);
+  font-family: var(--font-label);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+}
+
+.structureRoot strong {
+  color: var(--brand-on-background-strong);
+  font-family: var(--font-label);
+  font-size: var(--font-size-m);
+}
+
+.structureRoot small {
+  color: var(--neutral-on-background-weak);
+  font-size: var(--font-size-xs);
+}
+
+.treeStem {
+  background: var(--brand-border-strong);
+  height: 1.4rem;
+  margin-inline: auto;
+  opacity: 0.75;
+  width: 1px;
+}
+
+.structureGrid {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  position: relative;
+}
+
+.structureGrid::before {
+  background: var(--brand-border-strong);
+  content: "";
+  height: 1px;
+  left: 25%;
+  opacity: 0.5;
+  position: absolute;
+  right: 25%;
+  top: 0;
+}
+
+.structureNode {
+  background: color-mix(in srgb, var(--page-background) 43%, transparent);
+  border: 1px solid var(--neutral-border-medium);
+  border-radius: var(--radius-s);
+  display: grid;
+  gap: 0.3rem;
+  min-width: 0;
+  padding: 0.75rem;
+}
+
+.structureNode code {
+  color: var(--brand-on-background-strong);
+  font-size: var(--font-size-xs);
+  width: fit-content;
+}
+
+.structureNode strong,
+.flowStep strong,
+.serviceNode strong {
+  color: var(--neutral-on-background-strong);
+  font-family: var(--font-label);
+  font-size: var(--font-size-s);
+}
+
+.structureNode span,
+.stepDetail,
+.serviceNode small {
+  color: var(--neutral-on-background-weak);
+  font-size: var(--font-size-xs);
+  line-height: 1.45;
+}
+
+.flowSteps {
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 1rem;
+}
+
+.flowStep {
+  background: color-mix(in srgb, var(--page-background) 43%, transparent);
+  border: 1px solid var(--neutral-border-medium);
+  border-radius: var(--radius-s);
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+  padding: 0.75rem;
+  position: relative;
+}
+
+.flowStep:not(:last-child)::after {
+  color: var(--brand-on-background-strong);
+  content: "→";
+  font-size: 1.1rem;
+  position: absolute;
+  right: -0.58rem;
+  top: calc(50% - 0.7rem);
+  z-index: 1;
+}
+
+.stepNumber {
+  color: var(--brand-on-background-strong);
+  font-family: var(--font-code);
+  font-size: var(--font-size-xs);
+}
+
+.services {
+  border-top: 1px solid var(--neutral-border-medium);
+  padding: 0.9rem 1rem 1rem;
+}
+
+.servicesLabel {
+  display: block;
+  margin-bottom: 0.65rem;
+}
+
+.serviceGrid {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.serviceNode {
+  background: color-mix(in srgb, var(--brand-background-strong) 8%, transparent);
+  border-left: 2px solid var(--brand-border-strong);
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+  padding: 0.7rem 0.75rem;
+}
+
+@media (max-width: 36rem) {
+  .flowSteps {
+    grid-template-columns: 1fr;
+  }
+
+  .flowStep:not(:last-child)::after {
+    bottom: -0.75rem;
+    left: calc(50% - 0.35rem);
+    right: auto;
+    top: auto;
+    transform: rotate(90deg);
+  }
+}

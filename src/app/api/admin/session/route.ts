@@ -3,6 +3,7 @@ import {
   adminSessionCookie,
   createAdminSession,
   isValidAdminPassword,
+  isValidAdminUsername,
 } from "@/lib/admin-auth";
 import { clearVisitorCookie, getExistingVisitorId, removeVisitor } from "@/lib/visitor-analytics";
 import { type NextRequest, NextResponse } from "next/server";
@@ -10,11 +11,15 @@ import { type NextRequest, NextResponse } from "next/server";
 export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
-  const payload = (await request.json().catch(() => null)) as { password?: unknown } | null;
+  const payload = (await request.json().catch(() => null)) as {
+    username?: unknown;
+    password?: unknown;
+  } | null;
+  const username = typeof payload?.username === "string" ? payload.username : "";
   const password = typeof payload?.password === "string" ? payload.password : "";
 
-  if (!isValidAdminPassword(password)) {
-    return NextResponse.json({ error: "Incorrect password." }, { status: 401 });
+  if (!isValidAdminUsername(username) || !isValidAdminPassword(password)) {
+    return NextResponse.json({ error: "Invalid username or password." }, { status: 401 });
   }
 
   const session = createAdminSession();

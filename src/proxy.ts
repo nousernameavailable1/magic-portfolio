@@ -33,5 +33,6 @@ export const config = {
     "/wall",
     "/jumpscare",
     "/rickroll",
+    "/terminal",
   ],
 };

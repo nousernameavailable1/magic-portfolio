@@ -1,0 +1,25 @@
+.notice {
+  align-items: baseline;
+  background: color-mix(in srgb, var(--brand-background-strong) 15%, transparent);
+  border: 1px solid var(--brand-border-strong);
+  border-radius: var(--radius-m);
+  color: var(--brand-on-background-strong);
+  display: flex;
+  font-family: var(--font-label);
+  font-size: var(--font-size-m);
+  gap: 0.5rem;
+  margin-block: 1.25rem;
+  padding: 1rem 1.1rem;
+}
+
+.notice strong {
+  font-weight: 700;
+}
+
+@media (max-width: 30rem) {
+  .notice {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+}

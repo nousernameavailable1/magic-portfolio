@@ -67,8 +67,8 @@ export const publicRoutes: PublicRoute[] = [
     lockedByDefault: true,
   },
   {
-    path: "/projects/building-once-ui-a-customizable-design-system",
-    label: "Project: Once UI",
+    path: "/projects/magic-portfolio",
+    label: "Project: Magic Portfolio",
     parent: "/projects",
     lockedByDefault: true,
   },
@@ -82,6 +82,7 @@ export const publicRoutes: PublicRoute[] = [
   { path: "/wall", label: "Wall", lockedByDefault: true },
   { path: "/jumpscare", label: "Jumpscare", lockedByDefault: false },
   { path: "/rickroll", label: "Rickroll", lockedByDefault: false },
+  { path: "/terminal", label: "Terminal", lockedByDefault: false },
   { path: "/statistics", label: "Statistics", lockedByDefault: false },
 ];
 

@@ -26,6 +26,7 @@ const routes: RoutesConfig = {
   "/wall": true,
   "/jumpscare": true,
   "/rickroll": true,
+  "/terminal": true,
   "/statistics": true,
 };
 

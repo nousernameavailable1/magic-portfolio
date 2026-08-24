@@ -72,6 +72,10 @@ export default async function Project({
     post.metadata.team?.map((person) => ({
       src: person.avatar,
     })) || [];
+  const relatedProjectExclusions =
+    post.slug === "magic-portfolio"
+      ? [post.slug, "simple-portfolio-builder"]
+      : [post.slug];
 
   return (
     <Column as="section" maxWidth="m" horizontal="center" gap="l">
@@ -106,7 +110,7 @@ export default async function Project({
           {post.metadata.team && <AvatarGroup reverse avatars={avatars} size="s" />}
           <Text variant="label-default-m" onBackground="brand-weak">
             {post.metadata.team?.map((member, idx) => (
-              <span key={member.linkedIn}>
+              <span key={`${member.linkedIn}-${member.name}-${idx}`}>
                 {idx > 0 && (
                   <Text as="span" onBackground="neutral-weak">
                     ,{" "}
@@ -122,14 +126,14 @@ export default async function Project({
         <Media priority aspectRatio="16 / 9" radius="m" alt="image" src={post.metadata.images[0]} />
       )}
       <Column style={{ margin: "auto" }} as="article" maxWidth="xs">
-        <CustomMDX source={post.content} />
+        <CustomMDX headingLinks={false} source={post.content} />
       </Column>
       <Column fillWidth gap="40" horizontal="center" marginTop="40">
         <Line maxWidth="40" />
         <Heading as="h2" variant="heading-strong-xl" marginBottom="24">
           Related projects
         </Heading>
-        <Projects exclude={[post.slug]} range={[2]} />
+        <Projects exclude={relatedProjectExclusions} range={[1, 2]} />
       </Column>
       <ScrollToHash />
     </Column>

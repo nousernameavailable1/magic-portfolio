@@ -1,0 +1,58 @@
+---
+title: "Magic Portfolio"
+publishedAt: "2026-08-24"
+summary: "A containerized Next.js portfolio with MDX content, route controls, an admin area, and services deployed to an OCI virtual machine."
+images:
+  - "/images/og/home.jpg"
+team:
+  - name: "Once UI Team"
+    role: "Template foundation"
+    avatar: "/images/projects/project-01/avatar-01.jpg"
+    linkedIn: "https://www.linkedin.com/company/once-ui/"
+  - name: "Talal Kadli"
+    role: "Developer"
+    avatar: "/images/profilepic.png"
+    linkedIn: "https://github.com/nousernameavailable1"
+  - name: "ChatGPT"
+    role: "AI contributor"
+    avatar: "/images/chatgpt-icon.svg"
+    linkedIn: "https://chatgpt.com/"
+---
+
+<AiGeneratedNotice />
+
+## Overview
+
+Magic Portfolio is the Next.js application behind this website. It uses the Once UI Magic Portfolio template as its starting point, then extends it with application-specific routes, server-side services, content management, and administration. Public pages and private tools are kept separate: visitors use the portfolio normally, while moderation, route controls, and operational settings are limited to the admin area.
+
+## What the website brings together
+
+- **MDX content workflow**: Project and blog entries live beside the application code. Adding a case study means creating a structured content file, rather than making a database migration or building a separate editor.
+- **Configurable public routes**: The route map controls whether pages are listed or protected. A server-side proxy checks access before protected content is rendered.
+- **Private administration**: The admin area handles wall moderation, editable website text, route settings, fakemail aliases, VPN details, and website status.
+- **Interactive details**: The anonymous Wall, simulated terminal, visitor tracking, and optional surprise redirects add controlled interaction without exposing real shell access.
+
+## Architecture
+
+<MagicPortfolioArchitecture />
+
+The application separates browser-facing interface code from server-authorized operations. App routes compose public and private screens, reusable components provide the interface, and server helpers centralize authentication, database access, analytics, and route policy. Browser actions reach stored data only through API handlers that validate the relevant access and request data before writing.
+
+## Deployment and hosting
+
+The application source is compiled into a Docker image so the runtime is packaged consistently with its dependencies and configuration. That image runs on an Oracle Cloud Infrastructure virtual machine, where it serves the Next.js application. Cloudflare manages the website domain and DNS records, directing the public hostname to the OCI-hosted service. This keeps the application runtime, cloud host, and public domain configuration as separate, clearly defined responsibilities.
+
+## Technology choices
+
+- **Next.js App Router** provides file-based pages, route handlers, metadata, and server-side rendering.
+- **React and Once UI** supply the component model and a consistent responsive design system.
+- **MDX** makes long-form portfolio and blog content editable alongside the relevant source code.
+- **Docker** packages the application into a repeatable image for deployment.
+- **Oracle Cloud Infrastructure** provides the virtual machine that hosts the running container.
+- **Cloudflare** manages the domain and DNS configuration for the public website.
+- **PostgreSQL** stores wall submissions, visitor data, route preferences, and editable website content.
+- **GitHub API** contributes deployment context to the admin dashboard without exposing a token to visitors.
+
+## Outcome
+
+The completed website provides a public portfolio, MDX-based publishing, moderated visitor interaction, protected administration, and operational visibility from one deployment. Its structure allows content and features to be updated independently while the Docker-based deployment remains consistent across rebuilds.

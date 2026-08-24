@@ -73,7 +73,7 @@ const home: Home = {
         </Text>
       </Row>
     ),
-    href: "/projects/building-once-ui-a-customizable-design-system",
+    href: "/projects/magic-portfolio",
   },
   subline: (
     <>

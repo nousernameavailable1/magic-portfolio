@@ -29,7 +29,7 @@ const adminRoutes: AdminRoute[] = [
   { path: "/admin/wall", label: "Wall moderation", parent: "/admin" },
   { path: "/admin/fakemail", label: "Fakemail", parent: "/admin" },
   { path: "/admin/vpn", label: "VPN", parent: "/admin" },
-  { path: "/admin/status", label: "Status", parent: "/admin" },
+  { path: "/admin/dashboard", label: "Dashboard", parent: "/admin" },
   { path: "/admin/text", label: "Text", parent: "/admin" },
   { path: "/admin/map", label: "Map", parent: "/admin" },
 ];
