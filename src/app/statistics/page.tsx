@@ -72,7 +72,7 @@ export default async function StatsPage() {
           Statistics
         </Heading>
         <Text variant="heading-default-l" onBackground="neutral-weak">
-          A live snapshot of this portfolio's runtime and codebase.
+          A live snapshot of this website's runtime and codebase.
         </Text>
       </Column>
 
