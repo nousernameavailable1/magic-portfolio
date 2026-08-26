@@ -76,7 +76,7 @@ export const Footer = () => {
             <Text onBackground="neutral-weak">© {currentYear} /</Text>
             <Text
               as="a"
-              href="/admin/login"
+              href="/admin/dashboard"
               paddingX="4"
               style={{ color: "inherit", textDecoration: "none" }}
             >

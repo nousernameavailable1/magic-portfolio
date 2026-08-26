@@ -134,6 +134,7 @@ export const Header = () => {
       <Fade s={{ hide: true }} fillWidth position="fixed" height="80" zIndex={9} />
       {!isAdminRoute && (
         <Fade
+          className={styles.mobileBottomFade}
           hide
           s={{ hide: false }}
           fillWidth

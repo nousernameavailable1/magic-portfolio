@@ -21,6 +21,10 @@
     display: none;
 }
 
+.mobileBottomFade {
+    pointer-events: none;
+}
+
 @media (max-width: breakpoints.$s) {
     .mobileNavigation {
         align-items: stretch;
