@@ -1,0 +1,180 @@
+.page,
+.detailPage {
+  width: min(100%, 46rem);
+}
+
+.page {
+  display: grid;
+  gap: 2.5rem;
+  padding-block: 2rem 4rem;
+}
+
+.intro {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 38rem;
+}
+
+.eyebrow {
+  color: var(--brand-on-background-strong);
+  font-size: var(--font-size-label-s);
+  font-weight: 750;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.intro h1,
+.noteHeader h1 {
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+  margin: 0;
+}
+
+.intro h1 {
+  font-size: clamp(3rem, 8vw, 5.5rem);
+}
+
+.intro p,
+.noteHeader p {
+  color: var(--neutral-on-background-weak);
+  font-size: var(--font-size-heading-l);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.notes {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.noteCard {
+  background: color-mix(in srgb, var(--surface-background) 84%, transparent);
+  border: 1px solid var(--neutral-border-medium);
+  border-radius: 1rem;
+  color: inherit;
+  display: grid;
+  gap: 0.8rem;
+  padding: 1.25rem;
+  text-decoration: none;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.noteCard:hover {
+  background: var(--surface-background);
+  border-color: var(--brand-border-medium);
+  transform: translateY(-2px);
+}
+
+.cardHeading {
+  align-items: baseline;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.cardHeading h2 {
+  font-size: var(--font-size-heading-xl);
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.cardHeading time,
+.noteMeta {
+  color: var(--neutral-on-background-weak);
+  flex: 0 0 auto;
+  font-size: var(--font-size-label-s);
+}
+
+.noteCard p {
+  color: var(--neutral-on-background-weak);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.readMore {
+  color: var(--brand-on-background-strong);
+  font-size: var(--font-size-label-s);
+  font-weight: 700;
+}
+
+.empty {
+  background: var(--neutral-alpha-weak);
+  border: 1px dashed var(--neutral-border-medium);
+  border-radius: 1rem;
+  color: var(--neutral-on-background-weak);
+  margin: 0;
+  padding: 1.5rem;
+}
+
+.detailPage {
+  display: grid;
+  gap: 2rem;
+  padding-block: 2rem 5rem;
+}
+
+.backLink {
+  color: var(--brand-on-background-strong);
+  font-size: var(--font-size-label-m);
+  font-weight: 700;
+  text-decoration: none;
+  width: fit-content;
+}
+
+.noteHeader {
+  border-bottom: 1px solid var(--neutral-alpha-weak);
+  display: grid;
+  gap: 1rem;
+  padding-bottom: 2rem;
+}
+
+.noteHeader h1 {
+  font-size: clamp(2.6rem, 7vw, 4.75rem);
+}
+
+.noteBody {
+  font-size: clamp(1.05rem, 2vw, 1.18rem);
+  line-height: 1.8;
+  margin-top: 2rem;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 48rem) {
+  .page,
+  .detailPage {
+    padding-block: 1rem calc(var(--mobile-shell-bottom) + 1rem);
+  }
+
+  .page {
+    gap: 1.75rem;
+  }
+
+  .intro h1 {
+    font-size: clamp(2.8rem, 16vw, 4rem);
+  }
+
+  .intro p,
+  .noteHeader p {
+    font-size: var(--font-size-body-l);
+  }
+
+  .noteCard {
+    padding: 1rem;
+  }
+
+  .cardHeading {
+    align-items: start;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .noteHeader h1 {
+    font-size: clamp(2.45rem, 13vw, 3.7rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .noteCard {
+    transition: none;
+  }
+}

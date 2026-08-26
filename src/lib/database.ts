@@ -1,7 +1,7 @@
 import type { PoolClient } from "pg";
 import { Pool } from "pg";
 
-const CURRENT_SCHEMA_VERSION = 9;
+const CURRENT_SCHEMA_VERSION = 11;
 
 declare global {
   // eslint-disable-next-line no-var
@@ -211,6 +211,38 @@ async function applyMigrations(pool: Pool) {
         CREATE INDEX IF NOT EXISTS fakemail_aliases_active_expiry_idx
           ON fakemail_aliases (expires_at)
           WHERE deleted_at IS NULL AND expires_at IS NOT NULL;
+      `,
+    );
+
+    await applyMigration(
+      client,
+      "010_create_notes",
+      "notes",
+      `
+        CREATE TABLE IF NOT EXISTS notes (
+          id BIGSERIAL PRIMARY KEY,
+          title TEXT NOT NULL CHECK (char_length(title) BETWEEN 1 AND 160),
+          slug TEXT NOT NULL UNIQUE CHECK (char_length(slug) BETWEEN 1 AND 180),
+          summary TEXT CHECK (summary IS NULL OR char_length(summary) <= 400),
+          body TEXT NOT NULL CHECK (char_length(body) BETWEEN 1 AND 50000),
+          public BOOLEAN NOT NULL DEFAULT FALSE,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          published_at TIMESTAMPTZ
+        );
+
+        CREATE INDEX IF NOT EXISTS notes_public_feed_idx
+          ON notes (public, published_at DESC, updated_at DESC);
+      `,
+    );
+
+    await applyMigration(
+      client,
+      "011_add_note_passwords",
+      "notes",
+      `
+        ALTER TABLE notes
+        ADD COLUMN IF NOT EXISTS private_password_hash TEXT;
       `,
     );
 

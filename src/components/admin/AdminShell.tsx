@@ -19,13 +19,14 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   const sectionName =
     {
       "/admin/wall": "Wall moderation",
+      "/admin/notes": "Notes",
       "/admin/fakemail": "Fakemail",
       "/admin/dashboard": "Dashboard",
       "/admin/text": "Text editor",
       "/admin/map": "Site map",
       "/admin/vpn": "VPN",
     }[pathname] ?? "Admin";
-  const overflowRouteSelected = pathname === "/admin/map" || pathname === "/admin/vpn";
+  const overflowRouteSelected = ["/admin/fakemail", "/admin/map", "/admin/vpn"].includes(pathname);
 
   useEffect(() => {
     if (pathname) setMobileMenuOpen(false);
@@ -87,7 +88,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   const mobileLink = (
     href: string,
     label: string,
-    icon: "mail" | "email" | "globe" | "text",
+    icon: "mail" | "email" | "globe" | "stickyNote" | "text",
     selected: boolean,
   ) => (
     <Link
@@ -124,6 +125,16 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             label="Wall moderation"
             prefixIcon="mail"
             selected={pathname === "/admin/wall"}
+          />
+          <ToggleButton
+            aria-label="Notes"
+            className={styles.navButton}
+            fillWidth
+            horizontal="start"
+            href="/admin/notes"
+            label="Notes"
+            prefixIcon="stickyNote"
+            selected={pathname === "/admin/notes"}
           />
           <ToggleButton
             aria-label="Fakemail"
@@ -235,6 +246,17 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             <span>View site</span>
           </Link>
           <Link
+            aria-current={pathname === "/admin/fakemail" ? "page" : undefined}
+            className={`${styles.mobileMenuLink} ${
+              pathname === "/admin/fakemail" ? styles.mobileMenuLinkSelected : ""
+            }`}
+            href="/admin/fakemail"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <Icon decorative name="email" size="m" />
+            <span>Fakemail</span>
+          </Link>
+          <Link
             aria-current={pathname === "/admin/map" ? "page" : undefined}
             className={`${styles.mobileMenuLink} ${
               pathname === "/admin/map" ? styles.mobileMenuLinkSelected : ""
@@ -283,7 +305,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
       <nav className={styles.mobileAdminNav} aria-label="Admin navigation">
         {mobileLink("/admin/wall", "Wall", "mail", pathname === "/admin/wall")}
-        {mobileLink("/admin/fakemail", "Mail", "email", pathname === "/admin/fakemail")}
+        {mobileLink("/admin/notes", "Notes", "stickyNote", pathname === "/admin/notes")}
         {mobileLink("/admin/dashboard", "Status", "globe", pathname === "/admin/dashboard")}
         {mobileLink("/admin/text", "Text", "text", pathname === "/admin/text")}
         <button

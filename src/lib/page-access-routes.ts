@@ -4,7 +4,7 @@
  * Keep this list independent of Node-only modules: it is shared by the
  * server-side Proxy and the client-safe site configuration.
  */
-export const pageAccessRoutes = ["/about", "/blog", "/projects", "/wall"] as const;
+export const pageAccessRoutes = ["/about", "/blog", "/notes", "/projects", "/wall"] as const;
 
 export function isPageAccessRoute(pathname: string) {
   return pageAccessRoutes.some((route) => pathname === route || pathname.startsWith(`${route}/`));

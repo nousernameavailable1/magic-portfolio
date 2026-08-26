@@ -27,6 +27,7 @@ const adminRoutes: AdminRoute[] = [
   { path: "/admin", label: "Admin" },
   { path: "/admin/login", label: "Login", parent: "/admin" },
   { path: "/admin/wall", label: "Wall moderation", parent: "/admin" },
+  { path: "/admin/notes", label: "Notes", parent: "/admin" },
   { path: "/admin/fakemail", label: "Fakemail", parent: "/admin" },
   { path: "/admin/vpn", label: "VPN", parent: "/admin" },
   { path: "/admin/dashboard", label: "Dashboard", parent: "/admin" },

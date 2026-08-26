@@ -3,6 +3,7 @@ import { createHmac } from "node:crypto";
 type RateLimitEntry = { count: number; resetAt: number };
 const submissions = new Map<string, RateLimitEntry>();
 const reactions = new Map<string, RateLimitEntry>();
+const notePasswords = new Map<string, RateLimitEntry>();
 const WINDOW_MS = 10 * 1000;
 const CLEANUP_THRESHOLD = 100;
 
@@ -18,16 +19,18 @@ function isRateLimited(
   entries: Map<string, RateLimitEntry>,
   forwardedFor: string | null,
   limit: number,
+  windowMs = WINDOW_MS,
+  identifier = "",
 ) {
   const address = forwardedFor?.split(",")[0]?.trim() || "unknown";
   const secret = process.env.ADMIN_SESSION_SECRET || "unconfigured-rate-limit-secret";
-  const key = createHmac("sha256", secret).update(address).digest("hex");
+  const key = createHmac("sha256", secret).update(`${address}:${identifier}`).digest("hex");
   const now = Date.now();
   removeExpiredEntries(entries, now);
   const entry = entries.get(key);
 
   if (!entry || entry.resetAt <= now) {
-    entries.set(key, { count: 1, resetAt: now + WINDOW_MS });
+    entries.set(key, { count: 1, resetAt: now + windowMs });
     return false;
   }
 
@@ -41,4 +44,8 @@ export function isSubmissionRateLimited(forwardedFor: string | null) {
 
 export function isReactionRateLimited(forwardedFor: string | null) {
   return isRateLimited(reactions, forwardedFor, 12);
+}
+
+export function isNotePasswordRateLimited(forwardedFor: string | null, slug: string) {
+  return isRateLimited(notePasswords, forwardedFor, 5, 60 * 1000, slug);
 }

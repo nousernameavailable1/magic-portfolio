@@ -52,7 +52,7 @@ export const Header = () => {
   const mobileMenuCloseRef = useRef<HTMLButtonElement>(null);
   const mobileMenuTriggerRef = useRef<HTMLButtonElement>(null);
   const isAdminRoute = pathname.startsWith("/admin");
-  const overflowRouteSelected = ["/gallery", "/wall", "/statistics", "/terminal"].some(
+  const overflowRouteSelected = ["/notes", "/gallery", "/wall", "/statistics", "/terminal"].some(
     (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
 
@@ -251,6 +251,25 @@ export const Header = () => {
                   </Row>
                 </>
               )}
+              {routes["/notes"] && (
+                <>
+                  <Row s={{ hide: true }}>
+                    <ToggleButton
+                      prefixIcon="stickyNote"
+                      href="/notes"
+                      label="Notes"
+                      selected={pathname.startsWith("/notes")}
+                    />
+                  </Row>
+                  <Row hide s={{ hide: false }}>
+                    <ToggleButton
+                      prefixIcon="stickyNote"
+                      href="/notes"
+                      selected={pathname.startsWith("/notes")}
+                    />
+                  </Row>
+                </>
+              )}
               {routes["/wall"] && (
                 <>
                   <Row s={{ hide: true }}>
@@ -332,6 +351,19 @@ export const Header = () => {
               </button>
             </div>
             <nav className={styles.mobileMenuGrid} aria-label="Secondary navigation">
+              {routes["/notes"] && (
+                <Link
+                  className={`${styles.mobileMenuLink} ${
+                    pathname.startsWith("/notes") ? styles.mobileMenuLinkSelected : ""
+                  }`}
+                  aria-current={pathname.startsWith("/notes") ? "page" : undefined}
+                  href="/notes"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Icon decorative name="stickyNote" size="m" />
+                  <span>Notes</span>
+                </Link>
+              )}
               {routes["/gallery"] && (
                 <Link
                   className={`${styles.mobileMenuLink} ${

@@ -28,6 +28,7 @@ export const config = {
     "/",
     "/about",
     "/blog/:path*",
+    "/notes/:path*",
     "/projects/:path*",
     "/gallery",
     "/wall",

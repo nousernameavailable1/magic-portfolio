@@ -18,6 +18,7 @@ export const publicRoutes: PublicRoute[] = [
   { path: "/", label: "Home", lockedByDefault: false },
   { path: "/about", label: "About", lockedByDefault: true },
   { path: "/blog", label: "Blog", lockedByDefault: true },
+  { path: "/notes", label: "Notes", lockedByDefault: true },
   { path: "/blog/blog", label: "Blog post: Blog", parent: "/blog", lockedByDefault: true },
   {
     path: "/blog/components",
@@ -90,8 +91,17 @@ function getPublicRoute(path: string) {
   return publicRoutes.find((route) => route.path === path);
 }
 
+function getManagedPublicRoute(path: string) {
+  return (
+    getPublicRoute(path) ??
+    publicRoutes
+      .filter((route) => route.path !== "/" && path.startsWith(`${route.path}/`))
+      .sort((left, right) => right.path.length - left.path.length)[0]
+  );
+}
+
 export function isManagedPublicRoute(path: string) {
-  return Boolean(getPublicRoute(path));
+  return Boolean(getManagedPublicRoute(path));
 }
 
 export async function getPublicRouteStates(): Promise<PublicRouteState[]> {
@@ -114,11 +124,15 @@ export async function getPublicRouteStates(): Promise<PublicRouteState[]> {
 
 export async function isPublicRouteLocked(path: string) {
   const states = await getPublicRouteStates();
-  let route = states.find((state) => state.path === path);
+  let route: PublicRouteState | undefined =
+    states.find((state) => state.path === path) ??
+    states
+      .filter((state) => state.path !== "/" && path.startsWith(`${state.path}/`))
+      .sort((left, right) => right.path.length - left.path.length)[0];
 
   while (route) {
     if (route.locked) return true;
-    const parentPath = route.parent;
+    const parentPath: string | undefined = route.parent;
     route = parentPath ? states.find((parent) => parent.path === parentPath) : undefined;
   }
 

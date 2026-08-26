@@ -1,0 +1,63 @@
+.page {
+  display: grid;
+  gap: 2rem;
+  padding-block: 2rem 5rem;
+  width: min(100%, 38rem);
+}
+
+.backLink {
+  color: var(--brand-on-background-strong);
+  font-size: var(--font-size-label-m);
+  font-weight: 700;
+  text-decoration: none;
+  width: fit-content;
+}
+
+.card {
+  overflow: hidden;
+  position: relative;
+}
+
+.card::before {
+  background: linear-gradient(90deg, transparent, var(--brand-on-background-strong), transparent);
+  content: "";
+  height: 1px;
+  left: 20%;
+  opacity: 0.55;
+  position: absolute;
+  right: 20%;
+  top: 0;
+}
+
+.eyebrow {
+  color: var(--brand-on-background-strong);
+  letter-spacing: 0.13em;
+}
+
+.form {
+  width: 100%;
+}
+
+.unavailable {
+  border-top: 1px solid var(--neutral-alpha-weak);
+  padding-top: 1rem;
+}
+
+@media (max-width: 48rem) {
+  .page {
+    justify-content: center;
+    min-height: clamp(30rem, calc(100dvh - 10rem), 44rem);
+    padding-block: 1rem calc(var(--mobile-shell-bottom) + 1rem);
+  }
+
+  .card {
+    background:
+      radial-gradient(circle at top, var(--brand-alpha-medium), transparent 42%),
+      color-mix(in srgb, var(--surface-background) 92%, transparent) !important;
+    padding: 1.5rem 1.25rem !important;
+  }
+
+  .card button {
+    min-height: var(--mobile-touch-target, 3rem);
+  }
+}

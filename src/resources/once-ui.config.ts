@@ -22,6 +22,7 @@ const routes: RoutesConfig = {
   "/about": true,
   "/projects": true,
   "/blog": true,
+  "/notes": true,
   "/gallery": true,
   "/wall": true,
   "/jumpscare": true,

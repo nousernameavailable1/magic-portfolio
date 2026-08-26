@@ -17,7 +17,7 @@ function isRouteEnabled(pathname: string) {
     return true;
   }
 
-  return ["/blog", "/projects"].some(
+  return ["/blog", "/notes", "/projects"].some(
     (route) => pathname.startsWith(route) && routes[route as keyof typeof routes],
   );
 }
