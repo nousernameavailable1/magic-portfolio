@@ -44,3 +44,21 @@
     animation: none;
   }
 }
+
+@media (max-width: 48rem) {
+  .page,
+  .scare {
+    min-height: 100dvh;
+  }
+
+  .scare {
+    overscroll-behavior: none;
+    touch-action: none;
+  }
+
+  .face {
+    height: 100dvh;
+    object-position: center;
+    width: 100vw;
+  }
+}

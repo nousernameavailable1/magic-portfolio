@@ -1,0 +1,47 @@
+.mobileAction {
+  display: none !important;
+}
+
+@media (max-width: 48rem) {
+  .page {
+    background:
+      radial-gradient(circle at 50% 28%, var(--brand-alpha-medium), transparent 32%),
+      color-mix(in srgb, var(--surface-background) 68%, transparent);
+    border: 1px solid var(--neutral-alpha-weak);
+    border-radius: var(--radius-xl);
+    min-height: clamp(28rem, calc(100dvh - 11rem), 40rem);
+    padding: var(--static-space-32) var(--static-space-20) !important;
+    width: 100%;
+  }
+
+  .code {
+    color: var(--brand-on-background-strong);
+    font-size: clamp(5rem, 28vw, 8rem) !important;
+    letter-spacing: -0.08em;
+    line-height: 0.88;
+    margin-bottom: var(--static-space-20) !important;
+  }
+
+  .title {
+    font-size: clamp(1.5rem, 8vw, 2rem) !important;
+    margin-bottom: var(--static-space-12) !important;
+  }
+
+  .description {
+    line-height: 1.55;
+    max-width: 22rem;
+  }
+
+  .mobileAction {
+    display: inline-flex !important;
+    margin-top: var(--static-space-24);
+    min-height: 3rem;
+  }
+}
+
+@media (max-width: 23rem) {
+  .page {
+    border-radius: var(--radius-l);
+    padding-inline: var(--static-space-16) !important;
+  }
+}

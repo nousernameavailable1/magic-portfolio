@@ -169,8 +169,9 @@ export function WallModeration() {
   };
 
   return (
-    <Column fillWidth gap="xl" paddingY="24">
+    <Column className={styles.moderationPage} fillWidth gap="xl" paddingY="24">
       <Row
+        className={styles.moderationHeader}
         fillWidth
         horizontal="between"
         vertical="center"
@@ -178,12 +179,7 @@ export function WallModeration() {
         s={{ direction: "column", horizontal: "start", vertical: "start" }}
       >
         <Column flex={1} gap="8">
-          <Heading
-            className={styles.pageTitle}
-            as="h1"
-            variant="display-strong-l"
-            style={{ whiteSpace: "nowrap" }}
-          >
+          <Heading className={styles.pageTitle} as="h1" variant="display-strong-l">
             Wall submissions
           </Heading>
           <Text className={styles.pageDescription} onBackground="neutral-weak">
@@ -191,10 +187,11 @@ export function WallModeration() {
           </Text>
         </Column>
         <WallBypassSettings />
-        <Row gap="8" wrap>
+        <Row className={styles.moderationFilters} gap="8" wrap>
           {statuses.map((item) => (
             <Button
               key={item.value}
+              aria-pressed={status === item.value}
               variant={status === item.value ? "primary" : "secondary"}
               size="s"
               onClick={() => selectStatus(item.value)}
@@ -204,6 +201,7 @@ export function WallModeration() {
           ))}
           <span aria-hidden="true" className={styles.filterDivider} />
           <Button
+            className={styles.moderationRefresh}
             size="s"
             variant="secondary"
             style={{
@@ -286,8 +284,14 @@ export function WallModeration() {
                   </Text>
                 </Column>
               )}
-              <Row fillWidth horizontal="between" vertical="center" gap="8">
-                <Row gap="8" wrap>
+              <Row
+                className={styles.moderationActions}
+                fillWidth
+                horizontal="between"
+                vertical="center"
+                gap="8"
+              >
+                <Row className={styles.moderationActionGroup} gap="8" wrap>
                   {submission.status !== "approved" && (
                     <Button
                       size="s"
@@ -354,6 +358,7 @@ export function WallModeration() {
                 </Row>
                 {submission.status !== "pending" && (
                   <Button
+                    className={styles.moderationDelete}
                     size="s"
                     variant="danger"
                     loading={isBusy("delete")}

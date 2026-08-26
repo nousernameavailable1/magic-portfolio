@@ -2,12 +2,14 @@
 
 import { gallery } from "@/resources";
 import { MasonryGrid, Media } from "@once-ui-system/core";
+import styles from "./gallery.module.scss";
 
 export default function GalleryView() {
   return (
-    <MasonryGrid columns={2} s={{ columns: 1 }}>
+    <MasonryGrid className={styles.grid} columns={2} s={{ columns: 2 }}>
       {gallery.images.map((image, index) => (
         <Media
+          className={styles.image}
           enlarge
           priority={index < 10}
           sizes="(max-width: 560px) 100vw, 50vw"

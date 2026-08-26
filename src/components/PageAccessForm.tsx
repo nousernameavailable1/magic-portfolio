@@ -2,6 +2,7 @@
 
 import { Button, Column, Heading, PasswordInput, Text } from "@once-ui-system/core";
 import { type FormEvent, useState } from "react";
+import styles from "./PageAccessForm.module.scss";
 
 type PageAccessFormProps = {
   returnTo: string;
@@ -38,8 +39,9 @@ export function PageAccessForm({ returnTo }: PageAccessFormProps) {
   }
 
   return (
-    <Column fillWidth paddingY="104" horizontal="center">
+    <Column as="main" className={styles.page} fillWidth paddingY="104" horizontal="center">
       <Column
+        className={styles.card}
         fillWidth
         maxWidth="s"
         gap="32"
@@ -49,15 +51,28 @@ export function PageAccessForm({ returnTo }: PageAccessFormProps) {
         radius="xl"
         shadow="l"
       >
-        <Column gap="12" horizontal="center" align="center">
-          <Heading align="center" variant="display-strong-m" wrap="balance">
+        <Column className={styles.intro} gap="12" horizontal="center" align="center">
+          <Text aria-hidden="true" className={styles.mobileEyebrow} variant="label-strong-s">
+            PRIVATE ROUTE
+          </Text>
+          <Heading
+            className={styles.title}
+            align="center"
+            variant="display-strong-m"
+            wrap="balance"
+          >
             This page is for invited eyes only.
           </Heading>
-          <Text align="center" variant="body-default-l" onBackground="neutral-weak">
+          <Text
+            className={styles.description}
+            align="center"
+            variant="body-default-l"
+            onBackground="neutral-weak"
+          >
             Enter the access password to continue.
           </Text>
         </Column>
-        <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+        <form className={styles.form} onSubmit={handleSubmit}>
           <Column fillWidth gap="16" horizontal="center">
             <PasswordInput
               id="password"
@@ -68,12 +83,23 @@ export function PageAccessForm({ returnTo }: PageAccessFormProps) {
               autoComplete="current-password"
               required
             />
-            <Button type="submit" fillWidth size="l" loading={submitting}>
+            <Button
+              className={styles.submitButton}
+              type="submit"
+              fillWidth
+              size="l"
+              loading={submitting}
+            >
               Unlock page
             </Button>
           </Column>
         </form>
-        <Text align="center" variant="body-default-s" onBackground="neutral-weak">
+        <Text
+          className={styles.note}
+          align="center"
+          variant="body-default-s"
+          onBackground="neutral-weak"
+        >
           Don&apos;t have access? Womp womp.
         </Text>
       </Column>

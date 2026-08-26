@@ -1,0 +1,47 @@
+.manager,
+.fieldCard,
+.nestedGroup,
+.nestedField {
+  min-width: 0;
+}
+
+@media (max-width: 48rem) {
+  .manager {
+    gap: 1rem !important;
+  }
+
+  .fieldCard {
+    gap: 1rem !important;
+    padding: 1rem !important;
+  }
+
+  .financeHeader {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+
+  .nestedGroup {
+    gap: 1rem !important;
+    padding: 0.875rem !important;
+  }
+
+  .nestedField + .nestedField {
+    border-top: 1px solid var(--neutral-alpha-weak);
+    padding-top: 1rem;
+  }
+
+  .editorActions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .editorActions > button {
+    min-height: var(--mobile-touch-target, 3rem);
+    width: 100% !important;
+  }
+
+  .editorActions > button:last-child {
+    grid-column: 1 / -1;
+  }
+}

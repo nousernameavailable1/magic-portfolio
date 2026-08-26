@@ -6,3 +6,29 @@
  *   --default-border: var(--neutral-border-medium);
  * }
  */
+
+@media (max-width: 48rem) {
+  :root {
+    --mobile-gutter: 1rem;
+    --mobile-touch-target: 3rem;
+    --mobile-dock-height: 4.1rem;
+    --mobile-dock-offset: 0.75rem;
+    --mobile-shell-bottom: calc(
+      var(--mobile-dock-height) + var(--mobile-dock-offset) + env(safe-area-inset-bottom) + 1rem
+    );
+  }
+
+  html {
+    scroll-padding-bottom: var(--mobile-shell-bottom);
+  }
+
+  body {
+    overflow-x: clip;
+  }
+
+  input,
+  textarea,
+  select {
+    font-size: max(1rem, 16px);
+  }
+}

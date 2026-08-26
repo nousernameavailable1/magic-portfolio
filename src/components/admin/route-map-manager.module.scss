@@ -263,9 +263,30 @@
 }
 
 @media (max-width: 48rem) {
+  .manager {
+    gap: 1.25rem;
+    padding-block: 0.75rem 1.5rem;
+  }
+
   .headingRow {
     align-items: start;
     flex-direction: column;
+  }
+
+  .manager h1 {
+    font-size: clamp(2.1rem, 11vw, 3rem);
+    letter-spacing: -0.04em;
+    line-height: 1.02;
+  }
+
+  .viewToggle {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .viewToggle button {
+    min-height: var(--mobile-touch-target, 3rem);
   }
 
   .branches {
@@ -299,9 +320,50 @@
   .route {
     align-items: start;
     flex-direction: column;
+    gap: 0.75rem;
+    min-height: 0;
+    padding: 0.875rem;
   }
 
   .actions {
-    justify-content: start;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: stretch;
+    width: 100%;
+  }
+
+  .actions button {
+    min-height: var(--mobile-touch-target, 3rem);
+    width: 100%;
+  }
+}
+
+@media (max-width: 23rem) {
+  .branches {
+    margin-left: 0.4rem;
+    padding-left: 1rem;
+  }
+
+  .branch::before,
+  .branches > .branch::after {
+    left: -1rem;
+  }
+
+  .branch::before {
+    width: 1rem;
+  }
+
+  .children {
+    margin-left: 0.45rem;
+    padding-left: 1rem;
+  }
+
+  .children .branch::before,
+  .children > .branch::after {
+    left: -1rem;
+  }
+
+  .children .branch::before {
+    width: 1rem;
   }
 }

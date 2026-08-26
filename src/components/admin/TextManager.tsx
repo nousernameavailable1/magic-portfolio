@@ -3,6 +3,7 @@
 import { FinanceVisibilityToggle } from "@/components/admin/FinanceVisibilityToggle";
 import { Button, Column, Heading, Row, Text, Textarea, useToast } from "@once-ui-system/core";
 import { useCallback, useEffect, useRef, useState } from "react";
+import styles from "./text-manager.module.scss";
 
 type TextField = {
   key: string;
@@ -51,7 +52,7 @@ function TextFieldEditor({
         characterCount
         resize="vertical"
       />
-      <Row gap="8" wrap>
+      <Row className={styles.editorActions} gap="8" wrap>
         <Button
           size="s"
           variant="primary"
@@ -199,7 +200,7 @@ export function TextManager() {
   );
 
   return (
-    <Column fillWidth gap="16">
+    <Column className={styles.manager} fillWidth gap="16">
       {topLevelFields.map((field) => {
         const value = values[field.key] ?? "";
         const nestedFields = fields.filter((candidate) => candidate.parentKey === field.key);
@@ -210,6 +211,7 @@ export function TextManager() {
           : "Shown from 1:00 AM to 5:59 AM (Asia/Dubai).";
         return (
           <Column
+            className={styles.fieldCard}
             key={field.key}
             fillWidth
             gap="16"
@@ -220,7 +222,13 @@ export function TextManager() {
           >
             {isFinanceGroup ? (
               <Column gap="4">
-                <Row fillWidth horizontal="between" vertical="center" gap="16">
+                <Row
+                  className={styles.financeHeader}
+                  fillWidth
+                  horizontal="between"
+                  vertical="center"
+                  gap="16"
+                >
                   <Heading as="h2" variant="heading-strong-l">
                     {field.label}
                   </Heading>
@@ -251,6 +259,7 @@ export function TextManager() {
             )}
             {nestedFields.length > 0 && (
               <Column
+                className={styles.nestedGroup}
                 fillWidth
                 gap="16"
                 padding="16"
@@ -265,7 +274,7 @@ export function TextManager() {
                   <Text onBackground="neutral-weak">{nestedDescription}</Text>
                 </Column>
                 {nestedFields.map((nestedField) => (
-                  <Column key={nestedField.key} gap="8">
+                  <Column className={styles.nestedField} key={nestedField.key} gap="8">
                     <Column gap="2">
                       <Text variant="label-strong-s">{nestedField.label}</Text>
                       <Text variant="body-default-xs" onBackground="neutral-weak">

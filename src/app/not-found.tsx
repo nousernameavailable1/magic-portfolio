@@ -1,15 +1,27 @@
-import { Column, Heading, Text } from "@once-ui-system/core";
+import { Button, Column, Heading, Text } from "@once-ui-system/core";
+import styles from "./not-found.module.scss";
 
 export default function NotFound() {
   return (
-    <Column as="section" fill center paddingBottom="160">
-      <Text marginBottom="s" variant="display-strong-xl">
+    <Column className={styles.page} as="section" fill center paddingBottom="160">
+      <Text className={styles.code} marginBottom="s" variant="display-strong-xl">
         404
       </Text>
-      <Heading marginBottom="l" variant="display-default-xs">
+      <Heading className={styles.title} marginBottom="l" variant="display-default-xs">
         Page Not Found
       </Heading>
-      <Text onBackground="neutral-weak">The page you are looking for does not exist.</Text>
+      <Text className={styles.description} align="center" onBackground="neutral-weak">
+        The page you are looking for does not exist.
+      </Text>
+      <Button
+        className={styles.mobileAction}
+        href="/"
+        prefixIcon="home"
+        size="l"
+        variant="secondary"
+      >
+        Back home
+      </Button>
     </Column>
   );
 }

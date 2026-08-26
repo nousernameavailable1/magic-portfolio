@@ -155,6 +155,7 @@ export function WallBoard() {
             shadow="l"
           >
             <Row
+              className={styles.composerFooter}
               fillWidth
               horizontal="between"
               vertical="end"
@@ -205,6 +206,7 @@ export function WallBoard() {
                 No account required. Your message is submitted without a name.
               </Text>
               <Button
+                className={styles.sendButton}
                 type="submit"
                 loading={submitting}
                 disabled={!body.trim()}
@@ -226,7 +228,7 @@ export function WallBoard() {
             gap="16"
             s={{ direction: "column", horizontal: "start", vertical: "start" }}
           >
-            <Row gap="12" vertical="center">
+            <Row className={styles.feedTitleRow} gap="12" vertical="center">
               <Heading as="h2" variant="display-strong-s">
                 Messages
               </Heading>

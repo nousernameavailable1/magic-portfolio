@@ -130,6 +130,59 @@
 }
 
 @media (max-width: breakpoints.$s) {
+    .page {
+        width: 100%;
+    }
+
+    .profileLayout {
+        gap: var(--static-space-24);
+    }
+
+    .avatar {
+        align-items: center;
+        align-self: stretch;
+        background:
+            radial-gradient(circle at top left, var(--brand-alpha-weak), transparent 48%),
+            color-mix(in srgb, var(--surface-background) 88%, transparent);
+        border: 1px solid var(--neutral-border-medium);
+        border-radius: var(--radius-l);
+        display: grid !important;
+        gap: var(--static-space-8) var(--static-space-16) !important;
+        grid-template-columns: auto minmax(0, 1fr);
+        justify-content: stretch;
+        max-width: 34rem;
+        min-width: 0 !important;
+        padding: var(--static-space-16) !important;
+        width: 100%;
+    }
+
+    .avatar > :first-child {
+        grid-row: 1 / span 2;
+        height: 5rem !important;
+        min-height: 5rem !important;
+        min-width: 5rem !important;
+        width: 5rem !important;
+    }
+
+    .location,
+    .languages {
+        justify-content: flex-start;
+        min-width: 0;
+    }
+
+    .mainContent {
+        align-self: stretch;
+        max-width: none !important;
+        width: 100%;
+    }
+
+    .introBlock {
+        border-bottom: 1px solid var(--neutral-alpha-weak);
+        margin-bottom: var(--static-space-32) !important;
+        min-height: 0 !important;
+        padding: var(--static-space-8) 0 var(--static-space-24);
+    }
+
     .textAlign {
         text-align: center;
     }
@@ -138,12 +191,113 @@
         align-self: center;
     }
 
+    .socialLinks {
+        gap: var(--static-space-12) !important;
+        padding-top: var(--static-space-16) !important;
+    }
+
+    .socialLinks a {
+        min-height: var(--mobile-touch-target, 3rem) !important;
+        min-width: var(--mobile-touch-target, 3rem) !important;
+    }
+
+    .introduction {
+        background: color-mix(in srgb, var(--surface-background) 70%, transparent);
+        border-left: 2px solid var(--brand-border-medium);
+        border-radius: 0 var(--radius-m) var(--radius-m) 0;
+        font-size: var(--font-size-body-m);
+        margin-bottom: var(--static-space-40) !important;
+        padding: var(--static-space-16);
+    }
+
+    .sectionHeading {
+        border-bottom: 1px solid var(--neutral-alpha-weak);
+        font-size: clamp(1.55rem, 8vw, 2rem) !important;
+        margin-bottom: var(--static-space-20) !important;
+        padding-bottom: var(--static-space-12);
+        width: 100%;
+    }
+
+    .experience,
+    .study,
+    .skill {
+        background: color-mix(in srgb, var(--surface-background) 72%, transparent);
+        border: 1px solid var(--neutral-alpha-weak);
+        border-radius: var(--radius-l);
+        padding: var(--static-space-16);
+    }
+
+    .experienceHeading {
+        align-items: flex-start !important;
+        flex-direction: column;
+        gap: var(--static-space-4);
+    }
+
+    .timeframe {
+        color: var(--brand-on-background-weak);
+    }
+
+    .achievements {
+        margin: 0;
+        padding-left: var(--static-space-20);
+    }
+
+    .mediaGrid {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr);
+        padding-left: 0 !important;
+        width: 100%;
+    }
+
+    .mediaFrame {
+        aspect-ratio: 16 / 9;
+        height: auto !important;
+        min-width: 0 !important;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .paymentSection {
+        border-top: 1px solid var(--neutral-alpha-weak);
+        gap: var(--static-space-16);
+        margin-top: var(--static-space-40);
+        padding-top: var(--static-space-32);
+    }
+
     .paymentCard {
+        border-radius: var(--radius-l);
+        gap: var(--static-space-12);
         min-height: 13rem;
-        padding: var(--static-space-20);
+        padding: var(--static-space-16);
     }
 
     .financeGrid {
         grid-template-columns: minmax(0, 1fr);
+    }
+
+    .cardNumber {
+        font-size: clamp(1rem, 5vw, 1.3rem);
+        letter-spacing: 0.045em;
+    }
+
+    .bankDetails {
+        padding: var(--static-space-8) var(--static-space-16);
+    }
+}
+
+@media (max-width: 26rem) {
+    .cardFooter {
+        align-items: start !important;
+        display: grid !important;
+        gap: var(--static-space-12);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cardFooter > :first-child {
+        grid-column: 1 / -1;
+    }
+
+    .cardFooter > :last-child {
+        align-items: start !important;
     }
 }

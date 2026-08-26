@@ -1,0 +1,61 @@
+@media (max-width: 48rem) {
+  .card {
+    background: color-mix(in srgb, var(--surface-background) 72%, transparent);
+    border: 1px solid var(--neutral-border-medium);
+    border-radius: 1.15rem;
+    gap: 0 !important;
+    overflow: hidden;
+    padding: 0 !important;
+  }
+
+  .card:active {
+    transform: scale(0.99);
+  }
+
+  .media {
+    border: 0 !important;
+    border-bottom: 1px solid var(--neutral-border-medium) !important;
+    border-radius: 0 !important;
+  }
+
+  .body {
+    min-width: 0;
+  }
+
+  .content {
+    gap: 0.8rem !important;
+    max-width: none !important;
+    padding: 1rem !important;
+    width: 100%;
+  }
+
+  .meta {
+    gap: 0.65rem !important;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .author {
+    gap: 0.55rem !important;
+    min-width: 0;
+  }
+
+  .title {
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+
+  .tag {
+    align-self: flex-start;
+    background: var(--neutral-alpha-weak);
+    border: 1px solid var(--neutral-border-medium);
+    border-radius: 999px;
+    padding: 0.3rem 0.55rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:active {
+    transform: none;
+  }
+}

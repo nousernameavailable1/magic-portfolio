@@ -4,6 +4,7 @@ import { person } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
 import type { MDXPost } from "@/utils/utils";
 import { Avatar, Card, Column, Media, Row, Text } from "@once-ui-system/core";
+import styles from "./Post.module.scss";
 
 interface PostProps {
   post: MDXPost;
@@ -14,6 +15,7 @@ interface PostProps {
 export default function Post({ post, thumbnail, direction }: PostProps) {
   return (
     <Card
+      className={styles.card}
       fillWidth
       key={post.slug}
       href={`/blog/${post.slug}`}
@@ -28,6 +30,7 @@ export default function Post({ post, thumbnail, direction }: PostProps) {
     >
       {post.metadata.image && thumbnail && (
         <Media
+          className={styles.media}
           priority
           sizes="(max-width: 768px) 100vw, 640px"
           border="neutral-alpha-weak"
@@ -38,10 +41,17 @@ export default function Post({ post, thumbnail, direction }: PostProps) {
           aspectRatio="16 / 9"
         />
       )}
-      <Row fillWidth>
-        <Column maxWidth={28} paddingY="24" paddingX="l" gap="20" vertical="center">
-          <Row gap="24" vertical="center">
-            <Row vertical="center" gap="16">
+      <Row className={styles.body} fillWidth>
+        <Column
+          className={styles.content}
+          maxWidth={28}
+          paddingY="24"
+          paddingX="l"
+          gap="20"
+          vertical="center"
+        >
+          <Row className={styles.meta} gap="24" vertical="center">
+            <Row className={styles.author} vertical="center" gap="16">
               <Avatar src={person.avatar} size="s" />
               <Text variant="label-default-s">{person.name}</Text>
             </Row>
@@ -49,11 +59,11 @@ export default function Post({ post, thumbnail, direction }: PostProps) {
               {formatDate(post.metadata.publishedAt, false)}
             </Text>
           </Row>
-          <Text variant="heading-strong-l" wrap="balance">
+          <Text className={styles.title} variant="heading-strong-l" wrap="balance">
             {post.metadata.title}
           </Text>
           {post.metadata.tag && (
-            <Text variant="label-strong-s" onBackground="neutral-weak">
+            <Text className={styles.tag} variant="label-strong-s" onBackground="neutral-weak">
               {post.metadata.tag}
             </Text>
           )}

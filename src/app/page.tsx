@@ -50,7 +50,9 @@ export default async function Home() {
   const subline = afterHours ? text["home.afterHoursDescription"] : text["home.subline"];
   return (
     <div className={styles.page}>
-      <PublicRouteMap />
+      <div className={styles.map}>
+        <PublicRouteMap />
+      </div>
       <Column className={styles.content} maxWidth="m" gap="xl" paddingY="12" horizontal="center">
         <Schema
           as="webPage"
@@ -66,9 +68,16 @@ export default async function Home() {
           }}
         />
         <Column fillWidth horizontal="center" gap="m">
-          <Column maxWidth="s" horizontal="center" align="center">
+          <Column
+            className={`${styles.hero} ${styles.desktopHero}`}
+            maxWidth="s"
+            horizontal="center"
+            align="center"
+            s={{ hide: true }}
+          >
             {home.featured.display && (
               <RevealFx
+                className={styles.featured}
                 fillWidth
                 horizontal="center"
                 paddingTop="16"
@@ -89,16 +98,27 @@ export default async function Home() {
               </RevealFx>
             )}
             <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
-              <Heading wrap="balance" variant="display-strong-l">
+              <Heading className={styles.heroHeading} wrap="balance" variant="display-strong-l">
                 {headline}
               </Heading>
             </RevealFx>
             <RevealFx translateY="8" delay={0.2} fillWidth horizontal="center" paddingBottom="32">
-              <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
+              <Text
+                className={styles.heroCopy}
+                wrap="balance"
+                onBackground="neutral-weak"
+                variant="heading-default-xl"
+              >
                 {subline}
               </Text>
             </RevealFx>
-            <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">
+            <RevealFx
+              className={styles.heroAction}
+              paddingTop="12"
+              delay={0.4}
+              horizontal="center"
+              paddingLeft="12"
+            >
               <Button
                 id="about"
                 data-border="rounded"
@@ -121,6 +141,63 @@ export default async function Home() {
                 </Row>
               </Button>
             </RevealFx>
+          </Column>
+          <Column
+            className={`${styles.hero} ${styles.mobileHero}`}
+            hide
+            s={{ hide: false }}
+            fillWidth
+            horizontal="center"
+            align="center"
+            gap="20"
+          >
+            {home.featured.display && (
+              <Badge
+                className={styles.mobileFeaturedLink}
+                background="brand-alpha-weak"
+                paddingX="12"
+                paddingY="4"
+                onBackground="neutral-strong"
+                textVariant="label-default-s"
+                arrow={false}
+                href={home.featured.href}
+              >
+                <Row paddingY="2">{home.featured.title}</Row>
+              </Badge>
+            )}
+            <Heading className={styles.heroHeading} wrap="balance" variant="display-strong-l">
+              {headline}
+            </Heading>
+            <Text
+              className={styles.heroCopy}
+              wrap="balance"
+              onBackground="neutral-weak"
+              variant="heading-default-xl"
+            >
+              {subline}
+            </Text>
+            <Button
+              className={styles.mobileAboutLink}
+              id="about-mobile"
+              data-border="rounded"
+              href={about.path}
+              variant="secondary"
+              size="m"
+              weight="default"
+              arrowIcon
+            >
+              <Row gap="8" vertical="center" paddingRight="4">
+                {about.avatar.display && (
+                  <Avatar
+                    marginRight="8"
+                    style={{ marginLeft: "-0.75rem" }}
+                    src={person.avatar}
+                    size="m"
+                  />
+                )}
+                {about.title}
+              </Row>
+            </Button>
           </Column>
         </Column>
         {/* --- PROJECTS (FIRST SECTION) --- */}

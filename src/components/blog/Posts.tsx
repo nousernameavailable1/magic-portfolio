@@ -1,6 +1,7 @@
 import { getBlogPosts } from "@/utils/utils";
 import { Grid } from "@once-ui-system/core";
 import Post from "./Post";
+import styles from "./Posts.module.scss";
 
 interface PostsProps {
   range?: [number] | [number, number];
@@ -35,7 +36,14 @@ export function Posts({
   return (
     <>
       {displayedBlogs.length > 0 && (
-        <Grid columns={columns} s={{ columns: 1 }} fillWidth marginBottom="40" gap="16">
+        <Grid
+          className={styles.grid}
+          columns={columns}
+          s={{ columns: 1 }}
+          fillWidth
+          marginBottom="40"
+          gap="16"
+        >
           {displayedBlogs.map((post) => (
             <Post key={post.slug} post={post} thumbnail={thumbnail} direction={direction} />
           ))}

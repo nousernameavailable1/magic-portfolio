@@ -2,6 +2,7 @@
 
 import { Button, Input, Row, Text, useToast } from "@once-ui-system/core";
 import { useCallback, useEffect, useRef, useState } from "react";
+import styles from "./wall.module.scss";
 
 type BypassSettings = {
   suffix: string;
@@ -79,6 +80,7 @@ export function WallBypassSettings() {
 
   return (
     <Row
+      className={styles.bypassSettings}
       gap="8"
       vertical="center"
       wrap
@@ -91,6 +93,7 @@ export function WallBypassSettings() {
         Bypass
       </Text>
       <Input
+        className={styles.bypassInput}
         aria-label="Bypass suffix"
         id="wall-bypass-suffix"
         placeholder="--bypass"
@@ -102,6 +105,7 @@ export function WallBypassSettings() {
         style={{ minHeight: "2.25rem", width: "8rem" }}
       />
       <Button
+        className={styles.bypassSave}
         size="s"
         variant="secondary"
         loading={savingAction === "save-suffix"}
@@ -111,6 +115,7 @@ export function WallBypassSettings() {
         Save
       </Button>
       <Button
+        className={styles.bypassToggle}
         size="s"
         variant={enabled ? "danger" : "success"}
         loading={savingAction === "toggle"}

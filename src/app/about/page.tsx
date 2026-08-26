@@ -60,7 +60,7 @@ export default async function About() {
     },
   ];
   return (
-    <Column maxWidth="m">
+    <Column className={styles.page} maxWidth="m">
       <Schema
         as="webPage"
         baseURL={baseURL}
@@ -86,7 +86,12 @@ export default async function About() {
           <TableOfContents structure={structure} about={about} />
         </Column>
       )}
-      <Row fillWidth s={{ direction: "column" }} horizontal="center">
+      <Row
+        className={styles.profileLayout}
+        fillWidth
+        s={{ direction: "column" }}
+        horizontal="center"
+      >
         {about.avatar.display && (
           <Column
             className={styles.avatar}
@@ -103,12 +108,12 @@ export default async function About() {
             horizontal="center"
           >
             <Avatar src={person.avatar} size="xl" />
-            <Row gap="8" vertical="center">
+            <Row className={styles.location} gap="8" vertical="center">
               <Icon onBackground="accent-weak" name="globe" />
               {person.location}
             </Row>
             {person.languages && person.languages.length > 0 && (
-              <Row wrap gap="8">
+              <Row className={styles.languages} wrap gap="8">
                 {person.languages.map((language) => (
                   <Tag key={language} size="l">
                     {language}
@@ -118,8 +123,9 @@ export default async function About() {
             )}
           </Column>
         )}
-        <Column className={styles.blockAlign} flex={9} maxWidth={40}>
+        <Column className={`${styles.blockAlign} ${styles.mainContent}`} flex={9} maxWidth={40}>
           <Column
+            className={styles.introBlock}
             id={about.intro.title}
             fillWidth
             minHeight="160"
@@ -163,7 +169,7 @@ export default async function About() {
             </Text>
             {social.length > 0 && (
               <Row
-                className={styles.blockAlign}
+                className={`${styles.blockAlign} ${styles.socialLinks}`}
                 paddingTop="20"
                 paddingBottom="8"
                 gap="8"
@@ -206,31 +212,57 @@ export default async function About() {
           </Column>
 
           {about.intro.display && (
-            <Column textVariant="body-default-l" fillWidth gap="m" marginBottom="xl">
+            <Column
+              className={styles.introduction}
+              textVariant="body-default-l"
+              fillWidth
+              gap="m"
+              marginBottom="xl"
+            >
               {about.intro.description}
             </Column>
           )}
 
           {about.work.display && (
             <>
-              <Heading as="h2" id={about.work.title} variant="display-strong-s" marginBottom="m">
+              <Heading
+                className={styles.sectionHeading}
+                as="h2"
+                id={about.work.title}
+                variant="display-strong-s"
+                marginBottom="m"
+              >
                 {about.work.title}
               </Heading>
               <Column fillWidth gap="l" marginBottom="40">
                 {about.work.experiences.map((experience, index) => (
-                  <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
-                    <Row fillWidth horizontal="between" vertical="end" marginBottom="4">
+                  <Column
+                    className={styles.experience}
+                    key={`${experience.company}-${experience.role}-${index}`}
+                    fillWidth
+                  >
+                    <Row
+                      className={styles.experienceHeading}
+                      fillWidth
+                      horizontal="between"
+                      vertical="end"
+                      marginBottom="4"
+                    >
                       <Text id={experience.company} variant="heading-strong-l">
                         {experience.company}
                       </Text>
-                      <Text variant="heading-default-xs" onBackground="neutral-weak">
+                      <Text
+                        className={styles.timeframe}
+                        variant="heading-default-xs"
+                        onBackground="neutral-weak"
+                      >
                         {experience.timeframe}
                       </Text>
                     </Row>
                     <Text variant="body-default-s" onBackground="brand-weak" marginBottom="m">
                       {experience.role}
                     </Text>
-                    <Column as="ul" gap="16">
+                    <Column className={styles.achievements} as="ul" gap="16">
                       {experience.achievements.map(
                         (achievement: React.ReactNode, index: number) => (
                           <Text
@@ -244,9 +276,17 @@ export default async function About() {
                       )}
                     </Column>
                     {experience.images && experience.images.length > 0 && (
-                      <Row fillWidth paddingTop="m" paddingLeft="40" gap="12" wrap>
+                      <Row
+                        className={styles.mediaGrid}
+                        fillWidth
+                        paddingTop="m"
+                        paddingLeft="40"
+                        gap="12"
+                        wrap
+                      >
                         {experience.images.map((image) => (
                           <Row
+                            className={styles.mediaFrame}
                             key={image.src}
                             border="neutral-medium"
                             radius="m"
@@ -272,12 +312,23 @@ export default async function About() {
 
           {about.studies.display && (
             <>
-              <Heading as="h2" id={about.studies.title} variant="display-strong-s" marginBottom="m">
+              <Heading
+                className={styles.sectionHeading}
+                as="h2"
+                id={about.studies.title}
+                variant="display-strong-s"
+                marginBottom="m"
+              >
                 {about.studies.title}
               </Heading>
               <Column fillWidth gap="l" marginBottom="40">
                 {about.studies.institutions.map((institution, index) => (
-                  <Column key={`${institution.name}-${index}`} fillWidth gap="4">
+                  <Column
+                    className={styles.study}
+                    key={`${institution.name}-${index}`}
+                    fillWidth
+                    gap="4"
+                  >
                     <Text id={institution.name} variant="heading-strong-l">
                       {institution.name}
                     </Text>
@@ -293,6 +344,7 @@ export default async function About() {
           {about.technical.display && (
             <>
               <Heading
+                className={styles.sectionHeading}
                 as="h2"
                 id={about.technical.title}
                 variant="display-strong-s"
@@ -302,7 +354,7 @@ export default async function About() {
               </Heading>
               <Column fillWidth gap="l">
                 {about.technical.skills.map((skill) => (
-                  <Column key={skill.title} fillWidth gap="4">
+                  <Column className={styles.skill} key={skill.title} fillWidth gap="4">
                     <Text id={skill.title} variant="heading-strong-l">
                       {skill.title}
                     </Text>
@@ -319,9 +371,10 @@ export default async function About() {
                       </Row>
                     )}
                     {skill.images && skill.images.length > 0 && (
-                      <Row fillWidth paddingTop="m" gap="12" wrap>
+                      <Row className={styles.mediaGrid} fillWidth paddingTop="m" gap="12" wrap>
                         {skill.images.map((image) => (
                           <Row
+                            className={styles.mediaFrame}
                             key={image.src}
                             border="neutral-medium"
                             radius="m"

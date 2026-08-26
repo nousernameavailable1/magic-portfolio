@@ -1,0 +1,85 @@
+.form {
+  width: 100%;
+}
+
+.mobileEyebrow {
+  display: none !important;
+}
+
+@media (max-width: 48rem) {
+  .page {
+    justify-content: center;
+    min-height: clamp(30rem, calc(100dvh - 10rem), 44rem);
+    padding: var(--static-space-16) 0 var(--static-space-32) !important;
+  }
+
+  .card {
+    background:
+      radial-gradient(circle at top, var(--brand-alpha-medium), transparent 42%),
+      color-mix(in srgb, var(--surface-background) 92%, transparent) !important;
+    border-color: var(--brand-border-medium) !important;
+    border-radius: var(--radius-xl) !important;
+    box-shadow:
+      0 1.5rem 4rem color-mix(in srgb, var(--static-black) 28%, transparent),
+      inset 0 1px var(--static-white-medium) !important;
+    gap: var(--static-space-24) !important;
+    max-width: 30rem !important;
+    overflow: hidden;
+    padding: var(--static-space-24) var(--static-space-20) !important;
+    position: relative;
+  }
+
+  .card::before {
+    background: linear-gradient(90deg, transparent, var(--brand-on-background-strong), transparent);
+    content: "";
+    height: 1px;
+    left: 20%;
+    opacity: 0.55;
+    position: absolute;
+    right: 20%;
+    top: 0;
+  }
+
+  .intro {
+    gap: var(--static-space-8) !important;
+  }
+
+  .mobileEyebrow {
+    color: var(--brand-on-background-strong);
+    display: block !important;
+    letter-spacing: 0.14em;
+  }
+
+  .title {
+    font-size: clamp(1.85rem, 9vw, 2.65rem) !important;
+    line-height: 1.08;
+  }
+
+  .description {
+    font-size: var(--font-size-body-m) !important;
+    line-height: 1.5;
+    max-width: 24rem;
+  }
+
+  .submitButton {
+    min-height: 3rem;
+  }
+
+  .card button[aria-label] {
+    min-height: var(--mobile-touch-target, 3rem);
+    min-width: var(--mobile-touch-target, 3rem);
+  }
+
+  .note {
+    border-top: 1px solid var(--neutral-alpha-weak);
+    padding-top: var(--static-space-16);
+    width: 100%;
+  }
+}
+
+@media (max-width: 23rem) {
+  .card {
+    border-radius: var(--radius-l) !important;
+    padding-inline: var(--static-space-16) !important;
+  }
+}

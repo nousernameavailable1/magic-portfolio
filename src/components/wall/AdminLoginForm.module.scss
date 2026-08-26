@@ -1,0 +1,54 @@
+.form {
+  width: 100%;
+}
+
+@media (max-width: 48rem) {
+  .card {
+    background:
+      radial-gradient(circle at top right, var(--brand-alpha-medium), transparent 46%),
+      color-mix(in srgb, var(--surface-background) 92%, transparent) !important;
+    border-color: var(--brand-border-medium) !important;
+    border-radius: var(--radius-xl) !important;
+    box-shadow:
+      0 1.5rem 4rem color-mix(in srgb, var(--static-black) 28%, transparent),
+      inset 0 1px var(--static-white-medium);
+    gap: var(--static-space-16) !important;
+    overflow: hidden;
+    padding: var(--static-space-24) var(--static-space-20) !important;
+    position: relative;
+  }
+
+  .card::before {
+    background: linear-gradient(90deg, transparent, var(--brand-on-background-strong), transparent);
+    content: "";
+    height: 1px;
+    left: 20%;
+    opacity: 0.55;
+    position: absolute;
+    right: 20%;
+    top: 0;
+  }
+
+  .note {
+    border-top: 1px solid var(--neutral-alpha-weak);
+    padding-top: var(--static-space-12);
+    width: 100%;
+  }
+
+  .submitButton {
+    min-height: 3rem;
+    width: 100%;
+  }
+
+  .card button[aria-label] {
+    min-height: var(--mobile-touch-target, 3rem);
+    min-width: var(--mobile-touch-target, 3rem);
+  }
+}
+
+@media (max-width: 23rem) {
+  .card {
+    border-radius: var(--radius-l) !important;
+    padding-inline: var(--static-space-16) !important;
+  }
+}

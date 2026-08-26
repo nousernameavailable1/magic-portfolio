@@ -141,9 +141,10 @@ export function FakemailManager() {
     settings?.configured && !isBusy && (mode === "random" || Boolean(localPart.trim()));
 
   return (
-    <Column fillWidth gap="24">
+    <Column className={styles.manager} fillWidth gap="24">
       <form onSubmit={createAlias}>
         <Column
+          className={styles.createCard}
           fillWidth
           gap="16"
           padding="20"
@@ -162,15 +163,17 @@ export function FakemailManager() {
               Add the Fakemail environment variables before creating aliases.
             </Text>
           )}
-          <SegmentedControl
-            buttons={[
-              { value: "random", label: "Random alias", type: "button" },
-              { value: "custom", label: "Custom alias", type: "button" },
-            ]}
-            fillWidth={false}
-            onToggle={(value) => setMode(value === "custom" ? "custom" : "random")}
-            selected={mode}
-          />
+          <div className={styles.modeControl}>
+            <SegmentedControl
+              buttons={[
+                { value: "random", label: "Random alias", type: "button" },
+                { value: "custom", label: "Custom alias", type: "button" },
+              ]}
+              fillWidth
+              onToggle={(value) => setMode(value === "custom" ? "custom" : "random")}
+              selected={mode}
+            />
+          </div>
           {mode === "custom" && (
             <Input
               id="fakemail-local-part"
@@ -193,8 +196,14 @@ export function FakemailManager() {
             options={expirationOptions}
             value={expiresIn}
           />
-          <Row gap="8" vertical="center" wrap>
-            <Button disabled={!canCreate} loading={busyAction === "create"} size="s" type="submit">
+          <Row className={styles.formActions} gap="8" vertical="center" wrap>
+            <Button
+              className={styles.createButton}
+              disabled={!canCreate}
+              loading={busyAction === "create"}
+              size="s"
+              type="submit"
+            >
               {mode === "random" ? "Create random alias" : "Create alias"}
             </Button>
             <Text variant="body-default-s" onBackground="neutral-weak">
@@ -205,7 +214,14 @@ export function FakemailManager() {
       </form>
 
       <Column fillWidth gap="12">
-        <Row fillWidth horizontal="between" vertical="center" gap="12" wrap>
+        <Row
+          className={styles.listHeader}
+          fillWidth
+          horizontal="between"
+          vertical="center"
+          gap="12"
+          wrap
+        >
           <Text variant="heading-strong-l">Active aliases</Text>
           <Button
             disabled={loading || isBusy}
@@ -239,6 +255,7 @@ export function FakemailManager() {
               </Text>
             </Column>
             <Button
+              className={styles.deleteButton}
               disabled={isBusy}
               loading={busyAction === alias.id}
               onClick={() => void deleteAlias(alias)}

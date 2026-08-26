@@ -29,6 +29,7 @@ function StatCard({
 }) {
   return (
     <Column
+      className={styles.statCard}
       fillWidth
       gap="12"
       padding="20"
@@ -36,11 +37,13 @@ function StatCard({
       border="neutral-alpha-weak"
       radius="l"
     >
-      <Text variant="label-strong-s" onBackground="neutral-weak">
+      <Text className={styles.statLabel} variant="label-strong-s" onBackground="neutral-weak">
         {label}
       </Text>
-      <Text variant="heading-strong-l">{value}</Text>
-      <Text variant="body-default-s" onBackground="neutral-weak">
+      <Text className={styles.statValue} variant="heading-strong-l">
+        {value}
+      </Text>
+      <Text className={styles.statDetail} variant="body-default-s" onBackground="neutral-weak">
         {detail}
       </Text>
     </Column>
@@ -66,12 +69,15 @@ export default async function StatsPage() {
     : "Unavailable";
 
   return (
-    <Column maxWidth="l" fillWidth gap="24" paddingY="24">
-      <Column gap="8">
-        <Heading as="h1" variant="display-strong-l">
+    <Column className={styles.page} maxWidth="l" fillWidth gap="24" paddingY="24">
+      <Column className={styles.hero} gap="8">
+        <Text className={styles.mobileEyebrow} variant="label-strong-s">
+          LIVE SITE TELEMETRY
+        </Text>
+        <Heading className={styles.title} as="h1" variant="display-strong-l">
           Statistics
         </Heading>
-        <Text variant="heading-default-l" onBackground="neutral-weak">
+        <Text className={styles.subtitle} variant="heading-default-l" onBackground="neutral-weak">
           A live snapshot of this website's runtime and codebase.
         </Text>
       </Column>
@@ -92,7 +98,7 @@ export default async function StatsPage() {
           }
         />
         <Column
-          className={styles.structureCard}
+          className={`${styles.structureCard} ${styles.statCard}`}
           fillWidth
           gap="12"
           padding="20"
@@ -101,11 +107,17 @@ export default async function StatsPage() {
           radius="l"
         >
           <Column gap="12">
-            <Text variant="label-strong-s" onBackground="neutral-weak">
+            <Text className={styles.statLabel} variant="label-strong-s" onBackground="neutral-weak">
               Source files
             </Text>
-            <Text variant="heading-strong-l">{sourceFiles}</Text>
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <Text className={styles.statValue} variant="heading-strong-l">
+              {sourceFiles}
+            </Text>
+            <Text
+              className={styles.statDetail}
+              variant="body-default-s"
+              onBackground="neutral-weak"
+            >
               {sourceDetail}
             </Text>
           </Column>
@@ -131,7 +143,7 @@ export default async function StatsPage() {
         />
       </div>
 
-      <Row>
+      <Row className={styles.updated}>
         <Text variant="body-default-s" onBackground="neutral-weak">
           Updated {formatDate(stats.checkedAt)} (Asia/Dubai)
         </Text>

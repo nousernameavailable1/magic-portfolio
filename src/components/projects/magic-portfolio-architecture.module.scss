@@ -193,7 +193,53 @@
 }
 
 @media (max-width: 36rem) {
+  .diagrams {
+    gap: 1rem;
+    margin-block: 1rem;
+  }
+
+  .diagram {
+    border-radius: 1rem;
+  }
+
+  .diagram figcaption {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.8rem;
+  }
+
+  .structureTree {
+    padding: 0.8rem;
+  }
+
+  .structureRoot {
+    width: 100%;
+  }
+
+  .treeStem {
+    height: 1rem;
+  }
+
+  .structureGrid,
+  .serviceGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .structureGrid::before {
+    display: none;
+  }
+
+  .structureNode {
+    border-left: 2px solid var(--brand-border-strong);
+  }
+
+  .structureNode code {
+    overflow-wrap: anywhere;
+  }
+
   .flowSteps {
+    padding: 0.8rem;
     grid-template-columns: 1fr;
   }
 
@@ -203,5 +249,9 @@
     right: auto;
     top: auto;
     transform: rotate(90deg);
+  }
+
+  .services {
+    padding: 0.8rem;
   }
 }

@@ -3,6 +3,7 @@
 import { Button } from "@once-ui-system/core";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
+import styles from "./admin.module.scss";
 
 export function StatusRefreshButton() {
   const router = useRouter();
@@ -10,6 +11,7 @@ export function StatusRefreshButton() {
 
   return (
     <Button
+      className={styles.statusRefresh}
       size="s"
       variant="secondary"
       loading={refreshing}

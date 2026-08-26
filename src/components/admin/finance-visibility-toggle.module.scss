@@ -46,3 +46,13 @@
   background: var(--brand-on-background-strong);
   transform: translateX(1.5rem);
 }
+
+@media (max-width: 48rem) {
+  .switch {
+    align-items: center;
+    display: inline-flex;
+    justify-content: center;
+    min-height: 3rem;
+    min-width: 4.5rem;
+  }
+}

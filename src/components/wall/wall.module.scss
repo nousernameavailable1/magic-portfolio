@@ -174,4 +174,204 @@
   .pageDescription {
     white-space: normal;
   }
+
+  .moderationPage {
+    gap: 1.25rem !important;
+    padding-block: 0.75rem 1.5rem !important;
+  }
+
+  .moderationHeader {
+    align-items: stretch !important;
+    gap: 1rem !important;
+  }
+
+  .moderationHeader > :first-child {
+    gap: 0.4rem !important;
+  }
+
+  .moderationFilters {
+    display: grid !important;
+    gap: 0.5rem !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .moderationFilters > button {
+    min-height: var(--mobile-touch-target, 3rem);
+    width: 100% !important;
+  }
+
+  .moderationFilters .moderationRefresh {
+    grid-column: 1 / -1;
+  }
+
+  .filterDivider {
+    display: none;
+  }
+
+  .bypassSettings {
+    display: grid !important;
+    gap: 0.5rem !important;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    padding: 0.75rem !important;
+    width: 100%;
+  }
+
+  .bypassInput {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .bypassInput input {
+    min-height: var(--mobile-touch-target, 3rem) !important;
+  }
+
+  .bypassSave,
+  .bypassToggle {
+    min-height: var(--mobile-touch-target, 3rem);
+  }
+
+  .bypassToggle {
+    grid-column: 1 / -1;
+    width: 100% !important;
+  }
+
+  .moderationPage > :last-child > * {
+    gap: 1rem !important;
+    padding: 1rem !important;
+  }
+
+  .moderationActions {
+    align-items: stretch !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+
+  .moderationActionGroup {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .moderationActionGroup > button {
+    min-height: var(--mobile-touch-target, 3rem);
+    width: 100% !important;
+  }
+
+  .moderationLikeCount {
+    align-items: center;
+    justify-content: center;
+    min-height: var(--mobile-touch-target, 3rem);
+  }
+
+  .moderationDelete {
+    min-height: var(--mobile-touch-target, 3rem);
+    width: 100% !important;
+  }
+
+  .board {
+    gap: 1.25rem !important;
+    padding-block: 0.5rem 2rem !important;
+  }
+
+  .board .hero {
+    padding: 0.25rem 0 1.25rem;
+  }
+
+  .board .hero h1 {
+    font-size: clamp(2.25rem, 11vw, 3.25rem);
+    letter-spacing: -0.045em;
+    line-height: 1.02;
+    overflow-wrap: anywhere;
+  }
+
+  .board .heroContent {
+    gap: 0.65rem !important;
+  }
+
+  .board .wallLayout {
+    gap: 1.25rem !important;
+  }
+
+  .board .composer {
+    border-radius: 1.1rem;
+    gap: 1rem !important;
+    padding: 1rem !important;
+  }
+
+  .board .composerMark {
+    background: var(--brand-alpha-weak);
+    border: 1px solid var(--brand-border-medium);
+    border-radius: 999px;
+    padding: 0.3rem 0.55rem;
+  }
+
+  .board .composerFooter {
+    align-items: stretch !important;
+    flex-direction: column !important;
+    gap: 0.8rem !important;
+  }
+
+  .board .sendButton {
+    min-height: 3rem;
+    width: 100% !important;
+  }
+
+  .board .feed {
+    gap: 1rem !important;
+  }
+
+  .board .feedHeader {
+    align-items: center !important;
+    flex-direction: row !important;
+    gap: 0.75rem !important;
+    justify-content: space-between !important;
+  }
+
+  .board .feedTitleRow {
+    min-width: 0;
+  }
+
+  .board .refreshButton,
+  .board .reactionButton {
+    min-height: var(--mobile-touch-target, 3rem);
+  }
+
+  .board .messageCard {
+    border-left-width: 3px;
+    gap: 1rem !important;
+    padding: 1rem !important;
+  }
+
+  .board .messageCard:hover {
+    transform: none;
+  }
+
+  .board .publishedComment {
+    padding: 0.75rem !important;
+  }
+
+  .board .publishedComment .comment {
+    margin-left: 0;
+  }
+
+  .board .messageMeta {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .board .emptyState {
+    padding: 1rem !important;
+  }
+}
+
+@media (max-width: 24rem) {
+  .board .feedHeader {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .board .refreshButton {
+    width: 100% !important;
+  }
 }

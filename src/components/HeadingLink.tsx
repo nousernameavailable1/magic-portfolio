@@ -58,6 +58,7 @@ export const HeadingLink: React.FC<HeadingLinkProps> = ({ id, level, children, s
         {children}
       </Heading>
       <IconButton
+        aria-label={`Copy link to ${id}`}
         className={styles.visibility}
         size="s"
         icon="openLink"

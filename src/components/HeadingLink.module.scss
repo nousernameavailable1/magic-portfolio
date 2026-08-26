@@ -22,3 +22,26 @@
     opacity: 0;
     transform: scale(0.875);
 }
+
+@media (max-width: 48rem) {
+    .control {
+        align-items: flex-start;
+        gap: var(--static-space-8);
+        min-width: 0;
+        width: 100%;
+    }
+
+    .text {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .visibility {
+        flex: 0 0 auto;
+        min-height: var(--mobile-touch-target, 3rem);
+        min-width: var(--mobile-touch-target, 3rem);
+        opacity: 1;
+        transform: none;
+    }
+}

@@ -1,6 +1,7 @@
 import GalleryView from "@/components/gallery/GalleryView";
+import styles from "@/components/gallery/gallery.module.scss";
 import { baseURL, gallery, person } from "@/resources";
-import { Flex, Meta, Schema } from "@once-ui-system/core";
+import { Column, Flex, Heading, Meta, Schema, Text } from "@once-ui-system/core";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -14,7 +15,7 @@ export async function generateMetadata() {
 
 export default function Gallery() {
   return (
-    <Flex maxWidth="l">
+    <Flex className={styles.page} maxWidth="l">
       <Schema
         as="webPage"
         baseURL={baseURL}
@@ -28,6 +29,17 @@ export default function Gallery() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
+      <Column className={styles.mobileIntro} gap="8">
+        <Text className={styles.eyebrow} variant="label-strong-s">
+          VISUAL ARCHIVE
+        </Text>
+        <Heading as="h1" variant="display-strong-m">
+          Gallery
+        </Heading>
+        <Text onBackground="neutral-weak">
+          {gallery.images.length} frames. Tap any photograph to open it full size.
+        </Text>
+      </Column>
       <GalleryView />
     </Flex>
   );

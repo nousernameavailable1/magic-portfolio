@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { HiOutlineMap } from "react-icons/hi2";
+import { HiChevronDown, HiOutlineMap } from "react-icons/hi2";
 import styles from "./PublicRouteMap.module.scss";
 
 type PublicRouteState = {
@@ -59,6 +59,11 @@ export function PublicRouteMapClient({ routes }: { routes: PublicRouteState[] })
         type="button"
       >
         <HiOutlineMap aria-hidden="true" />
+        <span className={styles.mobileToggleCopy}>
+          <small>Site directory</small>
+          <strong>Explore every page</strong>
+        </span>
+        <HiChevronDown className={styles.mobileToggleChevron} aria-hidden="true" />
       </button>
       <button
         aria-label="Close site map"

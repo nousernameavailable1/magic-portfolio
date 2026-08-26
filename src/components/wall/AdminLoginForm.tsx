@@ -2,6 +2,7 @@
 
 import { Button, Column, Input, PasswordInput, Text, useToast } from "@once-ui-system/core";
 import { type FormEvent, useState } from "react";
+import styles from "./AdminLoginForm.module.scss";
 
 export function AdminLoginForm() {
   const [username, setUsername] = useState("");
@@ -32,8 +33,9 @@ export function AdminLoginForm() {
   };
 
   return (
-    <form onSubmit={submit} style={{ width: "100%" }}>
+    <form className={styles.form} onSubmit={submit}>
       <Column
+        className={styles.card}
         fillWidth
         gap="16"
         padding="20"
@@ -60,10 +62,20 @@ export function AdminLoginForm() {
           autoComplete="current-password"
           required
         />
-        <Text align="center" variant="body-default-s" onBackground="neutral-weak">
+        <Text
+          className={styles.note}
+          align="center"
+          variant="body-default-s"
+          onBackground="neutral-weak"
+        >
           This area is private.
         </Text>
-        <Button type="submit" loading={submitting} disabled={!username || !password}>
+        <Button
+          className={styles.submitButton}
+          type="submit"
+          loading={submitting}
+          disabled={!username || !password}
+        >
           Sign in
         </Button>
       </Column>

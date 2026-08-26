@@ -1,13 +1,27 @@
+"use client";
+
 import { person, social } from "@/resources";
 import { IconButton, Row, SmartLink, Text } from "@once-ui-system/core";
+import { usePathname } from "next/navigation";
 import { FaChartColumn } from "react-icons/fa6";
 import styles from "./Footer.module.scss";
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const pathname = usePathname() ?? "";
+  const visibleSocial = social.filter(
+    (item) => item.link && !["LinkedIn", "Instagram", "Threads"].includes(item.name),
+  );
 
   return (
-    <Row as="footer" fillWidth padding="8" horizontal="center" s={{ direction: "column" }}>
+    <Row
+      as="footer"
+      className={`${styles.footer} ${pathname.startsWith("/admin") ? styles.adminFooter : ""}`}
+      fillWidth
+      padding="8"
+      horizontal="center"
+      s={{ direction: "column" }}
+    >
       <Row
         className={styles.mobile}
         maxWidth="m"
@@ -22,6 +36,26 @@ export const Footer = () => {
           align: "center",
         }}
       >
+        <Row className={styles.mobileActions} gap="8" horizontal="center" vertical="center">
+          <a
+            className={styles.mobileActionLink}
+            href="/statistics"
+            aria-label="View site statistics"
+          >
+            <FaChartColumn aria-hidden="true" />
+          </a>
+          {visibleSocial.map((item) => (
+            <IconButton
+              className={styles.mobileSocialButton}
+              key={`mobile-${item.name}`}
+              href={item.link}
+              icon={item.icon}
+              tooltip={item.name}
+              size="s"
+              variant="ghost"
+            />
+          ))}
+        </Row>
         <Row className={styles.footerStart} gap="8" vertical="center">
           <a
             className={styles.statsLink}
@@ -31,10 +65,14 @@ export const Footer = () => {
           >
             <FaChartColumn aria-hidden="true" />
           </a>
-          <Text aria-hidden="true" onBackground="neutral-weak">
+          <Text className={styles.divider} aria-hidden="true" onBackground="neutral-weak">
             |
           </Text>
-          <Text variant="body-default-s" onBackground="neutral-strong">
+          <Text
+            className={styles.footerCopy}
+            variant="body-default-s"
+            onBackground="neutral-strong"
+          >
             <Text onBackground="neutral-weak">© {currentYear} /</Text>
             <Text
               as="a"
@@ -51,24 +89,20 @@ export const Footer = () => {
             </Text>
           </Text>
         </Row>
-        <Row gap="16">
-          {social.map(
-            (item) =>
-              item.link &&
-              !["LinkedIn", "Instagram", "Threads"].includes(item.name) && (
-                <IconButton
-                  key={item.name}
-                  href={item.link}
-                  icon={item.icon}
-                  tooltip={item.name}
-                  size="s"
-                  variant="ghost"
-                />
-              ),
-          )}
+        <Row className={styles.desktopSocial} gap="16">
+          {visibleSocial.map((item) => (
+            <IconButton
+              key={item.name}
+              href={item.link}
+              icon={item.icon}
+              tooltip={item.name}
+              size="s"
+              variant="ghost"
+            />
+          ))}
         </Row>
       </Row>
-      <Row height="80" hide s={{ hide: false }} />
+      <Row className={styles.mobileSpacer} height="80" hide s={{ hide: false }} />
     </Row>
   );
 };

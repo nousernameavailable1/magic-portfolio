@@ -14,3 +14,17 @@
   max-width: 100%;
   width: min(90vw, 96rem);
 }
+
+@media (max-width: 48rem) {
+  .page {
+    align-items: flex-start;
+    min-height: calc(100dvh - var(--mobile-shell-bottom, 6rem) - 2rem);
+    padding-block: clamp(2rem, 12dvh, 5rem);
+  }
+
+  .video {
+    border-radius: 1rem;
+    box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 32%);
+    width: 100%;
+  }
+}

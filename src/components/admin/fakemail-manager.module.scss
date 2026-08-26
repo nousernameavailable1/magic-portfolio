@@ -26,3 +26,61 @@
   color: var(--brand-on-background-strong);
   overflow-wrap: anywhere;
 }
+
+@media (max-width: 48rem) {
+  .manager {
+    gap: 1.25rem !important;
+  }
+
+  .createCard {
+    gap: 1rem !important;
+    padding: 1rem !important;
+  }
+
+  .modeControl {
+    width: 100%;
+  }
+
+  .modeControl > * {
+    width: 100% !important;
+  }
+
+  .modeControl button {
+    min-height: var(--mobile-touch-target, 3rem);
+  }
+
+  .formActions {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .createButton {
+    min-height: var(--mobile-touch-target, 3rem);
+    width: 100% !important;
+  }
+
+  .listHeader {
+    flex-wrap: nowrap !important;
+  }
+
+  .listHeader button {
+    min-height: var(--mobile-touch-target, 3rem);
+  }
+
+  .alias {
+    align-items: stretch !important;
+    border-radius: 1rem;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+    padding: 1rem !important;
+  }
+
+  .alias > div {
+    min-width: 0;
+  }
+
+  .deleteButton {
+    min-height: var(--mobile-touch-target, 3rem);
+    width: 100% !important;
+  }
+}

@@ -198,25 +198,23 @@
   }
 }
 
-@media (max-width: 48rem) and (hover: none) and (pointer: coarse) {
+@media (max-width: 48rem) {
   .mobileToggle {
     align-items: center;
-    background: var(--surface-background);
+    background: color-mix(in srgb, var(--surface-background) 86%, transparent);
     border: 1px solid var(--neutral-border-medium);
-    border-radius: var(--radius-l);
+    border-radius: 1.15rem;
     color: var(--neutral-on-background-strong);
     cursor: pointer;
-    display: inline-flex;
-    height: 3rem;
-    justify-content: center;
-    left: 1rem;
-    padding: 0;
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
+    display: flex;
+    gap: var(--static-space-12);
+    min-height: 4.25rem;
+    padding: var(--static-space-12) var(--static-space-16);
+    position: relative;
+    text-align: left;
     transition: background 160ms ease, border-color 160ms ease;
-    width: 3rem;
-    z-index: 7;
+    width: 100%;
+    z-index: 1;
   }
 
   .mobileToggle:hover,
@@ -231,51 +229,55 @@
     width: 1.25rem;
   }
 
+  .mobileToggleCopy {
+    display: grid;
+    flex: 1;
+    gap: 0.1rem;
+  }
+
+  .mobileToggleCopy small {
+    color: var(--neutral-on-background-weak);
+    font-size: var(--font-size-label-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .mobileToggleCopy strong {
+    font-size: var(--font-size-body-m);
+  }
+
+  .mobileToggle .mobileToggleChevron {
+    transition: transform 180ms ease;
+  }
+
+  .mobileToggle[aria-expanded="true"] .mobileToggleChevron {
+    transform: rotate(180deg);
+  }
+
   .mobileBackdrop {
-    background: color-mix(in srgb, var(--page-background) 56%, transparent);
-    border: 0;
-    inset: 0;
-    opacity: 0;
-    pointer-events: none;
-    position: fixed;
-    transition: opacity 200ms ease;
-    z-index: 5;
+    display: none;
   }
 
   .mobileBackdropVisible {
-    opacity: 1;
-    pointer-events: auto;
+    display: none;
   }
 
   .section {
-    background: var(--page-background);
+    animation: none;
+    background: color-mix(in srgb, var(--surface-background) 76%, transparent);
     border: 1px solid var(--neutral-border-medium);
-    border-radius: var(--radius-l);
-    bottom: 7rem;
-    left: 4.75rem;
-    margin: 0;
+    border-radius: 1.15rem;
+    display: none;
+    margin: var(--static-space-8) 0 0;
     max-height: none;
-    max-width: min(18rem, calc(100vw - 5.75rem));
-    opacity: 0;
-    overflow-y: auto;
-    overscroll-behavior: contain;
+    max-width: 100%;
     padding: 1rem;
-    pointer-events: none;
-    position: fixed;
-    top: 1rem;
-    transform: translateX(calc(-100% - 1rem));
-    transition: opacity 200ms ease, transform 200ms ease;
-    visibility: hidden;
-    width: min(18rem, calc(100vw - 5.75rem));
-    z-index: 6;
+    position: static;
+    width: 100%;
   }
 
   .mobileOpen {
-    animation: none;
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateX(0);
-    visibility: visible;
+    display: grid;
   }
 
   .heading h2 {
@@ -289,6 +291,34 @@
 
   .node {
     width: 100%;
+  }
+
+  .branches {
+    margin-left: 0.75rem;
+    padding-left: 1.25rem;
+  }
+
+  .branch::before,
+  .branches > .branch::after {
+    left: -1.25rem;
+  }
+
+  .branch::before {
+    width: 1.25rem;
+  }
+
+  .children {
+    margin-left: 0.75rem;
+    padding-left: 1.15rem;
+  }
+
+  .children .branch::before,
+  .children > .branch::after {
+    left: -1.15rem;
+  }
+
+  .children .branch::before {
+    width: 1.15rem;
   }
 }
 

@@ -1,0 +1,21 @@
+@use "../components/breakpoints.scss" as breakpoints;
+
+.siteBody,
+.siteMain,
+.siteContent {
+  min-width: 0;
+}
+
+@media (max-width: breakpoints.$s) {
+  .siteBody {
+    min-height: 100dvh !important;
+  }
+
+  .siteMain {
+    padding: var(--static-space-16) var(--mobile-gutter, 1rem) 0 !important;
+  }
+
+  .siteContent {
+    align-items: stretch;
+  }
+}

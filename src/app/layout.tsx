@@ -3,6 +3,7 @@ import "@once-ui-system/core/css/tokens.css";
 import "@/resources/custom.css";
 
 import classNames from "classnames";
+import styles from "./layout.module.scss";
 
 import { Footer, Header, Providers, RouteGuard, VisitorTracker } from "@/components";
 import { baseURL, dataStyle, effects, fonts, home, person, style } from "@/resources";
@@ -99,6 +100,7 @@ export default async function RootLayout({
       <Providers>
         <Column
           as="body"
+          className={styles.siteBody}
           background="page"
           fillWidth
           style={{ minHeight: "100vh" }}
@@ -151,8 +153,15 @@ export default async function RootLayout({
           <Flex fillWidth minHeight="16" s={{ hide: true }} />
           <Header />
           <VisitorTracker />
-          <Flex zIndex={0} fillWidth padding="l" horizontal="center" flex={1}>
-            <Flex horizontal="center" fillWidth minHeight="0">
+          <Flex
+            className={styles.siteMain}
+            zIndex={0}
+            fillWidth
+            padding="l"
+            horizontal="center"
+            flex={1}
+          >
+            <Flex className={styles.siteContent} horizontal="center" fillWidth minHeight="0">
               <RouteGuard>{children}</RouteGuard>
             </Flex>
           </Flex>
