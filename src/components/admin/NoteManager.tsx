@@ -1,8 +1,8 @@
 "use client";
 
+import { formatDubaiDateTime } from "@/utils/formatDate";
 import {
   Button,
-  Column,
   Input,
   PasswordInput,
   Row,
@@ -67,14 +67,6 @@ function noteSlug(value: string) {
     .replace(/-+/g, "-")
     .slice(0, 180)
     .replace(/-+$/g, "");
-}
-
-function formatDate(value: string) {
-  return new Intl.DateTimeFormat("en", {
-    dateStyle: "medium",
-    timeStyle: "short",
-    timeZone: "Asia/Dubai",
-  }).format(new Date(value));
 }
 
 export function NoteManager() {
@@ -258,7 +250,7 @@ export function NoteManager() {
                   {note.public ? "Public" : note.hasPassword ? "Private" : "Needs password"}
                 </span>
               </span>
-              <span>{formatDate(note.updatedAt)}</span>
+              <span>{formatDubaiDateTime(note.updatedAt)}</span>
             </button>
           ))}
         </div>
@@ -271,7 +263,9 @@ export function NoteManager() {
             <Text variant="body-default-s" onBackground="neutral-weak">
               {creating
                 ? "New notes start private until you choose to publish them."
-                : `Last saved ${formatDate(selectedNote?.updatedAt ?? new Date().toISOString())}`}
+                : `Last saved ${formatDubaiDateTime(
+                    selectedNote?.updatedAt ?? new Date().toISOString(),
+                  )}`}
             </Text>
           </div>
           {selectedNote && (selectedNote.public || selectedNote.hasPassword) && (

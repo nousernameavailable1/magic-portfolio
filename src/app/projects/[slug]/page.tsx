@@ -4,11 +4,8 @@ import { about, baseURL, person, work } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
 import { getProjectPosts } from "@/utils/utils";
 import {
-  Avatar,
   AvatarGroup,
-  Button,
   Column,
-  Flex,
   Heading,
   Line,
   Media,
@@ -47,7 +44,8 @@ export async function generateMetadata({
     title: post.metadata.title,
     description: post.metadata.summary,
     baseURL: baseURL,
-    image: post.metadata.image || `/api/og/generate?title=${post.metadata.title}`,
+    image:
+      post.metadata.image || `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`,
     path: `${work.path}/${post.slug}`,
   });
 }
@@ -73,9 +71,7 @@ export default async function Project({
       src: person.avatar,
     })) || [];
   const relatedProjectExclusions =
-    post.slug === "magic-portfolio"
-      ? [post.slug, "simple-portfolio-builder"]
-      : [post.slug];
+    post.slug === "magic-portfolio" ? [post.slug, "simple-portfolio-builder"] : [post.slug];
 
   return (
     <Column as="section" maxWidth="m" horizontal="center" gap="l">

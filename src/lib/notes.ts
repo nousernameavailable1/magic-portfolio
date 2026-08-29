@@ -1,6 +1,7 @@
 import "server-only";
 
 import { database } from "@/lib/database";
+import { cache } from "react";
 import { slugify } from "transliteration";
 
 export const NOTE_LIMITS = {
@@ -37,6 +38,11 @@ type NoteRow = {
   updated_at: Date;
   published_at: Date | null;
 };
+
+type PublicNoteRow = Pick<
+  NoteRow,
+  "id" | "title" | "slug" | "summary" | "updated_at" | "published_at"
+>;
 
 export class NoteSlugConflictError extends Error {}
 
@@ -103,14 +109,20 @@ export async function getAllNotes() {
 
 export async function getPublicNotes() {
   const db = await database();
-  const result = await db.query<NoteRow>(`
-    SELECT id, title, slug, summary, body, public, private_password_hash,
-      created_at, updated_at, published_at
+  const result = await db.query<PublicNoteRow>(`
+    SELECT id, title, slug, summary, updated_at, published_at
     FROM notes
     WHERE public = TRUE
     ORDER BY published_at DESC NULLS LAST, updated_at DESC, id DESC
   `);
-  return result.rows.map(mapNote);
+  return result.rows.map((row) => ({
+    id: row.id,
+    title: row.title,
+    slug: row.slug,
+    summary: row.summary,
+    updatedAt: row.updated_at.toISOString(),
+    publishedAt: row.published_at?.toISOString() ?? null,
+  }));
 }
 
 export type NoteAccessRecord = {
@@ -120,33 +132,35 @@ export type NoteAccessRecord = {
   passwordHash: string | null;
 };
 
-export async function getNoteAccessRecordBySlug(slug: string): Promise<NoteAccessRecord | null> {
-  const db = await database();
-  const result = await db.query<{
-    id: string;
-    slug: string;
-    public: boolean;
-    private_password_hash: string | null;
-  }>(
-    `
-      SELECT id, slug, public, private_password_hash
-      FROM notes
-      WHERE slug = $1
-    `,
-    [slug],
-  );
-  const row = result.rows[0];
-  return row
-    ? {
-        id: row.id,
-        slug: row.slug,
-        public: row.public,
-        passwordHash: row.private_password_hash,
-      }
-    : null;
-}
+export const getNoteAccessRecordBySlug = cache(
+  async (slug: string): Promise<NoteAccessRecord | null> => {
+    const db = await database();
+    const result = await db.query<{
+      id: string;
+      slug: string;
+      public: boolean;
+      private_password_hash: string | null;
+    }>(
+      `
+        SELECT id, slug, public, private_password_hash
+        FROM notes
+        WHERE slug = $1
+      `,
+      [slug],
+    );
+    const row = result.rows[0];
+    return row
+      ? {
+          id: row.id,
+          slug: row.slug,
+          public: row.public,
+          passwordHash: row.private_password_hash,
+        }
+      : null;
+  },
+);
 
-export async function getNoteBySlug(slug: string) {
+export const getNoteBySlug = cache(async (slug: string) => {
   const db = await database();
   const result = await db.query<NoteRow>(
     `
@@ -158,6 +172,26 @@ export async function getNoteBySlug(slug: string) {
     [slug],
   );
   return result.rows[0] ? mapNote(result.rows[0]) : null;
+});
+
+export async function getNoteMutationRecord(id: string) {
+  const db = await database();
+  const result = await db.query<{
+    id: string;
+    slug: string;
+    private_password_hash: string | null;
+  }>(
+    `
+      SELECT id, slug, private_password_hash
+      FROM notes
+      WHERE id = $1
+    `,
+    [id],
+  );
+  const row = result.rows[0];
+  return row
+    ? { id: row.id, slug: row.slug, hasPassword: Boolean(row.private_password_hash) }
+    : null;
 }
 
 export async function createNote(input: NoteInput, passwordHash: string | null) {

@@ -255,7 +255,11 @@ type CustomMDXProps = Omit<MDXRemoteProps, "components"> & {
   headingLinks?: boolean;
 };
 
-export function CustomMDX({ components: customComponents, headingLinks = true, ...props }: CustomMDXProps) {
+export function CustomMDX({
+  components: customComponents,
+  headingLinks = true,
+  ...props
+}: CustomMDXProps) {
   return (
     <MDXRemote
       options={{ blockJS: false }}

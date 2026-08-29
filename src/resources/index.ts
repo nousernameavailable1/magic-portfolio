@@ -1,8 +1,7 @@
-// import a pre-defined template for config and content options
+// Central exports for site content and configuration.
 export {
   person,
   social,
-  newsletter,
   home,
   about,
   blog,
@@ -12,14 +11,10 @@ export {
 
 export {
   display,
-  mailchimp,
   routes,
-  protectedRoutes,
   baseURL,
   fonts,
   style,
-  schema,
-  sameAs,
   socialSharing,
   effects,
   dataStyle,

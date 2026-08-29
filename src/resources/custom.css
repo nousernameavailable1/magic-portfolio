@@ -14,7 +14,10 @@
     --mobile-dock-height: 4.1rem;
     --mobile-dock-offset: 0.75rem;
     --mobile-shell-bottom: calc(
-      var(--mobile-dock-height) + var(--mobile-dock-offset) + env(safe-area-inset-bottom) + 1rem
+      var(--mobile-dock-height) +
+      var(--mobile-dock-offset) +
+      env(safe-area-inset-bottom) +
+      1rem
     );
   }
 

@@ -1,6 +1,7 @@
 import { StatusRefreshButton } from "@/components/admin/StatusRefreshButton";
 import styles from "@/components/admin/admin.module.scss";
-import { formatDuration, getSiteStatus } from "@/lib/site-status";
+import { getSiteStatus } from "@/lib/site-status";
+import { formatDubaiDateTime, formatDuration } from "@/utils/formatDate";
 import { Column, Heading, Row, StatusIndicator, Text } from "@once-ui-system/core";
 import type { Metadata } from "next";
 
@@ -9,14 +10,6 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Dashboard",
 };
-
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("en", {
-    dateStyle: "medium",
-    timeStyle: "short",
-    timeZone: "Asia/Dubai",
-  }).format(date);
-}
 
 function StatusCard({
   title,
@@ -116,7 +109,7 @@ export default async function AdminDashboardPage() {
               <Text>{github.commit.message}</Text>
               <Text onBackground="neutral-weak">
                 {github.commit.sha.slice(0, 7)} · {github.commit.author ?? "Unknown author"} ·{" "}
-                {formatDate(github.commit.committedAt)}
+                {formatDubaiDateTime(github.commit.committedAt)}
               </Text>
               <a
                 className={styles.statusLink}
@@ -159,7 +152,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       <Text variant="body-default-s" onBackground="neutral-weak">
-        Checked {formatDate(status.checkedAt)} (Asia/Dubai)
+        Checked {formatDubaiDateTime(status.checkedAt)} (Asia/Dubai)
       </Text>
     </Column>
   );

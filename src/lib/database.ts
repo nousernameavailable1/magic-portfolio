@@ -4,11 +4,8 @@ import { Pool } from "pg";
 const CURRENT_SCHEMA_VERSION = 11;
 
 declare global {
-  // eslint-disable-next-line no-var
   var portfolioDatabasePool: Pool | undefined;
-  // eslint-disable-next-line no-var
   var portfolioSchemaPromise: Promise<void> | undefined;
-  // eslint-disable-next-line no-var
   var portfolioSchemaVersion: number | undefined;
 }
 

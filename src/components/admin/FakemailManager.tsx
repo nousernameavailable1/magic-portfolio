@@ -1,5 +1,6 @@
 "use client";
 
+import { formatDubaiDateTime } from "@/utils/formatDate";
 import {
   Button,
   Column,
@@ -35,14 +36,6 @@ const expirationOptions = [
   { value: "1w", label: "1 week" },
   { value: "never", label: "Never" },
 ];
-
-function formatDate(value: string) {
-  return new Intl.DateTimeFormat("en", {
-    dateStyle: "medium",
-    timeStyle: "short",
-    timeZone: "Asia/Dubai",
-  }).format(new Date(value));
-}
 
 export function FakemailManager() {
   const [settings, setSettings] = useState<FakemailSettings | null>(null);
@@ -181,7 +174,7 @@ export function FakemailManager() {
               hasSuffix={<span className={styles.domain}>@{domain}</span>}
               maxLength={64}
               onChange={(event) => setLocalPart(event.target.value)}
-              placeholder="newsletter"
+              placeholder="Product update"
               value={localPart}
             />
           )}
@@ -250,8 +243,10 @@ export function FakemailManager() {
             <Column gap="4">
               <code className={styles.address}>{alias.email}</code>
               <Text variant="body-default-s" onBackground="neutral-weak">
-                Created {formatDate(alias.createdAt)} ·{" "}
-                {alias.expiresAt ? `Expires ${formatDate(alias.expiresAt)}` : "Never expires"}
+                Created {formatDubaiDateTime(alias.createdAt)} ·{" "}
+                {alias.expiresAt
+                  ? `Expires ${formatDubaiDateTime(alias.expiresAt)}`
+                  : "Never expires"}
               </Text>
             </Column>
             <Button

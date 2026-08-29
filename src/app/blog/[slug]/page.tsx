@@ -9,7 +9,6 @@ import {
   Column,
   Heading,
   HeadingNav,
-  Icon,
   Line,
   Media,
   Meta,
@@ -20,7 +19,6 @@ import {
 } from "@once-ui-system/core";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import React from "react";
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const posts = getBlogPosts();
@@ -48,7 +46,8 @@ export async function generateMetadata({
     title: post.metadata.title,
     description: post.metadata.summary,
     baseURL: baseURL,
-    image: post.metadata.image || `/api/og/generate?title=${post.metadata.title}`,
+    image:
+      post.metadata.image || `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`,
     path: `${blog.path}/${post.slug}`,
   });
 }
@@ -64,11 +63,6 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
   if (!post) {
     notFound();
   }
-
-  const avatars =
-    post.metadata.team?.map((person) => ({
-      src: person.avatar,
-    })) || [];
 
   return (
     <Row fillWidth>

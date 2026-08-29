@@ -1,4 +1,4 @@
-import type { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
+import type { About, Blog, Gallery, Home, Person, Social, Work } from "@/types";
 import { Line, Row, Text } from "@once-ui-system/core";
 
 const person: Person = {
@@ -13,15 +13,9 @@ const person: Person = {
   locale: "en", // BCP 47 language tag for the HTML lang attribute, e.g., 'en', 'ja', 'zh-TW'
 };
 
-const newsletter: Newsletter = {
-  display: false, // set to false to hide this section
-  title: <>Subscribe to {person.firstName}'s Newsletter</>,
-  description: <>Nothing here</>,
-};
-
 const social: Social = [
   // Links are automatically displayed.
-  // Import new icons in /once-ui/icons.ts
+  // Register new icons in /src/resources/icons.ts.
   // Set essentials: true for links you want to show on the about page
   {
     name: "GitHub",
@@ -94,10 +88,6 @@ const about: About = {
   },
   avatar: {
     display: true,
-  },
-  calendar: {
-    display: false,
-    link: "https://cal.com",
   },
   intro: {
     display: true,
@@ -247,7 +237,7 @@ const work: Work = {
   title: `Projects – ${person.name}`,
   description: `Design and dev projects by ${person.name}`,
   // Create new project pages by adding an .mdx file to app/projects/projects.
-  // All projects will be listed on the /home and /projects routes
+  // All projects are listed on /projects; the disabled home sections can feature them too.
 };
 
 const gallery: Gallery = {
@@ -301,4 +291,4 @@ const gallery: Gallery = {
   ],
 };
 
-export { person, social, newsletter, home, about, blog, work, gallery };
+export { person, social, home, about, blog, work, gallery };

@@ -32,9 +32,11 @@ export async function generateMetadata() {
 }
 
 export default async function About() {
-  const financeVisible = await getFinanceVisibility();
-  const finance = await getFinanceDetails();
-  const crypto = await getCryptoDetails();
+  const [financeVisible, finance, crypto] = await Promise.all([
+    getFinanceVisibility(),
+    getFinanceDetails(),
+    getCryptoDetails(),
+  ]);
   const cryptoWallets = [
     { name: "Bitcoin", network: "BTC", address: crypto.bitcoin, icon: <FaBitcoin /> },
     { name: "Ethereum", network: "ETH", address: crypto.ethereum, icon: <FaEthereum /> },
@@ -146,31 +148,6 @@ export default async function About() {
             vertical="center"
             marginBottom="32"
           >
-            {about.calendar.display && (
-              <Row
-                fitWidth
-                border="brand-alpha-medium"
-                background="brand-alpha-weak"
-                radius="full"
-                padding="4"
-                gap="8"
-                marginBottom="m"
-                vertical="center"
-                className={styles.blockAlign}
-                style={{
-                  backdropFilter: "blur(var(--static-space-1))",
-                }}
-              >
-                <Icon paddingLeft="12" name="calendar" onBackground="brand-weak" />
-                <Row paddingX="8">Schedule a call</Row>
-                <IconButton
-                  href={about.calendar.link}
-                  data-border="rounded"
-                  variant="secondary"
-                  icon="chevronRight"
-                />
-              </Row>
-            )}
             <Heading className={styles.textAlign} variant="display-strong-xl">
               {person.name}
             </Heading>

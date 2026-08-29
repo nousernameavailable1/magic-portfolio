@@ -1,113 +1,79 @@
-# Magic Portfolio
+# Talal Kadli's Portfolio
 
-Magic Portfolio is a simple, clean, beginner-friendly portfolio template. It supports an MDX-based content system for projects and blog posts, an about / CV page and a gallery.
-
-View the demo [here](https://demo.magic-portfolio.com).
-
-![Magic Portfolio](public/images/og/home.jpg)
-
-Launch your portfolio on [Aveiro](https://www.aveiro.app/marketplace/spotlight), our managed publishing platform. Update case studies, blog posts and content through MCP from your favorite AI tools.
-
-## Getting started
-
-**1. Clone the repository**
-```
-git clone https://github.com/once-ui-system/magic-portfolio.git
-```
-
-**2. Install dependencies**
-```
-npm install
-```
-
-**3. Run dev server**
-```
-npm run dev
-```
-
-**4. Edit site configuration**
-```
-src/resources/once-ui.config.ts
-```
-
-**5. Edit content**
-```
-src/resources/content.tsx
-```
-
-**6. Create blog posts / projects**
-```
-Add a new .mdx file to src/app/blog/posts or src/app/projects/projects
-```
-
-Magic Portfolio was built with [Once UI](https://once-ui.com) for [Next.js](https://nextjs.org). It requires Node.js v18.17+.
-
-## Documentation
-
-Docs available at: [docs.once-ui.com](https://docs.once-ui.com/docs/magic-portfolio/quick-start)
+This repository contains the source for [talal.kadli.org](https://talal.kadli.org), a personal
+portfolio built with Next.js, React, TypeScript, PostgreSQL, and Once UI.
 
 ## Features
 
-### Once UI
-- All tokens, components & features of [Once UI](https://once-ui.com)
+- Portfolio, projects, blog, gallery, notes, statistics, wall, and utility pages
+- MDX-backed blog posts and project case studies
+- Password-protected public routes with per-route access and map visibility controls
+- Private admin area for notes, wall moderation, site text, route settings, and fakemail aliases
+- PostgreSQL-backed content, visitor statistics, reactions, and configuration
+- Dynamic metadata, RSS, sitemap, robots, and Open Graph image generation
+- Docker and Caddy configuration for self-hosting
 
-### SEO
-- Automatic open-graph and X image generation with next/og
-- Automatic schema and metadata generation based on the content file
+## Local development
 
-### Design
-- Responsive layout optimized for all screen sizes
-- Timeless design without heavy animations and motion
-- Endless customization options through [data attributes](https://once-ui.com/docs/theming)
+Next.js 16 requires Node.js 20.9 or newer. Install the project dependencies and start the local
+server:
 
-### Content
-- Render sections conditionally based on the content file
-- Enable or disable pages for blog, projects, gallery and about / CV
-- Generate and display social links automatically
-- Set up password protection for URLs
+```sh
+npm install
+npm run dev
+```
 
-### Localization
-- A localized, earlier version of Magic Portfolio is available with the next-intl library
-- To use localization, switch to the 'i18n' branch
+The database-backed features require PostgreSQL. A local database can be started from the provided
+example:
 
-## Creators
+```sh
+cp .env.example .env
+docker compose -f docker-compose.dev.yml.example up -d
+```
 
-Lorant One: [Threads](https://www.threads.net/@lorant.one) / [LinkedIn](https://www.linkedin.com/in/lorant-one/)
+Configure `.env.local` with the matching `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, and
+`DB_PASSWORD` values, plus any access, admin, or Cloudflare settings needed for the features you
+want to exercise. Real environment files are ignored by Git.
 
-## Get involved
+## Content and configuration
 
-- Join the Design Engineers Club on [Discord](https://discord.com/invite/5EyAQ4eNdS) and share your project with us!
-- Deployed your docs? Share it on the [Once UI Hub](https://once-ui.com/hub) too! We feature our favorite apps on our landing page.
+- Site content: `src/resources/content.tsx`
+- Theme, routes, and sharing: `src/resources/once-ui.config.ts`
+- Blog posts: `src/app/blog/posts/*.mdx`
+- Project case studies: `src/app/projects/projects/*.mdx`
+- Default protected-page prefixes: `src/lib/page-access-routes.ts`
+- Public route map and lock defaults: `src/lib/public-routes.ts`
 
-## License
+The admin area is available at `/admin`. Database tables and migrations are initialized by
+`src/lib/database.ts`.
 
-Distributed under the CC BY-NC 4.0 License.
-- Attribution is required.
-- Commercial usage is not allowed.
-- You can extend the license to [Dopler CC](https://dopler.app/license) by purchasing a [Once UI Pro](https://once-ui.com/pricing) license.
+## Quality checks
 
-See `LICENSE.txt` for more information.
+```sh
+npm run lint
+npm run typecheck
+npm run build
+```
+
+The production build also generates the code metrics consumed by the Statistics page.
 
 ## Self-hosted deployment
 
-The production setup is designed for Docker, PostgreSQL, and Caddy on the OCI VM.
+The production examples use Docker, PostgreSQL, and Caddy:
 
 ```sh
 cp docker-compose.yml.example docker-compose.yml
 cp Caddyfile.example Caddyfile
 cp .env.example .env
-```
-
-Set strong values in `.env`, confirm the hostname in `Caddyfile`, then start the stack:
-
-```sh
 docker compose up -d
 ```
 
-### Fakemail
+Set strong values in `.env` and confirm the hostname in `Caddyfile` before starting the stack. The
+Fakemail feature additionally requires the Cloudflare Email Routing values documented in
+`.env.example`.
 
-The admin Fakemail page creates `kadli.org` aliases through Cloudflare Email Routing and forwards
-them to one verified destination address. Configure `CLOUDFLARE_API_TOKEN`,
-`CLOUDFLARE_ZONE_ID`, `FAKEMAIL_DOMAIN`, `FAKEMAIL_FORWARD_TO`, and
-`FAKEMAIL_CLEANUP_SECRET` in `.env`. The API token needs **Zone / Email Routing Rules: Edit**.
-The `fakemail-cleanup` service removes expired aliases within five minutes.
+## Credits and license
+
+The interface is based on [Magic Portfolio](https://once-ui.com/products/magic-portfolio) by
+[Once UI](https://once-ui.com). The project remains subject to the
+[CC BY-NC 4.0 license](LICENSE), including its attribution and non-commercial-use requirements.

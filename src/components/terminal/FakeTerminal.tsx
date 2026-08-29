@@ -1,15 +1,21 @@
 "use client";
 
-import { type FormEvent, useRef, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 import styles from "./fake-terminal.module.scss";
 
 const PROMPT = "ubuntu@scriptbridge:~$";
 const REDIRECTS = ["/rickroll", "/jumpscare"] as const;
+type HistoryEntry = { id: number; command: string };
 
 export function FakeTerminal() {
   const [command, setCommand] = useState("");
-  const [history, setHistory] = useState<string[]>([]);
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const nextHistoryId = useRef(0);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -22,7 +28,9 @@ export function FakeTerminal() {
       return;
     }
 
-    setHistory((currentHistory) => [...currentHistory, enteredCommand]);
+    const entry = { id: nextHistoryId.current, command: enteredCommand };
+    nextHistoryId.current += 1;
+    setHistory((currentHistory) => [...currentHistory, entry]);
     setCommand("");
   }
 
@@ -31,7 +39,7 @@ export function FakeTerminal() {
       <section
         aria-label="Simulated Linux terminal"
         className={styles.terminal}
-        onClick={() => inputRef.current?.focus()}
+        onPointerDown={() => inputRef.current?.focus()}
       >
         <header className={styles.titleBar}>
           <div aria-hidden="true" className={styles.windowControls}>
@@ -44,12 +52,12 @@ export function FakeTerminal() {
         </header>
 
         <div className={styles.screen}>
-          {history.map((enteredCommand, index) => {
-            const executable = enteredCommand.split(/\s+/, 1)[0];
+          {history.map((entry) => {
+            const executable = entry.command.split(/\s+/, 1)[0];
             return (
-              <div className={styles.historyEntry} key={`${enteredCommand}-${index}`}>
+              <div className={styles.historyEntry} key={entry.id}>
                 <div>
-                  <span className={styles.prompt}>{PROMPT}</span> {enteredCommand}
+                  <span className={styles.prompt}>{PROMPT}</span> {entry.command}
                 </div>
                 <div>{executable}: command not found</div>
               </div>
@@ -65,7 +73,6 @@ export function FakeTerminal() {
               autoCapitalize="none"
               autoComplete="off"
               autoCorrect="off"
-              autoFocus
               className={styles.commandInput}
               id="terminal-command"
               onChange={(event) => setCommand(event.target.value)}

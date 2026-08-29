@@ -33,12 +33,6 @@ export const publicRoutes: PublicRoute[] = [
     parent: "/blog",
     lockedByDefault: true,
   },
-  {
-    path: "/blog/mailchimp",
-    label: "Blog post: Mailchimp",
-    parent: "/blog",
-    lockedByDefault: true,
-  },
   { path: "/blog/pages", label: "Blog post: Pages", parent: "/blog", lockedByDefault: true },
   {
     path: "/blog/password",
@@ -167,9 +161,4 @@ export async function updatePublicRouteSettings(
     `,
     [path, locked, listed],
   );
-}
-
-export async function updatePublicRouteLock(path: string, locked: boolean) {
-  if (!getPublicRoute(path)) throw new Error("Unknown public route.");
-  await updatePublicRouteSettings(path, { locked });
 }

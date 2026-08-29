@@ -4,7 +4,11 @@ const projectStructure = [
   { path: "src/app", title: "Routes", detail: "Pages, layouts and API handlers" },
   { path: "src/components", title: "Interface", detail: "Reusable views and feature UI" },
   { path: "src/lib", title: "Server helpers", detail: "Auth, data access and route policy" },
-  { path: "src/resources", title: "Configuration", detail: "Content, navigation and design settings" },
+  {
+    path: "src/resources",
+    title: "Configuration",
+    detail: "Content, navigation and design settings",
+  },
 ];
 
 const requestStages = [

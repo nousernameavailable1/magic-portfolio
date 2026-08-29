@@ -1,6 +1,6 @@
 import { PublicRouteMap } from "@/components/PublicRouteMap";
 import { getSiteText } from "@/lib/site-text";
-import { about, baseURL, home, person, routes } from "@/resources";
+import { about, baseURL, home, person } from "@/resources";
 import {
   Avatar,
   Badge,
@@ -15,7 +15,6 @@ import {
   // Line,
 } from "@once-ui-system/core";
 import styles from "./page.module.scss";
-// import { Mailchimp } from "@/components";
 // import { Projects } from "@/components/projects/Projects";
 // import { Posts } from "@/components/blog/Posts";
 
@@ -200,6 +199,7 @@ export default async function Home() {
             </Button>
           </Column>
         </Column>
+        {/* Disabled template sections below also need their commented imports restored. */}
         {/* --- PROJECTS (FIRST SECTION) --- */}
         {/* <RevealFx translateY="16" delay={0.6}>
         <Projects range={[1, 1]} />
@@ -229,9 +229,6 @@ export default async function Home() {
 
         {/* --- PROJECTS (SECOND SECTION) --- */}
         {/* <Projects range={[2]} /> */}
-
-        {/* --- NEWSLETTER SECTION --- */}
-        {/* <Mailchimp /> */}
       </Column>
     </div>
   );

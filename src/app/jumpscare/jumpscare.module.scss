@@ -3,6 +3,7 @@
 }
 
 .scare {
+  animation: flash 100ms steps(2, end) 4, shake 95ms steps(2, end) 8;
   align-items: center;
   background: #000;
   display: flex;
@@ -10,10 +11,6 @@
   justify-content: center;
   position: fixed;
   z-index: 100;
-}
-
-.scare {
-  animation: flash 100ms steps(2, end) 4, shake 95ms steps(2, end) 8;
 }
 
 .face {
@@ -39,7 +36,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .countdown,
   .scare {
     animation: none;
   }

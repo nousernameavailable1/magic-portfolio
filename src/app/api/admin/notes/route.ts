@@ -5,6 +5,7 @@ import {
   createNote,
   deleteNote,
   getAllNotes,
+  getNoteMutationRecord,
   normalizeNoteSlug,
   updateNote,
   validateNoteInput,
@@ -116,7 +117,7 @@ export async function PATCH(request: NextRequest) {
   }
 
   try {
-    const existing = (await getAllNotes()).find((note) => note.id === payload.id);
+    const existing = await getNoteMutationRecord(payload.id);
     if (!existing) return NextResponse.json({ error: "Note not found." }, { status: 404 });
     const passwordError = passwordValidationError(
       parsed.privatePassword,
@@ -144,7 +145,7 @@ export async function DELETE(request: NextRequest) {
   if (!validId(id)) return NextResponse.json({ error: "Invalid note." }, { status: 400 });
 
   try {
-    const existing = (await getAllNotes()).find((note) => note.id === id);
+    const existing = await getNoteMutationRecord(id);
     if (!existing || !(await deleteNote(id))) {
       return NextResponse.json({ error: "Note not found." }, { status: 404 });
     }

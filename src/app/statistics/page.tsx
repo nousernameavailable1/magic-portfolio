@@ -1,4 +1,5 @@
-import { formatDuration, getPublicSiteStats } from "@/lib/site-stats";
+import { getPublicSiteStats } from "@/lib/site-stats";
+import { formatDubaiDateTime, formatDuration } from "@/utils/formatDate";
 import { Column, Heading, Row, Text } from "@once-ui-system/core";
 import type { Metadata } from "next";
 import styles from "./statistics.module.scss";
@@ -9,14 +10,6 @@ export const metadata: Metadata = {
   title: "Statistics",
   description: "Live statistics for Talal Kadli's portfolio.",
 };
-
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("en", {
-    dateStyle: "medium",
-    timeStyle: "short",
-    timeZone: "Asia/Dubai",
-  }).format(date);
-}
 
 function StatCard({
   label,
@@ -86,7 +79,7 @@ export default async function StatsPage() {
         <StatCard
           label="Uptime"
           value={formatDuration(stats.processUptimeSeconds)}
-          detail={`Running since ${formatDate(stats.startedAt)} (Asia/Dubai).`}
+          detail={`Running since ${formatDubaiDateTime(stats.startedAt)} (Asia/Dubai).`}
         />
         <StatCard
           label="Codebase"
@@ -145,7 +138,7 @@ export default async function StatsPage() {
 
       <Row className={styles.updated}>
         <Text variant="body-default-s" onBackground="neutral-weak">
-          Updated {formatDate(stats.checkedAt)} (Asia/Dubai)
+          Updated {formatDubaiDateTime(stats.checkedAt)} (Asia/Dubai)
         </Text>
       </Row>
     </Column>

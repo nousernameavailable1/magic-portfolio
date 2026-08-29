@@ -1,29 +1,7 @@
-.hover {
-    transition: var(--transition-micro-medium);
-
-    &:hover {
-        transform: translateX(var(--static-space-8));
-
-        .indicator {
-            transform: rotate(0);
-        }
-    }
-}
-
-.indicator {
-    transform: rotate(-90deg);
-    left: -2rem;
-    transition: var(--transition-micro-medium);
-}
-
 @media (max-width: 48rem) {
     .list {
         gap: 1.5rem !important;
         margin-bottom: 2rem !important;
         padding-inline: 0 !important;
-    }
-
-    .hover:hover {
-        transform: none;
     }
 }

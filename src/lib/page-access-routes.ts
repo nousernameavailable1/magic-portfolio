@@ -2,7 +2,7 @@
  * Public page prefixes that require the site access password.
  *
  * Keep this list independent of Node-only modules: it is shared by the
- * server-side Proxy and the client-safe site configuration.
+ * server-side Proxy and crawl metadata.
  */
 export const pageAccessRoutes = ["/about", "/blog", "/notes", "/projects", "/wall"] as const;
 
