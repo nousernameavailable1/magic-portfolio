@@ -22,7 +22,7 @@ export function FinanceVisibilityToggle() {
     } catch (error) {
       addToastRef.current({
         variant: "danger",
-        message: error instanceof Error ? error.message : "Could not load Finance visibility.",
+        message: error instanceof Error ? error.message : "Could not load financial visibility.",
       });
     } finally {
       setLoading(false);
@@ -48,12 +48,12 @@ export function FinanceVisibilityToggle() {
       setVisible(data.visible);
       addToastRef.current({
         variant: "success",
-        message: `Finance section ${data.visible ? "shown" : "hidden"}.`,
+        message: `Finance and Crypto wallets sections ${data.visible ? "shown" : "hidden"}.`,
       });
     } catch (error) {
       addToastRef.current({
         variant: "danger",
-        message: error instanceof Error ? error.message : "Could not update Finance visibility.",
+        message: error instanceof Error ? error.message : "Could not update financial visibility.",
       });
     } finally {
       setSaving(false);
@@ -63,7 +63,11 @@ export function FinanceVisibilityToggle() {
   return (
     <button
       aria-checked={visible}
-      aria-label={visible ? "Hide Finance section" : "Show Finance section"}
+      aria-label={
+        visible
+          ? "Hide Finance and Crypto wallets sections"
+          : "Show Finance and Crypto wallets sections"
+      }
       className={`${styles.switch} ${visible ? styles.enabled : ""}`}
       disabled={loading || saving}
       onClick={() => void toggleVisibility()}

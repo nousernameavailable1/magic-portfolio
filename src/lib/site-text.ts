@@ -58,8 +58,8 @@ export const siteTextDefinitions = [
   },
   {
     key: "about.financeVisible",
-    label: "Finance visibility",
-    description: "Whether the Finance section appears on the About page.",
+    label: "Financial details visibility",
+    description: "Whether the Finance and Crypto wallets sections appear on the About page.",
     defaultValue: "true",
     maxLength: 5,
     lines: 1,
@@ -145,6 +145,51 @@ export const siteTextDefinitions = [
     maxLength: 20,
     lines: 1,
   },
+  {
+    key: "about.crypto",
+    label: "Crypto wallets",
+    description:
+      "Update the fake wallet addresses shown in the Crypto wallets section on the About page.",
+    defaultValue: "Crypto wallets",
+    maxLength: 20,
+    lines: 1,
+  },
+  {
+    key: "about.crypto.bitcoin",
+    label: "Bitcoin (BTC)",
+    description: "The fake Bitcoin wallet address shown on the About page.",
+    parentKey: "about.crypto",
+    defaultValue: "bc1qexample7x9m3k2v8n5p4t6r0s1w2y3z4a5b6c7d8e",
+    maxLength: 120,
+    lines: 2,
+  },
+  {
+    key: "about.crypto.ethereum",
+    label: "Ethereum (ETH)",
+    description: "The fake Ethereum wallet address shown on the About page.",
+    parentKey: "about.crypto",
+    defaultValue: "0x7A1aF9C4D2E8B6F013579BDF2468Ace13579BDF0",
+    maxLength: 120,
+    lines: 2,
+  },
+  {
+    key: "about.crypto.solana",
+    label: "Solana (SOL)",
+    description: "The fake Solana wallet address shown on the About page.",
+    parentKey: "about.crypto",
+    defaultValue: "DemoSo1ana7YkT4mQ2vN8pL3xR6cW9zH5sD1fG8jK2",
+    maxLength: 120,
+    lines: 2,
+  },
+  {
+    key: "about.crypto.tether",
+    label: "Tether (USDT, TRC20)",
+    description: "The fake TRC20 Tether wallet address shown on the About page.",
+    parentKey: "about.crypto",
+    defaultValue: "TDemoWa11et8m4N2p7Kx9V5c3R6w1Yz8H4fJ2dL",
+    maxLength: 120,
+    lines: 2,
+  },
 ] as const;
 
 export type SiteTextKey = (typeof siteTextDefinitions)[number]["key"];
@@ -222,6 +267,16 @@ export async function getFinanceDetails() {
     iban: text["about.finance.iban"],
     swift: text["about.finance.swift"],
     validThru: text["about.finance.validThru"],
+  };
+}
+
+export async function getCryptoDetails() {
+  const text = await getSiteText();
+  return {
+    bitcoin: text["about.crypto.bitcoin"],
+    ethereum: text["about.crypto.ethereum"],
+    solana: text["about.crypto.solana"],
+    tether: text["about.crypto.tether"],
   };
 }
 

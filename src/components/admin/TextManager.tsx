@@ -205,10 +205,18 @@ export function TextManager() {
         const value = values[field.key] ?? "";
         const nestedFields = fields.filter((candidate) => candidate.parentKey === field.key);
         const isFinanceGroup = field.key === "about.finance";
-        const nestedTitle = isFinanceGroup ? "Card and bank fields" : "After-hours message";
+        const isCryptoGroup = field.key === "about.crypto";
+        const isSettingsGroup = isFinanceGroup || isCryptoGroup;
+        const nestedTitle = isFinanceGroup
+          ? "Card and bank fields"
+          : isCryptoGroup
+            ? "Wallet address fields"
+            : "After-hours message";
         const nestedDescription = isFinanceGroup
-          ? "Each saved change is reflected in the Finance section on the About page."
-          : "Shown from 1:00 AM to 5:59 AM (Asia/Dubai).";
+          ? "Each saved change is reflected in the Finance section. This visibility switch also controls Crypto wallets."
+          : isCryptoGroup
+            ? "Each saved change is reflected in the Crypto wallets section, which follows Finance visibility."
+            : "Shown from 1:00 AM to 5:59 AM (Asia/Dubai).";
         return (
           <Column
             className={styles.fieldCard}
@@ -244,7 +252,7 @@ export function TextManager() {
                 <Text onBackground="neutral-weak">{field.description}</Text>
               </Column>
             )}
-            {!isFinanceGroup && (
+            {!isSettingsGroup && (
               <TextFieldEditor
                 field={field}
                 value={value}

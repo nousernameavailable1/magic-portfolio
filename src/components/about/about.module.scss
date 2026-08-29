@@ -129,6 +129,63 @@
     overflow-wrap: anywhere;
 }
 
+.cryptoGrid {
+    display: grid;
+    gap: var(--static-space-16);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.walletCard {
+    background:
+        radial-gradient(circle at top right, var(--brand-alpha-weak), transparent 52%),
+        color-mix(in srgb, var(--surface-background) 88%, transparent);
+    border: 1px solid var(--neutral-border-medium);
+    border-radius: var(--radius-l);
+    display: grid;
+    gap: var(--static-space-16);
+    min-width: 0;
+    padding: var(--static-space-20);
+}
+
+.walletHeader {
+    align-items: center;
+    display: flex;
+    gap: var(--static-space-12);
+}
+
+.walletIcon {
+    align-items: center;
+    background: var(--brand-alpha-weak);
+    border: 1px solid var(--brand-alpha-medium);
+    border-radius: 50%;
+    color: var(--brand-on-background-strong);
+    display: inline-flex;
+    flex: 0 0 auto;
+    height: 2.5rem;
+    justify-content: center;
+    width: 2.5rem;
+}
+
+.walletIcon svg {
+    height: 1.125rem;
+    width: 1.125rem;
+}
+
+.walletNetwork {
+    color: var(--neutral-on-background-weak);
+    display: block;
+    letter-spacing: 0.08em;
+    margin-top: var(--static-space-2);
+}
+
+.walletAddress {
+    color: var(--neutral-on-background-medium);
+    font-family: var(--font-code);
+    font-size: var(--font-size-body-s);
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
 @media (max-width: breakpoints.$s) {
     .page {
         width: 100%;
@@ -272,6 +329,10 @@
     }
 
     .financeGrid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .cryptoGrid {
         grid-template-columns: minmax(0, 1fr);
     }
 

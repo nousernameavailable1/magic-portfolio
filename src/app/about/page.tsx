@@ -1,6 +1,6 @@
 import TableOfContents from "@/components/about/TableOfContents";
 import styles from "@/components/about/about.module.scss";
-import { getFinanceDetails, getFinanceVisibility } from "@/lib/site-text";
+import { getCryptoDetails, getFinanceDetails, getFinanceVisibility } from "@/lib/site-text";
 import { about, baseURL, person, social } from "@/resources";
 import {
   Avatar,
@@ -17,7 +17,9 @@ import {
   Text,
 } from "@once-ui-system/core";
 import React from "react";
+import { FaBitcoin, FaEthereum } from "react-icons/fa6";
 import { HiOutlineCreditCard } from "react-icons/hi2";
+import { SiSolana, SiTether } from "react-icons/si";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -32,6 +34,13 @@ export async function generateMetadata() {
 export default async function About() {
   const financeVisible = await getFinanceVisibility();
   const finance = await getFinanceDetails();
+  const crypto = await getCryptoDetails();
+  const cryptoWallets = [
+    { name: "Bitcoin", network: "BTC", address: crypto.bitcoin, icon: <FaBitcoin /> },
+    { name: "Ethereum", network: "ETH", address: crypto.ethereum, icon: <FaEthereum /> },
+    { name: "Solana", network: "SOL", address: crypto.solana, icon: <SiSolana /> },
+    { name: "Tether", network: "USDT · TRC20", address: crypto.tether, icon: <SiTether /> },
+  ];
   const structure = [
     {
       title: about.intro.title,
@@ -55,6 +64,11 @@ export default async function About() {
     },
     {
       title: "Finance",
+      display: financeVisible,
+      items: [],
+    },
+    {
+      title: "Crypto wallets",
       display: financeVisible,
       items: [],
     },
@@ -454,6 +468,36 @@ export default async function About() {
                     <dd>{finance.swift}</dd>
                   </div>
                 </dl>
+              </div>
+            </section>
+          )}
+
+          {financeVisible && (
+            <section
+              id="Crypto wallets"
+              className={styles.paymentSection}
+              aria-labelledby="crypto-title"
+            >
+              <Heading as="h2" id="crypto-title" variant="display-strong-s">
+                Crypto wallets
+              </Heading>
+              <div className={styles.cryptoGrid}>
+                {cryptoWallets.map((wallet) => (
+                  <article className={styles.walletCard} key={wallet.network}>
+                    <div className={styles.walletHeader}>
+                      <span className={styles.walletIcon} aria-hidden="true">
+                        {wallet.icon}
+                      </span>
+                      <div>
+                        <Text variant="label-strong-m">{wallet.name}</Text>
+                        <Text className={styles.walletNetwork} variant="label-default-xs">
+                          {wallet.network}
+                        </Text>
+                      </div>
+                    </div>
+                    <code className={styles.walletAddress}>{wallet.address}</code>
+                  </article>
+                ))}
               </div>
             </section>
           )}
