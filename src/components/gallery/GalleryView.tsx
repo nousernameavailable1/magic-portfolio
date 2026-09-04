@@ -11,11 +11,12 @@ export default function GalleryView() {
         <Media
           className={styles.image}
           enlarge
-          priority={index < 10}
+          priority={index === 0}
+          unoptimized
           sizes="(max-width: 560px) 100vw, 50vw"
           key={image.src}
           radius="m"
-          aspectRatio={image.orientation === "horizontal" ? "16 / 9" : "3 / 4"}
+          aspectRatio={`${image.width} / ${image.height}`}
           src={image.src}
           alt={image.alt}
         />

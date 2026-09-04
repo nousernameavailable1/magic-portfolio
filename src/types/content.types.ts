@@ -220,7 +220,9 @@ export interface Gallery extends BasePageConfig {
     src: string;
     /** Image alt text */
     alt: string;
-    /** Image orientation (horizontal/vertical) */
-    orientation: string;
+    /** Intrinsic image width in pixels */
+    width: number;
+    /** Intrinsic image height in pixels */
+    height: number;
   }>;
 }
