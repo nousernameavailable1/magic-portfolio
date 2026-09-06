@@ -8,3 +8,6 @@ docker-compose.yml
 .env.*
 npm-debug.log*
 README.md
+
+# Archival photo masters stay in Git but are not needed by the live site.
+public/images/gallery/originals

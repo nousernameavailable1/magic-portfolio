@@ -12,8 +12,7 @@ export default function GalleryView() {
           className={styles.image}
           enlarge
           priority={index === 0}
-          unoptimized
-          sizes="(max-width: 560px) 100vw, 50vw"
+          sizes="50vw"
           key={image.src}
           radius="m"
           aspectRatio={`${image.width} / ${image.height}`}

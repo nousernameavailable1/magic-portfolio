@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "node scripts/generate-site-code-metrics.mjs && next build",
+    "optimize:gallery": "node scripts/optimize-gallery-images.mjs",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "lint": "biome check src package.json next.config.mjs tsconfig.json",
