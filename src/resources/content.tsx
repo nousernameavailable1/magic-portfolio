@@ -245,13 +245,13 @@ const gallery: Gallery = {
   label: "Gallery",
   title: `Photo gallery – ${person.name}`,
   description: `A photo collection by ${person.name}`,
-  // Full-resolution AVIF display copies live here. Their untouched HEIC masters
+  // Full-resolution AVIF display copies live here. Their untouched source masters
   // are retained in /public/images/gallery/originals with embedded metadata.
   images: [
     {
       src: "/images/gallery/img_3581.avif",
       alt: "Rocky coastline beneath dramatic clouds",
-      width: 6048,
+      width: 4536,
       height: 8064,
     },
     {
@@ -263,7 +263,7 @@ const gallery: Gallery = {
     {
       src: "/images/gallery/img_3647.avif",
       alt: "A cliff rising above a bank of mist",
-      width: 6048,
+      width: 4536,
       height: 8064,
     },
     {
@@ -275,7 +275,7 @@ const gallery: Gallery = {
     {
       src: "/images/gallery/img_3676.avif",
       alt: "White stones on a beach beneath a cloudy sky",
-      width: 6048,
+      width: 4536,
       height: 8064,
     },
     {
@@ -307,6 +307,18 @@ const gallery: Gallery = {
       alt: "A herd of animals walking along a mountain road",
       width: 4032,
       height: 3024,
+    },
+    {
+      src: "/images/gallery/img_2467.avif",
+      alt: "Dubai skyline and Burj Khalifa at dusk",
+      width: 5712,
+      height: 4284,
+    },
+    {
+      src: "/images/gallery/img_2529.avif",
+      alt: "Sunset over a mountain lake with a rocky shoreline",
+      width: 5712,
+      height: 4284,
     },
   ],
 };
