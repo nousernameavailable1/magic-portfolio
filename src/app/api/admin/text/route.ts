@@ -21,8 +21,8 @@ function unauthorized() {
   return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
 }
 
-function revalidateAboutDetails(key: string) {
-  if (key.startsWith("about.finance.") || key.startsWith("about.crypto.")) {
+function revalidateAffectedPage(key: string) {
+  if (key.startsWith("about.")) {
     revalidatePath("/about");
   }
 }
@@ -72,7 +72,7 @@ export async function PATCH(request: NextRequest) {
 
   try {
     await saveSiteText(payload.key, value);
-    revalidateAboutDetails(payload.key);
+    revalidateAffectedPage(payload.key);
     return NextResponse.json({ field: { ...definition, value } });
   } catch {
     return NextResponse.json({ error: "Could not save this text." }, { status: 503 });
@@ -105,7 +105,7 @@ export async function PUT(request: NextRequest) {
 
   try {
     await setSiteTextDefault(payload.key, value);
-    revalidateAboutDetails(payload.key);
+    revalidateAffectedPage(payload.key);
     return NextResponse.json({
       field: { ...definition, defaultValue: value, value },
     });
@@ -125,7 +125,7 @@ export async function DELETE(request: NextRequest) {
   try {
     const definition = getSiteTextDefinition(key);
     await resetSiteText(key);
-    revalidateAboutDetails(key);
+    revalidateAffectedPage(key);
     const text = await getSiteTextState();
     return NextResponse.json({
       field: {

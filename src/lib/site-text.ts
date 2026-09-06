@@ -57,6 +57,14 @@ export const siteTextDefinitions = [
     lines: 3,
   },
   {
+    key: "about.introduction",
+    label: "About introduction",
+    description: "The introductory paragraph beneath the profile details on the About page.",
+    defaultValue: "Talal is a Dubai-based student with a passion for being bored.",
+    maxLength: 500,
+    lines: 4,
+  },
+  {
     key: "about.financeVisible",
     label: "Financial details visibility",
     description: "Whether the Finance and Crypto wallets sections appear on the About page.",

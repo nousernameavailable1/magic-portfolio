@@ -19,12 +19,15 @@
 
   .backLink {
     align-items: center;
-    align-self: flex-start;
     color: var(--neutral-on-background-weak);
     display: inline-flex;
     gap: var(--static-space-8);
+    left: calc(env(safe-area-inset-left) + var(--static-space-16));
     min-height: var(--mobile-touch-target, 3rem);
+    position: fixed;
     text-decoration: none;
+    top: calc(env(safe-area-inset-top) + var(--static-space-12));
+    z-index: 10;
   }
 
   .mobileEyebrow {

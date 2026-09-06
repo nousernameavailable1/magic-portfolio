@@ -1,6 +1,13 @@
 import TableOfContents from "@/components/about/TableOfContents";
 import styles from "@/components/about/about.module.scss";
-import { getCryptoDetails, getFinanceDetails, getFinanceVisibility } from "@/lib/site-text";
+import { getStudies, getTechnicalSkills } from "@/lib/about-sections";
+import {
+  getCryptoDetails,
+  getFinanceDetails,
+  getFinanceVisibility,
+  getSiteText,
+} from "@/lib/site-text";
+import { getWorkExperiences } from "@/lib/work-experiences";
 import { about, baseURL, person, social } from "@/resources";
 import {
   Avatar,
@@ -32,11 +39,16 @@ export async function generateMetadata() {
 }
 
 export default async function About() {
-  const [financeVisible, finance, crypto] = await Promise.all([
-    getFinanceVisibility(),
-    getFinanceDetails(),
-    getCryptoDetails(),
-  ]);
+  const [financeVisible, finance, crypto, text, workExperiences, studies, technicalSkills] =
+    await Promise.all([
+      getFinanceVisibility(),
+      getFinanceDetails(),
+      getCryptoDetails(),
+      getSiteText(),
+      getWorkExperiences(),
+      getStudies(),
+      getTechnicalSkills(),
+    ]);
   const cryptoWallets = [
     { name: "Bitcoin", network: "BTC", address: crypto.bitcoin, icon: <FaBitcoin /> },
     { name: "Ethereum", network: "ETH", address: crypto.ethereum, icon: <FaEthereum /> },
@@ -52,17 +64,17 @@ export default async function About() {
     {
       title: about.work.title,
       display: about.work.display,
-      items: about.work.experiences.map((experience) => experience.company),
+      items: workExperiences.map((experience) => experience.company),
     },
     {
       title: about.studies.title,
       display: about.studies.display,
-      items: about.studies.institutions.map((institution) => institution.name),
+      items: studies.map((study) => study.name),
     },
     {
       title: about.technical.title,
       display: about.technical.display,
-      items: about.technical.skills.map((skill) => skill.title),
+      items: technicalSkills.map((skill) => skill.title),
     },
     {
       title: "Finance",
@@ -210,7 +222,7 @@ export default async function About() {
               gap="m"
               marginBottom="xl"
             >
-              {about.intro.description}
+              {text["about.introduction"]}
             </Column>
           )}
 
@@ -226,7 +238,7 @@ export default async function About() {
                 {about.work.title}
               </Heading>
               <Column fillWidth gap="l" marginBottom="40">
-                {about.work.experiences.map((experience, index) => (
+                {workExperiences.map((experience, index) => (
                   <Column
                     className={styles.experience}
                     key={`${experience.company}-${experience.role}-${index}`}
@@ -254,17 +266,15 @@ export default async function About() {
                       {experience.role}
                     </Text>
                     <Column className={styles.achievements} as="ul" gap="16">
-                      {experience.achievements.map(
-                        (achievement: React.ReactNode, index: number) => (
-                          <Text
-                            as="li"
-                            variant="body-default-m"
-                            key={`${experience.company}-${index}`}
-                          >
-                            {achievement}
-                          </Text>
-                        ),
-                      )}
+                      {experience.achievements.map((achievement, index) => (
+                        <Text
+                          as="li"
+                          variant="body-default-m"
+                          key={`${experience.company}-${index}`}
+                        >
+                          {achievement}
+                        </Text>
+                      ))}
                     </Column>
                     {experience.images && experience.images.length > 0 && (
                       <Row
@@ -313,7 +323,7 @@ export default async function About() {
                 {about.studies.title}
               </Heading>
               <Column fillWidth gap="l" marginBottom="40">
-                {about.studies.institutions.map((institution, index) => (
+                {studies.map((institution, index) => (
                   <Column
                     className={styles.study}
                     key={`${institution.name}-${index}`}
@@ -344,7 +354,7 @@ export default async function About() {
                 {about.technical.title}
               </Heading>
               <Column fillWidth gap="l">
-                {about.technical.skills.map((skill) => (
+                {technicalSkills.map((skill) => (
                   <Column className={styles.skill} key={skill.title} fillWidth gap="4">
                     <Text id={skill.title} variant="heading-strong-l">
                       {skill.title}

@@ -1,8 +1,20 @@
 "use client";
 
 import { FinanceVisibilityToggle } from "@/components/admin/FinanceVisibilityToggle";
-import { Button, Column, Heading, Row, Text, Textarea, useToast } from "@once-ui-system/core";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { StudyManager } from "@/components/admin/StudyManager";
+import { TechnicalSkillsManager } from "@/components/admin/TechnicalSkillsManager";
+import { WorkExperienceManager } from "@/components/admin/WorkExperienceManager";
+import {
+  Button,
+  Column,
+  Heading,
+  Row,
+  Select,
+  Text,
+  Textarea,
+  useToast,
+} from "@once-ui-system/core";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import styles from "./text-manager.module.scss";
 
 type TextField = {
@@ -17,6 +29,14 @@ type TextField = {
 };
 
 type TextAction = "save" | "set-default" | "reset";
+type PageFilter = "home" | "about" | "wall" | "all";
+
+const pageFilters: { value: PageFilter; label: string }[] = [
+  { value: "home", label: "Home" },
+  { value: "about", label: "About" },
+  { value: "wall", label: "Wall" },
+  { value: "all", label: "All pages" },
+];
 
 type TextFieldEditorProps = {
   field: TextField;
@@ -88,6 +108,10 @@ function TextFieldEditor({
 export function TextManager() {
   const [fields, setFields] = useState<TextField[]>([]);
   const [values, setValues] = useState<Record<string, string>>({});
+  const [pageFilter, setPageFilter] = useState<PageFilter>("home");
+  const [workExperienceDirty, setWorkExperienceDirty] = useState(false);
+  const [studiesDirty, setStudiesDirty] = useState(false);
+  const [technicalSkillsDirty, setTechnicalSkillsDirty] = useState(false);
   const [loading, setLoading] = useState(true);
   const [busyAction, setBusyAction] = useState<{ key: string; action: TextAction } | null>(null);
   const { addToast } = useToast();
@@ -198,10 +222,99 @@ export function TextManager() {
   const topLevelFields = fields.filter(
     (field) => !field.parentKey && field.key !== "about.financeVisible",
   );
+  const visibleFields = topLevelFields.filter(
+    (field) => pageFilter === "all" || field.key.startsWith(`${pageFilter}.`),
+  );
+  const selectedPage = pageFilters.find((page) => page.value === pageFilter) ?? pageFilters[0];
+  const collectionEditorCount = pageFilter === "about" || pageFilter === "all" ? 3 : 0;
+  const visibleEditorGroupCount = visibleFields.length + collectionEditorCount;
+  const pageOptions = pageFilters.map((page) => {
+    const pageFieldCount =
+      page.value === "all"
+        ? fields.filter((field) => field.key !== "about.financeVisible").length
+        : fields.filter(
+            (field) =>
+              field.key.startsWith(`${page.value}.`) && field.key !== "about.financeVisible",
+          ).length;
+
+    return {
+      value: page.value,
+      label: page.label,
+      description: loading
+        ? "Loading editors…"
+        : `${pageFieldCount} ${pageFieldCount === 1 ? "text field" : "text fields"}${
+            page.value === "about" || page.value === "all" ? " + 3 block editors" : ""
+          }`,
+    };
+  });
 
   return (
     <Column className={styles.manager} fillWidth gap="16">
-      {topLevelFields.map((field) => {
+      <Row className={styles.pageHeader} fillWidth horizontal="between" vertical="end" gap="24">
+        <Column className={styles.pageHeading} gap="8">
+          <Heading as="h1" variant="display-strong-l">
+            Text
+          </Heading>
+          <Text variant="heading-default-l" onBackground="neutral-weak">
+            Edit the copy shown across your site.
+          </Text>
+        </Column>
+        <div className={styles.pagePicker}>
+          <Select
+            aria-label="Filter text editors by page"
+            id="text-page-filter"
+            label="Page"
+            maxWidth={18}
+            minWidth={14}
+            onSelect={(value) => {
+              if (!Array.isArray(value) && pageFilters.some((page) => page.value === value)) {
+                const nextPage = value as PageFilter;
+                const hidesAboutEditors = nextPage !== "about" && nextPage !== "all";
+                if (
+                  (workExperienceDirty || studiesDirty || technicalSkillsDirty) &&
+                  hidesAboutEditors &&
+                  !window.confirm("Discard your unsaved About page changes?")
+                ) {
+                  return;
+                }
+                setPageFilter(nextPage);
+              }
+            }}
+            options={pageOptions}
+            placement="bottom-end"
+            value={pageFilter}
+          />
+        </div>
+      </Row>
+
+      <Row
+        className={styles.filterSummary}
+        fillWidth
+        horizontal="between"
+        vertical="center"
+        gap="12"
+      >
+        <div>
+          <Text variant="label-strong-m">{selectedPage.label}</Text>
+          <Text variant="body-default-s" onBackground="neutral-weak">
+            {loading
+              ? "Loading text editors…"
+              : `${visibleEditorGroupCount} ${visibleEditorGroupCount === 1 ? "editor group" : "editor groups"}`}
+          </Text>
+        </div>
+        {pageFilter !== "all" && (
+          <Button
+            aria-label="Show text editors for every page"
+            onClick={() => setPageFilter("all")}
+            size="s"
+            variant="tertiary"
+          >
+            Show all
+          </Button>
+        )}
+      </Row>
+
+      {visibleFields.map((field) => {
         const value = values[field.key] ?? "";
         const nestedFields = fields.filter((candidate) => candidate.parentKey === field.key);
         const isFinanceGroup = field.key === "about.finance";
@@ -218,93 +331,101 @@ export function TextManager() {
             ? "Each saved change is reflected in the Crypto wallets section, which follows Finance visibility."
             : "Shown from 1:00 AM to 5:59 AM (Asia/Dubai).";
         return (
-          <Column
-            className={styles.fieldCard}
-            key={field.key}
-            fillWidth
-            gap="16"
-            padding="20"
-            background="surface"
-            border="neutral-alpha-weak"
-            radius="l"
-          >
-            {isFinanceGroup ? (
-              <Column gap="4">
-                <Row
-                  className={styles.financeHeader}
-                  fillWidth
-                  horizontal="between"
-                  vertical="center"
-                  gap="16"
-                >
+          <Fragment key={field.key}>
+            <Column
+              className={styles.fieldCard}
+              fillWidth
+              gap="16"
+              padding="20"
+              background="surface"
+              border="neutral-alpha-weak"
+              radius="l"
+            >
+              {isFinanceGroup ? (
+                <Column gap="4">
+                  <Row
+                    className={styles.financeHeader}
+                    fillWidth
+                    horizontal="between"
+                    vertical="center"
+                    gap="16"
+                  >
+                    <Heading as="h2" variant="heading-strong-l">
+                      {field.label}
+                    </Heading>
+                    <FinanceVisibilityToggle />
+                  </Row>
+                  <Text onBackground="neutral-weak">{field.description}</Text>
+                </Column>
+              ) : (
+                <Column gap="4">
                   <Heading as="h2" variant="heading-strong-l">
                     {field.label}
                   </Heading>
-                  <FinanceVisibilityToggle />
-                </Row>
-                <Text onBackground="neutral-weak">{field.description}</Text>
-              </Column>
-            ) : (
-              <Column gap="4">
-                <Heading as="h2" variant="heading-strong-l">
-                  {field.label}
-                </Heading>
-                <Text onBackground="neutral-weak">{field.description}</Text>
-              </Column>
-            )}
-            {!isSettingsGroup && (
-              <TextFieldEditor
-                field={field}
-                value={value}
-                busyAction={busyAction}
-                onValueChange={(key, nextValue) =>
-                  setValues((current) => ({ ...current, [key]: nextValue }))
-                }
-                onSave={(nextField) => void saveField(nextField)}
-                onSetDefault={(nextField) => void setDefaultField(nextField)}
-                onReset={(nextField) => void resetField(nextField)}
-              />
-            )}
-            {nestedFields.length > 0 && (
-              <Column
-                className={styles.nestedGroup}
-                fillWidth
-                gap="16"
-                padding="16"
-                background="neutral-alpha-weak"
-                border="neutral-alpha-weak"
-                radius="m"
-              >
-                <Column gap="4">
-                  <Heading as="h3" variant="heading-strong-m">
-                    {nestedFields.length === 1 ? nestedFields[0].label : nestedTitle}
-                  </Heading>
-                  <Text onBackground="neutral-weak">{nestedDescription}</Text>
+                  <Text onBackground="neutral-weak">{field.description}</Text>
                 </Column>
-                {nestedFields.map((nestedField) => (
-                  <Column className={styles.nestedField} key={nestedField.key} gap="8">
-                    <Column gap="2">
-                      <Text variant="label-strong-s">{nestedField.label}</Text>
-                      <Text variant="body-default-xs" onBackground="neutral-weak">
-                        {nestedField.description}
-                      </Text>
-                    </Column>
-                    <TextFieldEditor
-                      field={nestedField}
-                      value={values[nestedField.key] ?? ""}
-                      busyAction={busyAction}
-                      onValueChange={(key, nextValue) =>
-                        setValues((current) => ({ ...current, [key]: nextValue }))
-                      }
-                      onSave={(nextField) => void saveField(nextField)}
-                      onSetDefault={(nextField) => void setDefaultField(nextField)}
-                      onReset={(nextField) => void resetField(nextField)}
-                    />
+              )}
+              {!isSettingsGroup && (
+                <TextFieldEditor
+                  field={field}
+                  value={value}
+                  busyAction={busyAction}
+                  onValueChange={(key, nextValue) =>
+                    setValues((current) => ({ ...current, [key]: nextValue }))
+                  }
+                  onSave={(nextField) => void saveField(nextField)}
+                  onSetDefault={(nextField) => void setDefaultField(nextField)}
+                  onReset={(nextField) => void resetField(nextField)}
+                />
+              )}
+              {nestedFields.length > 0 && (
+                <Column
+                  className={styles.nestedGroup}
+                  fillWidth
+                  gap="16"
+                  padding="16"
+                  background="neutral-alpha-weak"
+                  border="neutral-alpha-weak"
+                  radius="m"
+                >
+                  <Column gap="4">
+                    <Heading as="h3" variant="heading-strong-m">
+                      {nestedFields.length === 1 ? nestedFields[0].label : nestedTitle}
+                    </Heading>
+                    <Text onBackground="neutral-weak">{nestedDescription}</Text>
                   </Column>
-                ))}
-              </Column>
+                  {nestedFields.map((nestedField) => (
+                    <Column className={styles.nestedField} key={nestedField.key} gap="8">
+                      <Column gap="2">
+                        <Text variant="label-strong-s">{nestedField.label}</Text>
+                        <Text variant="body-default-xs" onBackground="neutral-weak">
+                          {nestedField.description}
+                        </Text>
+                      </Column>
+                      <TextFieldEditor
+                        field={nestedField}
+                        value={values[nestedField.key] ?? ""}
+                        busyAction={busyAction}
+                        onValueChange={(key, nextValue) =>
+                          setValues((current) => ({ ...current, [key]: nextValue }))
+                        }
+                        onSave={(nextField) => void saveField(nextField)}
+                        onSetDefault={(nextField) => void setDefaultField(nextField)}
+                        onReset={(nextField) => void resetField(nextField)}
+                      />
+                    </Column>
+                  ))}
+                </Column>
+              )}
+            </Column>
+            {field.key === "about.introduction" && (
+              <>
+                <WorkExperienceManager onDirtyChange={setWorkExperienceDirty} />
+                <StudyManager onDirtyChange={setStudiesDirty} />
+                <TechnicalSkillsManager onDirtyChange={setTechnicalSkillsDirty} />
+              </>
             )}
-          </Column>
+          </Fragment>
         );
       })}
     </Column>

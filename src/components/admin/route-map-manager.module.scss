@@ -289,6 +289,10 @@
     min-height: var(--mobile-touch-target, 3rem);
   }
 
+  .routes::before {
+    left: 0.75rem;
+  }
+
   .branches {
     margin-left: 0.75rem;
     padding-left: 1.5rem;
@@ -339,6 +343,10 @@
 }
 
 @media (max-width: 23rem) {
+  .routes::before {
+    left: 0.4rem;
+  }
+
   .branches {
     margin-left: 0.4rem;
     padding-left: 1rem;
