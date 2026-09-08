@@ -1,4 +1,5 @@
 import { PublicRouteMap } from "@/components/PublicRouteMap";
+import { DesktopHome } from "@/components/home/DesktopHome";
 import { getSiteText } from "@/lib/site-text";
 import { about, baseURL, home, person } from "@/resources";
 import {
@@ -8,7 +9,6 @@ import {
   Column,
   Heading,
   Meta,
-  RevealFx,
   Row,
   Schema,
   Text,
@@ -67,80 +67,7 @@ export default async function Home() {
           }}
         />
         <Column fillWidth horizontal="center" gap="m">
-          <Column
-            className={`${styles.hero} ${styles.desktopHero}`}
-            maxWidth="s"
-            horizontal="center"
-            align="center"
-            s={{ hide: true }}
-          >
-            {home.featured.display && (
-              <RevealFx
-                className={styles.featured}
-                fillWidth
-                horizontal="center"
-                paddingTop="16"
-                paddingBottom="32"
-                paddingLeft="12"
-              >
-                <Badge
-                  background="brand-alpha-weak"
-                  paddingX="12"
-                  paddingY="4"
-                  onBackground="neutral-strong"
-                  textVariant="label-default-s"
-                  arrow={false}
-                  href={home.featured.href}
-                >
-                  <Row paddingY="2">{home.featured.title}</Row>
-                </Badge>
-              </RevealFx>
-            )}
-            <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
-              <Heading className={styles.heroHeading} wrap="balance" variant="display-strong-l">
-                {headline}
-              </Heading>
-            </RevealFx>
-            <RevealFx translateY="8" delay={0.2} fillWidth horizontal="center" paddingBottom="32">
-              <Text
-                className={styles.heroCopy}
-                wrap="balance"
-                onBackground="neutral-weak"
-                variant="heading-default-xl"
-              >
-                {subline}
-              </Text>
-            </RevealFx>
-            <RevealFx
-              className={styles.heroAction}
-              paddingTop="12"
-              delay={0.4}
-              horizontal="center"
-              paddingLeft="12"
-            >
-              <Button
-                id="about"
-                data-border="rounded"
-                href={about.path}
-                variant="secondary"
-                size="m"
-                weight="default"
-                arrowIcon
-              >
-                <Row gap="8" vertical="center" paddingRight="4">
-                  {about.avatar.display && (
-                    <Avatar
-                      marginRight="8"
-                      style={{ marginLeft: "-0.75rem" }}
-                      src={person.avatar}
-                      size="m"
-                    />
-                  )}
-                  {about.title}
-                </Row>
-              </Button>
-            </RevealFx>
-          </Column>
+          <DesktopHome headline={headline} subline={subline} afterHours={afterHours} />
           <Column
             className={`${styles.hero} ${styles.mobileHero}`}
             hide

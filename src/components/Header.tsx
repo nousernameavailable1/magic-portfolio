@@ -147,7 +147,7 @@ export const Header = () => {
       )}
       <Row
         fitHeight
-        className={styles.position}
+        className={`${styles.position} ${pathname === "/" ? styles.desktopHomeHeader : ""}`}
         position="sticky"
         as="header"
         zIndex={9}
@@ -162,6 +162,7 @@ export const Header = () => {
         </Row>
         <Row fillWidth horizontal="center">
           <Row
+            className={styles.navigationBar}
             background="page"
             border="neutral-alpha-weak"
             radius="m-4"
@@ -172,7 +173,12 @@ export const Header = () => {
           >
             <Row gap="4" vertical="center" textVariant="body-default-s" suppressHydrationWarning>
               {routes["/"] && (
-                <ToggleButton prefixIcon="home" href="/" selected={pathname === "/"} />
+                <ToggleButton
+                  prefixIcon="home"
+                  href="/"
+                  aria-label="Home"
+                  selected={pathname === "/"}
+                />
               )}
               <Line background="neutral-alpha-medium" vert maxHeight="24" />
               {routes["/about"] && (

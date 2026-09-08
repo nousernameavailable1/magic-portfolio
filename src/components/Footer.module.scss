@@ -24,6 +24,32 @@
     display: none;
 }
 
+@media (min-width: 48.001rem) {
+    .homeFooter {
+        padding: 0 clamp(2rem, 5vw, 6rem) 1rem !important;
+    }
+
+    .homeFooter > .mobile {
+        border-top: 1px solid var(--neutral-alpha-medium);
+        max-width: 76rem;
+        padding: 1.1rem 0 0;
+        width: 100%;
+    }
+
+    .homeFooter .footerCopy {
+        font-size: 0.65rem;
+    }
+
+    .homeFooter .statsLink {
+        color: var(--neutral-on-background-weak);
+    }
+
+    .homeFooter .statsLink svg {
+        height: 1rem;
+        width: 1rem;
+    }
+}
+
 @media (max-width: breakpoints.$s) {
     .footer {
         padding: var(--static-space-16) var(--mobile-gutter, 1rem) 0 !important;

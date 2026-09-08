@@ -16,7 +16,7 @@ export const Footer = () => {
   return (
     <Row
       as="footer"
-      className={`${styles.footer} ${pathname.startsWith("/admin") ? styles.adminFooter : ""}`}
+      className={`${styles.footer} ${pathname.startsWith("/admin") ? styles.adminFooter : ""} ${pathname === "/" ? styles.homeFooter : ""}`}
       fillWidth
       padding="8"
       horizontal="center"

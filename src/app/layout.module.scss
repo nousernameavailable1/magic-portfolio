@@ -6,6 +6,18 @@
   min-width: 0;
 }
 
+// The marker belongs only to the desktop home composition. These rules stop
+// matching as soon as another route renders, including after client navigation.
+@media (min-width: 48.001rem) {
+  .siteBody:has([data-desktop-home]) > .siteBackground {
+    display: none;
+  }
+
+  .siteMain:has([data-desktop-home]) {
+    padding: 0 clamp(2rem, 5vw, 6rem) 3rem !important;
+  }
+}
+
 @media (max-width: breakpoints.$s) {
   .siteBody {
     min-height: 100dvh !important;

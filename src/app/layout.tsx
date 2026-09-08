@@ -108,7 +108,7 @@ export default async function RootLayout({
           padding="0"
           horizontal="center"
         >
-          <RevealFx fill position="absolute">
+          <RevealFx className={styles.siteBackground} fill position="absolute">
             <Background
               mask={{
                 x: effects.mask.x,

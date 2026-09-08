@@ -10,6 +10,58 @@
     pointer-events: none;
 }
 
+@media (min-width: 48.001rem) {
+    .desktopHomeHeader {
+        gap: 1.5rem;
+        padding: 1rem clamp(2rem, 5vw, 6rem) !important;
+        top: 0;
+    }
+
+    .desktopHomeHeader > :first-child,
+    .desktopHomeHeader > :last-child {
+        color: var(--neutral-on-background-weak);
+        flex: 1;
+        font-family: var(--font-code);
+        font-size: 0.65rem;
+        letter-spacing: 0.025em;
+        padding: 0;
+        white-space: nowrap;
+        width: auto;
+    }
+
+    .desktopHomeHeader > :nth-child(2) {
+        width: auto;
+    }
+
+    .desktopHomeHeader > :last-child > div {
+        font-size: inherit;
+        padding: 0;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .desktopHomeHeader .navigationBar {
+        border-color: var(--neutral-alpha-medium);
+        border-radius: 0.85rem;
+        box-shadow: 0 4px 20px #00000008;
+        padding: 0.35rem;
+    }
+
+    .desktopHomeHeader .navigationBar a,
+    .desktopHomeHeader .navigationBar button {
+        border-radius: 0.5rem;
+        font-size: 0.75rem;
+        min-height: 2.25rem;
+        transition-duration: 160ms;
+    }
+}
+
+@media (min-width: 48.001rem) and (max-width: 72rem) {
+    .desktopHomeHeader > :first-child,
+    .desktopHomeHeader > :last-child {
+        display: none;
+    }
+}
+
 @media (max-width: breakpoints.$s) {
     .mobileNavigation {
         align-items: stretch;
