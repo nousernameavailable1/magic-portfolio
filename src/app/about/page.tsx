@@ -1,3 +1,4 @@
+import DesktopAboutHero from "@/components/about/DesktopAboutHero";
 import TableOfContents from "@/components/about/TableOfContents";
 import styles from "@/components/about/about.module.scss";
 import { getStudies, getTechnicalSkills } from "@/lib/about-sections";
@@ -58,6 +59,7 @@ export default async function About() {
   const structure = [
     {
       title: about.intro.title,
+      target: "about-overview",
       display: about.intro.display,
       items: [],
     },
@@ -88,7 +90,12 @@ export default async function About() {
     },
   ];
   return (
-    <Column className={styles.page} maxWidth="m">
+    <Column
+      className={styles.page}
+      maxWidth="m"
+      data-desktop-about
+      data-about-intro={about.intro.display}
+    >
       <Schema
         as="webPage"
         baseURL={baseURL}
@@ -102,17 +109,11 @@ export default async function About() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
+      <DesktopAboutHero introduction={text["about.introduction"]} />
       {about.tableOfContent.display && (
-        <Column
-          left="0"
-          style={{ top: "50%", transform: "translateY(-50%)" }}
-          position="fixed"
-          paddingLeft="24"
-          gap="32"
-          s={{ hide: true }}
-        >
+        <aside className={styles.contentsContainer}>
           <TableOfContents structure={structure} about={about} />
-        </Column>
+        </aside>
       )}
       <Row
         className={styles.profileLayout}
@@ -237,7 +238,7 @@ export default async function About() {
               >
                 {about.work.title}
               </Heading>
-              <Column fillWidth gap="l" marginBottom="40">
+              <Column className={styles.experienceList} fillWidth gap="l" marginBottom="40">
                 {workExperiences.map((experience, index) => (
                   <Column
                     className={styles.experience}
@@ -322,7 +323,7 @@ export default async function About() {
               >
                 {about.studies.title}
               </Heading>
-              <Column fillWidth gap="l" marginBottom="40">
+              <Column className={styles.studiesList} fillWidth gap="l" marginBottom="40">
                 {studies.map((institution, index) => (
                   <Column
                     className={styles.study}
@@ -353,7 +354,7 @@ export default async function About() {
               >
                 {about.technical.title}
               </Heading>
-              <Column fillWidth gap="l">
+              <Column className={styles.skillsList} fillWidth gap="l">
                 {technicalSkills.map((skill) => (
                   <Column className={styles.skill} key={skill.title} fillWidth gap="4">
                     <Text id={skill.title} variant="heading-strong-l">
@@ -363,7 +364,7 @@ export default async function About() {
                       {skill.description}
                     </Text>
                     {skill.tags && skill.tags.length > 0 && (
-                      <Row wrap gap="8" paddingTop="8">
+                      <Row className={styles.skillTags} wrap gap="8" paddingTop="8">
                         {skill.tags.map((tag, tagIndex) => (
                           <Tag key={`${skill.title}-${tagIndex}`} size="l" prefixIcon={tag.icon}>
                             {tag.name}

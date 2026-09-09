@@ -15,7 +15,7 @@ export async function generateMetadata() {
 
 export default function Gallery() {
   return (
-    <Flex className={styles.page} maxWidth="l">
+    <Flex className={styles.page} maxWidth="l" data-desktop-gallery>
       <Schema
         as="webPage"
         baseURL={baseURL}
@@ -29,6 +29,20 @@ export default function Gallery() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
+      <header className={styles.desktopIntro}>
+        <div>
+          <p className={styles.desktopEyebrow}>
+            <span /> VISUAL ARCHIVE
+          </p>
+          <h1>
+            Gallery<span>.</span>
+          </h1>
+        </div>
+        <p className={styles.desktopDescription}>
+          Places, textures, and passing moments.
+          <br />A few things worth looking at twice.
+        </p>
+      </header>
       <Column className={styles.mobileIntro} gap="8">
         <Text className={styles.eyebrow} variant="label-strong-s">
           VISUAL ARCHIVE

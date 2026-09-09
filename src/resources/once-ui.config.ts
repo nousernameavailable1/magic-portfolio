@@ -31,31 +31,34 @@ const display: DisplayConfig = {
   themeSwitcher: true,
 };
 
-// Import and set font for each variant
-import { Geist } from "next/font/google";
-import { Geist_Mono } from "next/font/google";
+// Keep the existing font families available without network access during builds.
+import localFont from "next/font/local";
 
-const heading = Geist({
+const heading = localFont({
+  src: "./fonts/Geist-Variable.woff2",
   variable: "--font-heading",
-  subsets: ["latin"],
+  weight: "100 900",
   display: "swap",
 });
 
-const body = Geist({
+const body = localFont({
+  src: "./fonts/Geist-Variable.woff2",
   variable: "--font-body",
-  subsets: ["latin"],
+  weight: "100 900",
   display: "swap",
 });
 
-const label = Geist({
+const label = localFont({
+  src: "./fonts/Geist-Variable.woff2",
   variable: "--font-label",
-  subsets: ["latin"],
+  weight: "100 900",
   display: "swap",
 });
 
-const code = Geist_Mono({
+const code = localFont({
+  src: "./fonts/GeistMono-Variable.woff2",
   variable: "--font-code",
-  subsets: ["latin"],
+  weight: "100 900",
   display: "swap",
 });
 

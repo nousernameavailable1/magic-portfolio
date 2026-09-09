@@ -25,26 +25,26 @@
 }
 
 @media (min-width: 48.001rem) {
-    .homeFooter {
+    :is(.homeFooter, :global(body:has([data-desktop-access])) .footer) {
         padding: 0 clamp(2rem, 5vw, 6rem) 1rem !important;
     }
 
-    .homeFooter > .mobile {
+    :is(.homeFooter, :global(body:has([data-desktop-access])) .footer) > .mobile {
         border-top: 1px solid var(--neutral-alpha-medium);
         max-width: 76rem;
         padding: 1.1rem 0 0;
         width: 100%;
     }
 
-    .homeFooter .footerCopy {
+    :is(.homeFooter, :global(body:has([data-desktop-access])) .footer) .footerCopy {
         font-size: 0.65rem;
     }
 
-    .homeFooter .statsLink {
+    :is(.homeFooter, :global(body:has([data-desktop-access])) .footer) .statsLink {
         color: var(--neutral-on-background-weak);
     }
 
-    .homeFooter .statsLink svg {
+    :is(.homeFooter, :global(body:has([data-desktop-access])) .footer) .statsLink svg {
         height: 1rem;
         width: 1rem;
     }

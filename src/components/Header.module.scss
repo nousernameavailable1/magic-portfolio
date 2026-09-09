@@ -11,14 +11,14 @@
 }
 
 @media (min-width: 48.001rem) {
-    .desktopHomeHeader {
+    :is(.desktopHomeHeader, :global(body:has([data-desktop-access])) .position) {
         gap: 1.5rem;
         padding: 1rem clamp(2rem, 5vw, 6rem) !important;
         top: 0;
     }
 
-    .desktopHomeHeader > :first-child,
-    .desktopHomeHeader > :last-child {
+    :is(.desktopHomeHeader, :global(body:has([data-desktop-access])) .position) > :first-child,
+    :is(.desktopHomeHeader, :global(body:has([data-desktop-access])) .position) > :last-child {
         color: var(--neutral-on-background-weak);
         flex: 1;
         font-family: var(--font-code);
@@ -29,25 +29,25 @@
         width: auto;
     }
 
-    .desktopHomeHeader > :nth-child(2) {
+    :is(.desktopHomeHeader, :global(body:has([data-desktop-access])) .position) > :nth-child(2) {
         width: auto;
     }
 
-    .desktopHomeHeader > :last-child > div {
+    :is(.desktopHomeHeader, :global(body:has([data-desktop-access])) .position) > :last-child > div {
         font-size: inherit;
         padding: 0;
         font-variant-numeric: tabular-nums;
     }
 
-    .desktopHomeHeader .navigationBar {
+    :is(.desktopHomeHeader, :global(body:has([data-desktop-access])) .position) .navigationBar {
         border-color: var(--neutral-alpha-medium);
         border-radius: 0.85rem;
         box-shadow: 0 4px 20px #00000008;
         padding: 0.35rem;
     }
 
-    .desktopHomeHeader .navigationBar a,
-    .desktopHomeHeader .navigationBar button {
+    :is(.desktopHomeHeader, :global(body:has([data-desktop-access])) .position) .navigationBar a,
+    :is(.desktopHomeHeader, :global(body:has([data-desktop-access])) .position) .navigationBar button {
         border-radius: 0.5rem;
         font-size: 0.75rem;
         min-height: 2.25rem;
@@ -56,8 +56,8 @@
 }
 
 @media (min-width: 48.001rem) and (max-width: 72rem) {
-    .desktopHomeHeader > :first-child,
-    .desktopHomeHeader > :last-child {
+    :is(.desktopHomeHeader, :global(body:has([data-desktop-access])) .position) > :first-child,
+    :is(.desktopHomeHeader, :global(body:has([data-desktop-access])) .position) > :last-child {
         display: none;
     }
 }

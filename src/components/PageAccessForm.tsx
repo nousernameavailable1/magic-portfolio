@@ -1,7 +1,9 @@
 "use client";
 
 import { Button, Column, Heading, PasswordInput, Text } from "@once-ui-system/core";
+import Link from "next/link";
 import { type FormEvent, useState } from "react";
+import { HiArrowLeft, HiOutlineLockClosed } from "react-icons/hi2";
 import styles from "./PageAccessForm.module.scss";
 
 type PageAccessFormProps = {
@@ -39,7 +41,14 @@ export function PageAccessForm({ returnTo }: PageAccessFormProps) {
   }
 
   return (
-    <Column as="main" className={styles.page} fillWidth paddingY="104" horizontal="center">
+    <Column
+      as="main"
+      className={styles.page}
+      data-desktop-access
+      fillWidth
+      paddingY="104"
+      horizontal="center"
+    >
       <Column
         className={styles.card}
         fillWidth
@@ -52,6 +61,9 @@ export function PageAccessForm({ returnTo }: PageAccessFormProps) {
         shadow="l"
       >
         <Column className={styles.intro} gap="12" horizontal="center" align="center">
+          <span className={styles.desktopEyebrow}>
+            <span /> INVITATION ONLY
+          </span>
           <Text aria-hidden="true" className={styles.mobileEyebrow} variant="label-strong-s">
             PRIVATE ROUTE
           </Text>
@@ -71,8 +83,18 @@ export function PageAccessForm({ returnTo }: PageAccessFormProps) {
           >
             Enter the access password to continue.
           </Text>
+          <Link className={styles.homeLink} href="/">
+            <HiArrowLeft aria-hidden="true" /> Back to home
+          </Link>
         </Column>
         <form className={styles.form} onSubmit={handleSubmit}>
+          <div className={styles.formHeading}>
+            <span className={styles.lockIcon}>
+              <HiOutlineLockClosed aria-hidden="true" />
+            </span>
+            <h2>This page is intentionally restricted</h2>
+            <p>Don&apos;t have access? Womp womp.</p>
+          </div>
           <Column fillWidth gap="16" horizontal="center">
             <PasswordInput
               id="password"
@@ -94,14 +116,6 @@ export function PageAccessForm({ returnTo }: PageAccessFormProps) {
             </Button>
           </Column>
         </form>
-        <Text
-          className={styles.note}
-          align="center"
-          variant="body-default-s"
-          onBackground="neutral-weak"
-        >
-          Don&apos;t have access? Womp womp.
-        </Text>
       </Column>
     </Column>
   );

@@ -1,0 +1,325 @@
+.hero {
+  display: none;
+}
+
+@media (min-width: 48.001rem) {
+  .hero {
+    align-items: center;
+    display: grid;
+    gap: clamp(3rem, 7vw, 7rem);
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.65fr);
+    padding: clamp(3.5rem, 7vh, 5.5rem) 0 4.5rem;
+  }
+
+  .intro {
+    min-width: 0;
+  }
+
+  .eyebrow {
+    align-items: center;
+    color: var(--about-muted);
+    display: flex;
+    font-family: var(--font-code);
+    font-size: 0.65rem;
+    font-weight: 400;
+    gap: 0.7rem;
+    letter-spacing: 0.12em;
+    line-height: 1.5;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .dot {
+    background: var(--about-accent);
+    border-radius: 50%;
+    height: 0.4rem;
+    width: 0.4rem;
+  }
+
+  .title {
+    font-size: clamp(4.5rem, 7.5vw, 7rem);
+    font-weight: 500;
+    letter-spacing: -0.075em;
+    line-height: 0.99;
+    margin: 1.8rem 0 1.5rem;
+    overflow-wrap: anywhere;
+  }
+
+  .title span {
+    color: var(--about-accent);
+  }
+
+  .role {
+    font-size: 1.1rem;
+    margin: 0 0 0.75rem;
+  }
+
+  .description {
+    color: var(--about-muted);
+    font-size: clamp(1rem, 1.2vw, 1.15rem);
+    line-height: 1.8;
+    margin: 0;
+    max-width: 30rem;
+    overflow-wrap: anywhere;
+  }
+
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 1.8rem;
+  }
+
+  .socials a,
+  .flipButton,
+  .shuffleButton {
+    align-items: center;
+    background: transparent;
+    border: 1px solid var(--about-line);
+    border-radius: 0.5rem;
+    color: var(--about-ink);
+    cursor: pointer;
+    display: inline-flex;
+    font: inherit;
+    font-size: 0.8rem;
+    gap: 0.6rem;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.85rem;
+    text-decoration: none;
+    transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+  }
+
+  .socials a:first-child {
+    background: var(--about-ink);
+    border-color: var(--about-ink);
+    color: var(--page-background);
+  }
+
+  .socials svg,
+  .flipButton svg,
+  .shuffleButton svg {
+    height: 1rem;
+    width: 1rem;
+  }
+
+  .socials a:hover,
+  .flipButton:hover,
+  .shuffleButton:hover {
+    background: color-mix(in srgb, var(--about-accent) 10%, var(--page-background));
+    border-color: var(--about-accent);
+    color: var(--about-accent);
+  }
+
+  .socials a:first-child:hover {
+    background: var(--about-accent);
+    color: var(--page-background);
+  }
+
+  .hero :is(a, button):focus-visible {
+    outline: 2px solid var(--about-accent);
+    outline-offset: 4px;
+  }
+
+  .profileCard {
+    background: color-mix(in srgb, var(--about-ink) 3%, var(--page-background));
+    border: 1px solid var(--about-line);
+    border-radius: 0.85rem;
+    min-width: 0;
+    perspective: 1200px;
+    transition: border-color 180ms ease, transform 220ms ease;
+  }
+
+  .profileCard:hover {
+    border-color: color-mix(in srgb, var(--about-accent) 55%, var(--about-line));
+    transform: translateY(-3px);
+  }
+
+  .cardHeader,
+  .cardFooter {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    padding: 1.1rem 1.4rem;
+  }
+
+  .flipButton {
+    border: 0;
+    color: var(--about-accent);
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    min-height: 2rem;
+    padding: 0.35rem;
+  }
+
+  .cardStage {
+    display: grid;
+    transform-style: preserve-3d;
+    transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .cardStage[data-flipped="true"] {
+    transform: rotateY(180deg);
+  }
+
+  .cardFace {
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    grid-area: 1 / 1;
+    justify-content: center;
+    min-height: 17.5rem;
+    min-width: 0;
+    padding: 0.5rem 1.75rem 1.75rem;
+  }
+
+  // Keep the inactive face out of the compositor as well as the accessibility
+  // tree. Some browsers otherwise paint transformed children through the back.
+  .cardFace[aria-hidden="true"] {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .portrait {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.25rem 0 1.75rem;
+    position: relative;
+  }
+
+  .portrait > :nth-child(2) {
+    height: 6.5rem !important;
+    min-height: 6.5rem !important;
+    min-width: 6.5rem !important;
+    width: 6.5rem !important;
+  }
+
+  .portraitRing {
+    border: 1px dashed color-mix(in srgb, var(--about-accent) 38%, transparent);
+    border-radius: 50%;
+    height: 8rem;
+    left: calc(50% - 4rem);
+    pointer-events: none;
+    position: absolute;
+    top: 0.5rem;
+    transition: transform 800ms ease;
+    width: 8rem;
+  }
+
+  .profileCard:hover .portraitRing {
+    transform: rotate(45deg);
+  }
+
+  .portraitCaption {
+    font-size: 0.9rem;
+  }
+
+  .facts {
+    display: grid;
+    gap: 0.65rem;
+    margin: 0;
+  }
+
+  .facts > div {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+  }
+
+  .facts dt,
+  .facts dd {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .facts dt {
+    color: var(--about-muted);
+    flex-shrink: 0;
+  }
+
+  .facts dd {
+    overflow-wrap: anywhere;
+    text-align: right;
+  }
+
+  .cardBack {
+    align-items: flex-start;
+    transform: rotateY(180deg);
+  }
+
+  .questIcon {
+    color: var(--about-accent);
+    height: 2rem;
+    margin-bottom: 1.25rem;
+    width: 2rem;
+  }
+
+  .questText {
+    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+    letter-spacing: -0.025em;
+    line-height: 1.45;
+    margin: 0.75rem 0 1.5rem;
+    min-height: 4.1em;
+  }
+
+  .questText span {
+    display: block;
+  }
+
+  .cardFooter {
+    border-top: 1px solid var(--about-line);
+    color: var(--about-muted);
+    font-family: var(--font-code);
+    font-size: 0.65rem;
+  }
+
+  .cardSignature {
+    color: var(--about-accent);
+    font-family: var(--font-body);
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: 600;
+    letter-spacing: -0.1em;
+    line-height: 1;
+  }
+}
+
+@media (min-width: 48.001rem) and (prefers-reduced-motion: no-preference) {
+  .intro,
+  .profileCard {
+    animation: arrive 450ms ease-out both;
+  }
+
+  .profileCard {
+    animation-delay: 80ms;
+    animation-fill-mode: backwards;
+  }
+
+  .questText span {
+    animation: arrive 200ms ease-out;
+  }
+
+  @keyframes arrive {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero *,
+  .hero *::before,
+  .hero *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .profileCard:hover {
+    transform: none;
+  }
+}

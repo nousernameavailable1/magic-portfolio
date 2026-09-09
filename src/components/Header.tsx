@@ -147,7 +147,7 @@ export const Header = () => {
       )}
       <Row
         fitHeight
-        className={`${styles.position} ${pathname === "/" ? styles.desktopHomeHeader : ""}`}
+        className={`${styles.position} ${["/", "/about", "/access", "/gallery"].includes(pathname) ? styles.desktopHomeHeader : ""}`}
         position="sticky"
         as="header"
         zIndex={9}
