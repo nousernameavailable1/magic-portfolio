@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import styles from "./jumpscare.module.scss";
 
 export const metadata: Metadata = {
@@ -11,6 +12,9 @@ export default function JumpscarePage() {
     <main className={styles.page}>
       <section className={styles.scare} aria-label="Jumpscare">
         <img alt="" className={styles.face} src="/images/jumpscare.png" />
+        <Link className={styles.exit} href="/">
+          ← Back home
+        </Link>
       </section>
     </main>
   );

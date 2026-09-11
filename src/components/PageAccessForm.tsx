@@ -81,7 +81,7 @@ export function PageAccessForm({ returnTo }: PageAccessFormProps) {
             variant="body-default-l"
             onBackground="neutral-weak"
           >
-            Enter the access password to continue.
+            Don&apos;t have access? Womp womp.
           </Text>
           <Link className={styles.homeLink} href="/">
             <HiArrowLeft aria-hidden="true" /> Back to home
@@ -93,7 +93,7 @@ export function PageAccessForm({ returnTo }: PageAccessFormProps) {
               <HiOutlineLockClosed aria-hidden="true" />
             </span>
             <h2>This page is intentionally restricted</h2>
-            <p>Don&apos;t have access? Womp womp.</p>
+            <p>Enter the access password to continue.</p>
           </div>
           <Column fillWidth gap="16" horizontal="center">
             <PasswordInput

@@ -1,4 +1,5 @@
 "use client";
+import { DesktopPageHeading } from "@/components/public/DesktopPageHeading";
 
 import { type FormEvent, useEffect, useRef, useState } from "react";
 import styles from "./fake-terminal.module.scss";
@@ -36,6 +37,11 @@ export function FakeTerminal() {
 
   return (
     <main className={styles.page}>
+      <DesktopPageHeading
+        eyebrow="A LITTLE EXPERIMENT"
+        title="Terminal"
+        description="A familiar prompt. A few unexpected turns. Try a command and see where it takes you."
+      />
       <section
         aria-label="Simulated Linux terminal"
         className={styles.terminal}

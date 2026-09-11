@@ -1,14 +1,16 @@
 import { ProjectCard } from "@/components";
 import { getProjectPosts } from "@/utils/utils";
 import { Column } from "@once-ui-system/core";
+import type { ReactNode } from "react";
 import styles from "./Projects.module.scss";
 
 interface ProjectsProps {
   range?: [number, number?];
   exclude?: string[];
+  portfolioPreview?: ReactNode;
 }
 
-export function Projects({ range, exclude }: ProjectsProps) {
+export function Projects({ range, exclude, portfolioPreview }: ProjectsProps) {
   let allProjects = getProjectPosts();
 
   // Exclude by slug (exact match)
@@ -36,6 +38,7 @@ export function Projects({ range, exclude }: ProjectsProps) {
           content={post.content}
           avatars={post.metadata.team?.map((member) => ({ src: member.avatar })) || []}
           link={post.metadata.link || ""}
+          desktopPreview={post.slug === "magic-portfolio" ? portfolioPreview : undefined}
         />
       ))}
     </Column>

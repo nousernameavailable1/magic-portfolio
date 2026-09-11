@@ -255,3 +255,9 @@
     padding: 0.8rem;
   }
 }
+
+@media (min-width: 48.001rem) {
+  .diagram { background: color-mix(in srgb, var(--neutral-on-background-strong) 3%, var(--page-background)); border-color: var(--neutral-alpha-medium); border-radius: 0.85rem; }
+  .diagram figcaption { font-family: var(--font-code); font-size: 0.75rem; font-weight: 400; padding: 1.25rem; }
+  .structureRoot { background: var(--brand-alpha-weak); border-color: var(--brand-border-medium); }
+}

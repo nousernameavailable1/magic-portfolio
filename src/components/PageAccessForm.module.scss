@@ -179,6 +179,7 @@
   .page .submitButton { background: var(--neutral-on-background-strong); border-color: var(--neutral-on-background-strong); border-radius: 0.5rem; color: var(--page-background); font-size: 0.85rem; min-height: 3rem; transition: background 160ms ease; }
   .page .submitButton:hover { background: var(--access-accent); border-color: var(--access-accent); }
   .page :is(a, button):focus-visible { outline: 2px solid var(--access-accent); outline-offset: 4px; }
+  .form input:focus-visible { outline: none !important; box-shadow: none; }
 }
 
 @media (min-width: 48.001rem) and (prefers-reduced-motion: no-preference) {

@@ -162,3 +162,15 @@
     padding: var(--static-space-12);
   }
 }
+
+@media (min-width: 48.001rem) {
+  .page { display: block; max-width: 76rem; padding-top: clamp(3rem, 6vw, 5rem); }
+  .terminal { background: color-mix(in srgb, var(--neutral-on-background-strong) 3%, var(--page-background)); border: 1px solid var(--neutral-alpha-medium); border-radius: 0.85rem; color: var(--neutral-on-background-strong); box-shadow: none; font-size: 0.9rem; }
+  .titleBar { background: var(--neutral-alpha-weak); border-color: var(--neutral-alpha-medium); color: var(--neutral-on-background-weak); min-height: 3rem; font: 0.7rem var(--font-code); padding-inline: 1.5rem; }
+  .windowControls span, .windowControls span:first-child { background: var(--public-accent); opacity: 0.4; }
+  .windowControls span:first-child { opacity: 1; }
+  .screen { padding: 2rem; min-height: 26rem; }
+  .prompt { color: var(--public-accent); font-weight: 400; }
+  .commandInput { caret-color: var(--public-accent); }
+  .commandInput:focus-visible { outline: none !important; box-shadow: none; }
+}

@@ -1,5 +1,9 @@
 import { CustomMDX, ScrollToHash } from "@/components";
+import { MagicPortfolioCaseStudy } from "@/components/projects/MagicPortfolioCaseStudy";
 import { Projects } from "@/components/projects/Projects";
+import caseStudyStyles from "@/components/projects/magic-portfolio-case-study.module.scss";
+import desktop from "@/components/public/public-pages.module.scss";
+import { getPortfolioSourceMetrics } from "@/lib/portfolio-case-study";
 import { about, baseURL, person, work } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
 import { getProjectPosts } from "@/utils/utils";
@@ -72,9 +76,17 @@ export default async function Project({
     })) || [];
   const relatedProjectExclusions =
     post.slug === "magic-portfolio" ? [post.slug, "simple-portfolio-builder"] : [post.slug];
+  const isMagicPortfolio = post.slug === "magic-portfolio";
+  const sourceMetrics = isMagicPortfolio ? await getPortfolioSourceMetrics() : null;
 
   return (
-    <Column as="section" maxWidth="m" horizontal="center" gap="l">
+    <Column
+      className={`${desktop.articlePage} ${isMagicPortfolio ? caseStudyStyles.root : ""}`}
+      as="section"
+      maxWidth="m"
+      horizontal="center"
+      gap="l"
+    >
       <Schema
         as="blogPosting"
         baseURL={baseURL}
@@ -92,39 +104,59 @@ export default async function Project({
           image: `${baseURL}${person.avatar}`,
         }}
       />
-      <Column maxWidth="s" gap="16" horizontal="center" align="center">
-        <SmartLink href="/projects">
-          <Text variant="label-strong-m">Projects</Text>
-        </SmartLink>
-        <Text variant="body-default-xs" onBackground="neutral-weak" marginBottom="12">
-          {post.metadata.publishedAt && formatDate(post.metadata.publishedAt)}
-        </Text>
-        <Heading variant="display-strong-m">{post.metadata.title}</Heading>
-      </Column>
-      <Row marginBottom="32" horizontal="center">
-        <Row gap="16" vertical="center">
-          {post.metadata.team && <AvatarGroup reverse avatars={avatars} size="s" />}
-          <Text variant="label-default-m" onBackground="brand-weak">
-            {post.metadata.team?.map((member, idx) => (
-              <span key={`${member.linkedIn}-${member.name}-${idx}`}>
-                {idx > 0 && (
-                  <Text as="span" onBackground="neutral-weak">
-                    ,{" "}
-                  </Text>
-                )}
-                <SmartLink href={member.linkedIn}>{member.name}</SmartLink>
-              </span>
-            ))}
+      {sourceMetrics && <MagicPortfolioCaseStudy metrics={sourceMetrics} />}
+      <div className={isMagicPortfolio ? caseStudyStyles.original : caseStudyStyles.passthrough}>
+        <Column
+          className={desktop.articleHeader}
+          maxWidth="s"
+          gap="16"
+          horizontal="center"
+          align="center"
+        >
+          <SmartLink href="/projects">
+            <Text variant="label-strong-m">Projects</Text>
+          </SmartLink>
+          <Text variant="body-default-xs" onBackground="neutral-weak" marginBottom="12">
+            {post.metadata.publishedAt && formatDate(post.metadata.publishedAt)}
           </Text>
+          <Heading variant="display-strong-m">{post.metadata.title}</Heading>
+        </Column>
+        <Row className={desktop.articleAuthors} marginBottom="32" horizontal="center">
+          <Row gap="16" vertical="center">
+            {post.metadata.team && <AvatarGroup reverse avatars={avatars} size="s" />}
+            <Text variant="label-default-m" onBackground="brand-weak">
+              {post.metadata.team?.map((member, idx) => (
+                <span key={`${member.linkedIn}-${member.name}-${idx}`}>
+                  {idx > 0 && (
+                    <Text as="span" onBackground="neutral-weak">
+                      ,{" "}
+                    </Text>
+                  )}
+                  <SmartLink href={member.linkedIn}>{member.name}</SmartLink>
+                </span>
+              ))}
+            </Text>
+          </Row>
         </Row>
-      </Row>
-      {post.metadata.images.length > 0 && (
-        <Media priority aspectRatio="16 / 9" radius="m" alt="image" src={post.metadata.images[0]} />
-      )}
-      <Column style={{ margin: "auto" }} as="article" maxWidth="xs">
-        <CustomMDX headingLinks={false} source={post.content} />
-      </Column>
-      <Column fillWidth gap="40" horizontal="center" marginTop="40">
+        {post.metadata.images.length > 0 && (
+          <Media
+            priority
+            aspectRatio="16 / 9"
+            radius="m"
+            alt="image"
+            src={post.metadata.images[0]}
+          />
+        )}
+        <Column
+          className={desktop.articleBody}
+          style={{ margin: "auto" }}
+          as="article"
+          maxWidth="xs"
+        >
+          <CustomMDX headingLinks={false} source={post.content} />
+        </Column>
+      </div>
+      <Column className={desktop.related} fillWidth gap="40" horizontal="center" marginTop="40">
         <Line maxWidth="40" />
         <Heading as="h2" variant="heading-strong-xl" marginBottom="24">
           Related projects

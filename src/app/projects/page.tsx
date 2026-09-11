@@ -1,4 +1,9 @@
+import { PortfolioPreview } from "@/components/home/PortfolioPreview";
 import { Projects } from "@/components/projects/Projects";
+import { DesktopPageHeading } from "@/components/public/DesktopPageHeading";
+import desktop from "@/components/public/public-pages.module.scss";
+import { getPublicRouteStates } from "@/lib/public-routes";
+import { getSiteText } from "@/lib/site-text";
 import { about, baseURL, person, work } from "@/resources";
 import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
 
@@ -12,9 +17,12 @@ export async function generateMetadata() {
   });
 }
 
-export default function ProjectsPage() {
+export const dynamic = "force-dynamic";
+
+export default async function ProjectsPage() {
+  const [text, routes] = await Promise.all([getSiteText(), getPublicRouteStates()]);
   return (
-    <Column maxWidth="m" paddingTop="24">
+    <Column className={desktop.page} maxWidth="m" paddingTop="24">
       <Schema
         as="webPage"
         baseURL={baseURL}
@@ -28,10 +36,32 @@ export default function ProjectsPage() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
-      <Heading marginBottom="l" variant="heading-strong-xl" align="center">
+      <DesktopPageHeading
+        eyebrow="SELECTED WORK"
+        title="Projects"
+        description="A closer look at the things I build, how they work, and what goes into them."
+      />
+      <Heading
+        className={desktop.mobileHeading}
+        marginBottom="l"
+        variant="heading-strong-xl"
+        align="center"
+      >
         {work.title}
       </Heading>
-      <Projects />
+      <Projects
+        portfolioPreview={
+          <PortfolioPreview
+            headline={text["home.headline"]}
+            subline={text["home.subline"]}
+            routes={routes
+              .filter(
+                (route) => route.listed && ["/blog", "/projects", "/gallery"].includes(route.path),
+              )
+              .map((route) => ({ path: route.path, label: route.label }))}
+          />
+        }
+      />
     </Column>
   );
 }

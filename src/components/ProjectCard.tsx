@@ -9,6 +9,8 @@ import {
   SmartLink,
   Text,
 } from "@once-ui-system/core";
+import Link from "next/link";
+import type { ReactNode } from "react";
 import styles from "./ProjectCard.module.scss";
 
 interface ProjectCardProps {
@@ -19,6 +21,7 @@ interface ProjectCardProps {
   description: string;
   avatars: { src: string }[];
   link: string;
+  desktopPreview?: ReactNode;
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -29,11 +32,17 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   description,
   avatars,
   link,
+  desktopPreview,
 }) => {
   return (
     <Column className={styles.card} fillWidth gap="m">
+      {desktopPreview && (
+        <Link className={styles.desktopPreview} href={href} aria-label={`Read ${title} case study`}>
+          {desktopPreview}
+        </Link>
+      )}
       <Carousel
-        className={styles.carousel}
+        className={`${styles.carousel} ${desktopPreview ? styles.mobileCarousel : ""}`}
         sizes="(max-width: 960px) 100vw, 960px"
         items={images.map((image) => ({
           slide: image,

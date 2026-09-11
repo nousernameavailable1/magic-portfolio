@@ -28,3 +28,8 @@
     width: 100%;
   }
 }
+
+@media (min-width: 48.001rem) {
+  .page { display: block; max-width: 76rem; padding-top: 1.5rem; }
+  .video { width: 100%; border: 1px solid var(--neutral-alpha-medium); border-radius: 0.85rem; box-shadow: none; }
+}

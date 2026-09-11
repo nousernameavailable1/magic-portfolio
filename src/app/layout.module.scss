@@ -8,11 +8,11 @@
 
 // Route markers keep the desktop redesign scoped, including after client navigation.
 @media (min-width: 48.001rem) {
-  .siteBody:has([data-desktop-home], [data-desktop-about], [data-desktop-access], [data-desktop-gallery]) > .siteBackground {
+  .siteBody:has([data-public-site]) > .siteBackground {
     display: none;
   }
 
-  .siteMain:has([data-desktop-home], [data-desktop-about], [data-desktop-access], [data-desktop-gallery]) {
+  .siteBody:has([data-public-site]) .siteMain {
     padding: 0 clamp(2rem, 5vw, 6rem) 3rem !important;
   }
 }
@@ -29,4 +29,20 @@
   .siteContent {
     align-items: stretch;
   }
+}
+
+@media (min-width: 48.001rem) {
+  .siteBody:has([data-public-site]) {
+    --public-accent: #a3bce8;
+    --brand-on-background-strong: var(--public-accent);
+    --brand-on-background-weak: var(--public-accent);
+    --brand-border-strong: var(--public-accent);
+    --brand-border-medium: color-mix(in srgb, var(--public-accent) 32%, transparent);
+    --brand-alpha-weak: color-mix(in srgb, var(--public-accent) 6%, transparent);
+    --brand-alpha-medium: color-mix(in srgb, var(--public-accent) 12%, transparent);
+    --brand-background-strong: var(--public-accent);
+    --brand-on-solid-strong: #10151d;
+  }
+  :global([data-theme="light"]) .siteBody:has([data-public-site]) { --public-accent: #3b6094; --brand-on-solid-strong: #fff; }
+  .siteBody:has([data-public-site]) :is(a, button, input, textarea):focus-visible { outline: 2px solid var(--public-accent); outline-offset: 4px; }
 }

@@ -5,3 +5,13 @@
         padding-inline: 0 !important;
     }
 }
+
+@media (min-width: 48.001rem) {
+  .list {
+    width: 92% !important;
+    max-width: 66rem;
+    margin-inline: auto;
+    padding-inline: 0 !important;
+    gap: 3rem !important;
+  }
+}

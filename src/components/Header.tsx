@@ -147,9 +147,10 @@ export const Header = () => {
       )}
       <Row
         fitHeight
-        className={`${styles.position} ${["/", "/about", "/access", "/gallery"].includes(pathname) ? styles.desktopHomeHeader : ""}`}
+        className={`${styles.position} ${!pathname.startsWith("/admin") ? styles.desktopHomeHeader : ""}`}
         position="sticky"
         as="header"
+        data-public-site={!isAdminRoute ? "" : undefined}
         zIndex={9}
         fillWidth
         padding="8"

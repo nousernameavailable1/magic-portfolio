@@ -1,6 +1,7 @@
 import { CustomMDX, ScrollToHash } from "@/components";
 import { Posts } from "@/components/blog/Posts";
 import { ShareSection } from "@/components/blog/ShareSection";
+import desktop from "@/components/public/public-pages.module.scss";
 import { about, baseURL, blog, person } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
 import { getBlogPosts } from "@/utils/utils";
@@ -65,10 +66,17 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
   }
 
   return (
-    <Row fillWidth>
-      <Row maxWidth={12} m={{ hide: true }} />
+    <Row className={desktop.articleLayout} fillWidth>
+      <Row className={desktop.articleSpacer} maxWidth={12} m={{ hide: true }} />
       <Row fillWidth horizontal="center">
-        <Column as="section" maxWidth="m" horizontal="center" gap="l" paddingTop="24">
+        <Column
+          className={desktop.articlePage}
+          as="section"
+          maxWidth="m"
+          horizontal="center"
+          gap="l"
+          paddingTop="24"
+        >
           <Schema
             as="blogPosting"
             baseURL={baseURL}
@@ -87,7 +95,13 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
               image: `${baseURL}${person.avatar}`,
             }}
           />
-          <Column maxWidth="s" gap="16" horizontal="center" align="center">
+          <Column
+            className={desktop.articleHeader}
+            maxWidth="s"
+            gap="16"
+            horizontal="center"
+            align="center"
+          >
             <SmartLink href="/blog">
               <Text variant="label-strong-m">Blog</Text>
             </SmartLink>
@@ -106,7 +120,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
               </Text>
             )}
           </Column>
-          <Row marginBottom="32" horizontal="center">
+          <Row className={desktop.articleAuthors} marginBottom="32" horizontal="center">
             <Row gap="16" vertical="center">
               <Avatar size="s" src={person.avatar} />
               <Text variant="label-default-m" onBackground="brand-weak">
@@ -127,13 +141,13 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
               marginBottom="8"
             />
           )}
-          <Column as="article" maxWidth="s">
+          <Column className={desktop.articleBody} as="article" maxWidth="s">
             <CustomMDX source={post.content} />
           </Column>
 
           <ShareSection title={post.metadata.title} url={`${baseURL}${blog.path}/${post.slug}`} />
 
-          <Column fillWidth gap="40" horizontal="center" marginTop="40">
+          <Column className={desktop.related} fillWidth gap="40" horizontal="center" marginTop="40">
             <Line maxWidth="40" />
             <Text as="h2" id="recent-posts" variant="heading-strong-xl" marginBottom="24">
               Recent posts
@@ -144,6 +158,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
         </Column>
       </Row>
       <Column
+        className={desktop.articleNav}
         maxWidth={12}
         paddingLeft="40"
         fitHeight

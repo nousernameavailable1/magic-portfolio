@@ -2,6 +2,12 @@
   min-height: 100svh;
 }
 
+.exit { display: none; }
+@media (min-width: 48.001rem) {
+  .exit { display: inline-flex; position: absolute; bottom: 2rem; left: 2rem; padding: 0.85rem 1.25rem; border: 1px solid #a3bce840; border-radius: 0.6rem; background: #111; color: #a3bce8; font: 0.75rem var(--font-code); text-decoration: none; }
+  .exit:hover { background: #1b2029; }
+}
+
 .scare {
   animation: flash 100ms steps(2, end) 4, shake 95ms steps(2, end) 8;
   align-items: center;

@@ -1,0 +1,113 @@
+.wall { display: none; }
+
+@media (min-width: 48.001rem) {
+  .wall {
+    --wall-accent: var(--public-accent, #a3bce8);
+    --wall-line: var(--neutral-alpha-medium);
+    --wall-muted: var(--neutral-on-background-weak);
+    --wall-panel: color-mix(in srgb, var(--neutral-on-background-strong) 3%, var(--page-background));
+    display: grid;
+    grid-template-columns: minmax(18rem, 0.8fr) minmax(0, 1.7fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    width: 100%;
+    align-items: start;
+    padding-bottom: 3rem;
+  }
+  .sidebar { position: sticky; top: 7rem; min-width: 0; }
+  .composer { border: 1px solid var(--wall-line); background: var(--wall-panel); border-radius: 1rem; padding: 1.6rem; }
+  .composerTop { display: flex; justify-content: space-between; align-items: center; color: var(--wall-accent); }
+  .composerTop > svg { width: 1.3rem; height: 1.3rem; transform: rotate(-20deg); }
+  .kicker { color: var(--wall-muted); font: 0.6rem var(--font-code); letter-spacing: 0.12em; }
+  .composer h2 { margin: 1.5rem 0 0.8rem; font-size: clamp(1.9rem, 2.5vw, 2.6rem); font-weight: 500; letter-spacing: -0.055em; line-height: 1.1; }
+  .intro { color: var(--wall-muted); font-size: 0.85rem; line-height: 1.7; margin: 0 0 1.6rem; max-width: 28rem; }
+  .writingArea { border: 1px solid var(--wall-line); border-radius: 0.65rem; background: var(--page-background); overflow: hidden; transition: border-color 160ms ease; }
+  .writingArea:focus-within { border-color: var(--wall-accent); }
+  .writingArea label { display: block; font: 0.6rem var(--font-code); color: var(--wall-muted); padding: 1rem 1rem 0.5rem; }
+  .writingArea textarea { display: block; width: 100%; min-height: 10rem; resize: vertical; color: var(--neutral-on-background-strong); background: transparent; border: 0; padding: 0.5rem 1rem; font: 0.9rem/1.8 var(--font-body); outline: none !important; box-shadow: none; }
+  .writingArea textarea::placeholder { color: var(--wall-muted); opacity: 0.65; }
+  .writingMeta { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 1rem; color: var(--wall-muted); font-size: 0.6rem; }
+  .writingMeta > span:first-child { display: flex; gap: 0.4rem; align-items: center; }
+  .privacyDot { height: 0.3rem; width: 0.3rem; background: var(--wall-accent); border-radius: 50%; }
+  .characterCount { font-family: var(--font-code); font-variant-numeric: tabular-nums; }
+  .characterCount > span { opacity: 0.5; }
+  .meter { height: 2px; background: var(--neutral-alpha-weak); }
+  .meter > span { display: block; height: 100%; background: var(--wall-accent); transition: width 120ms ease; }
+  .honeypot { display: none; }
+  .send { width: 100%; display: flex; justify-content: space-between; align-items: center; min-height: 3rem; margin-top: 1rem; padding: 0.8rem 1rem; border: 1px solid transparent; border-radius: 0.55rem; color: var(--page-background); background: var(--neutral-on-background-strong); font: 500 0.85rem var(--font-body); cursor: pointer; transition: background 160ms ease; }
+  .send:disabled { opacity: 0.35; cursor: default; }
+  .send:not(:disabled):hover, .send[data-sent="true"] { background: var(--wall-accent); }
+  .send[data-sent="true"] { opacity: 1; }
+  .send svg { height: 1.1rem; width: 1.1rem; transition: transform 160ms ease; }
+  .send:not(:disabled):hover svg { transform: translate(2px, -2px); }
+  .composerNote { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; color: var(--wall-muted); font-size: 0.55rem; }
+  .composerNote kbd { font: inherit; font-family: var(--font-code); opacity: 0.65; }
+  .promptButton { display: flex; align-items: center; gap: 0.6rem; width: 100%; padding: 1.2rem 0.4rem 0.5rem; background: transparent; border: 0; color: var(--wall-muted); font: 0.75rem var(--font-body); cursor: pointer; text-align: left; }
+  .promptButton svg { height: 1rem; width: 1rem; color: var(--wall-accent); }
+  .promptButton svg:last-child { margin-left: auto; opacity: 0.5; transition: transform 180ms ease; }
+  .promptButton:hover { color: var(--wall-accent); }
+  .promptButton:hover svg:last-child { transform: rotate(45deg); }
+  .promptHint { color: var(--wall-muted); font-size: 0.65rem; line-height: 1.7; opacity: 0.7; margin: 0.4rem 0.4rem 0 2rem; }
+  .feed { min-width: 0; }
+  .feedHeading { display: flex; align-items: end; justify-content: space-between; gap: 1.5rem; }
+  .feedHeading h2 { font-size: clamp(1.5rem, 2.1vw, 2rem); letter-spacing: -0.055em; line-height: 1.15; font-weight: 500; margin: 0.8rem 0 0; }
+  .feedHeading h2 > span { color: var(--wall-accent); }
+  .count { font: 1.25rem var(--font-code); color: var(--wall-accent); text-align: right; }
+  .count > span { font-size: 0.55rem; display: block; color: var(--wall-muted); margin-top: 0.4rem; }
+  .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--wall-line); padding: 1.5rem 0; margin-bottom: 1.25rem; }
+  .sort { display: flex; border: 1px solid var(--wall-line); border-radius: 0.55rem; padding: 0.2rem; margin: 0; min-width: 0; gap: 0.15rem; }
+  .sort button { border: 0; background: transparent; border-radius: 0.35rem; padding: 0.55rem 0.85rem; color: var(--wall-muted); cursor: pointer; font: 0.7rem var(--font-body); transition: background 160ms ease; }
+  .sort button[aria-pressed="true"] { color: var(--wall-accent); background: color-mix(in srgb, var(--wall-accent) 10%, transparent); }
+  .refresh { background: transparent; border: 0; display: flex; gap: 0.5rem; align-items: center; color: var(--wall-muted); font: 0.7rem var(--font-body); padding: 0.6rem 0; cursor: pointer; }
+  .refresh:hover { color: var(--wall-accent); }
+  .refresh:disabled { opacity: 0.5; cursor: wait; }
+  .refresh svg { width: 0.9rem; height: 0.9rem; }
+  .messages { column-count: 2; column-gap: 1rem; }
+  .messages > .message { break-inside: avoid; margin-bottom: 1rem; }
+  .message { display: flex; flex-direction: column; min-width: 0; border: 1px solid var(--wall-line); border-radius: 0.8rem; padding: 1.25rem; background: var(--wall-panel); transition: border-color 160ms ease; }
+  .message:hover { border-color: color-mix(in srgb, var(--wall-accent) 40%, transparent); }
+  .messageHeader { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+  .sender { display: flex; align-items: center; gap: 0.5rem; color: var(--wall-muted); font-size: 0.65rem; }
+  .senderMark { display: grid; place-items: center; width: 1.6rem; height: 1.6rem; border: 1px solid var(--wall-line); border-radius: 50%; color: var(--wall-accent); font-size: 1rem; }
+  .messageNumber { color: var(--wall-muted); opacity: 0.5; font: 0.55rem var(--font-code); }
+  .messageBody { font-size: 0.95rem; line-height: 1.85; margin: 1.25rem 0 1.5rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .reply { border-left: 1px solid color-mix(in srgb, var(--wall-accent) 35%, transparent); padding: 0 0 0 0.8rem; margin: 0 0 1.5rem; }
+  .replyLabel { color: var(--wall-accent); font-size: 0.6rem; display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+  .replyLabel > span { color: var(--wall-muted); }
+  .reply p { margin: 0.6rem 0 0; color: var(--wall-muted); font-size: 0.8rem; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .messageFooter { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; border-top: 1px solid var(--neutral-alpha-weak); padding-top: 0.85rem; margin-top: auto; }
+  .messageFooter time { font: 0.55rem var(--font-code); color: var(--wall-muted); opacity: 0.7; }
+  .reaction { display: inline-flex; align-items: center; gap: 0.35rem; color: var(--wall-muted); border: 0; border-radius: 0.35rem; background: transparent; padding: 0.4rem; margin-left: -0.4rem; cursor: pointer; font: 0.65rem var(--font-code); transition: color 140ms ease, background 140ms ease; }
+  .reaction svg { width: 1rem; height: 1rem; }
+  .reaction:disabled { opacity: 0.5; cursor: wait; }
+  .reaction:hover, .reaction[aria-pressed="true"] { color: var(--wall-accent); background: color-mix(in srgb, var(--wall-accent) 8%, transparent); }
+  .reactionLabel { font-family: var(--font-body); font-size: 0.55rem; margin-left: 0.15rem; }
+  .empty { display: block; padding: 3rem; border: 1px dashed var(--wall-line); border-radius: 0.8rem; color: var(--wall-muted); text-align: center; font-size: 0.85rem; line-height: 1.7; }
+  .empty > svg { font-size: 2rem; color: var(--wall-accent); }
+  .empty h3 { font-weight: 500; color: var(--neutral-on-background-strong); }
+  .error { display: block; margin-bottom: 1rem; border: 1px solid var(--danger-border-medium); border-radius: 0.65rem; padding: 1rem; color: var(--danger-on-background-strong); font-size: 0.8rem; line-height: 1.6; }
+}
+
+@media (min-width: 48.001rem) and (max-width: 75rem) {
+  .wall { grid-template-columns: minmax(17rem, 0.8fr) minmax(0, 1.2fr); gap: 2rem; }
+  .messages { column-count: 1; }
+}
+@media (min-width: 48.001rem) and (max-width: 60rem) {
+  .wall { grid-template-columns: minmax(0, 1fr); }
+  .sidebar { position: static; }
+  .composer { display: grid; grid-template-columns: 1fr 1.2fr; gap: 0 2rem; }
+  .composerTop, .composer h2, .intro { grid-column: 1; }
+  .writingArea { grid-column: 2; grid-row: 1 / 5; }
+  .send, .composerNote { grid-column: 1 / -1; }
+  .composer h2 { font-size: 2.2rem; }
+  .intro { margin-bottom: 0; }
+  .messages { column-count: 2; }
+}
+@media (min-width: 48.001rem) and (prefers-reduced-motion: no-preference) {
+  .spinning { animation: spin 1s linear infinite; }
+  .reaction[aria-pressed="true"] svg { animation: heart-pop 240ms ease-out; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes heart-pop { 50% { transform: scale(1.3); } }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wall *, .wall *::before, .wall *::after { transition: none !important; animation: none !important; }
+}

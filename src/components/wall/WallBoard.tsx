@@ -1,5 +1,8 @@
 "use client";
 
+import { DesktopPageHeading } from "@/components/public/DesktopPageHeading";
+import desktop from "@/components/public/public-pages.module.scss";
+
 import type { WallSubmission } from "@/lib/wall";
 import { person } from "@/resources";
 import {
@@ -13,6 +16,7 @@ import {
   useToast,
 } from "@once-ui-system/core";
 import { type FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { DesktopWall } from "./DesktopWall";
 import styles from "./wall.module.scss";
 
 function formatDate(value: string) {
@@ -33,6 +37,7 @@ export function WallBoard() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [reactingId, setReactingId] = useState<number | null>(null);
+  const [feedError, setFeedError] = useState<string | null>(null);
   const { addToast } = useToast();
   const addToastRef = useRef(addToast);
   addToastRef.current = addToast;
@@ -49,7 +54,9 @@ export function WallBoard() {
       if (!response.ok) throw new Error(data.error);
       setSubmissions(data.submissions ?? []);
       if (data.text) setText(data.text);
+      setFeedError(null);
     } catch (error) {
+      setFeedError(error instanceof Error ? error.message : "Could not load the feed.");
       addToastRef.current({
         variant: "danger",
         message: error instanceof Error ? error.message : "Could not load the feed.",
@@ -122,7 +129,12 @@ export function WallBoard() {
 
   return (
     <Column className={styles.board} maxWidth="100%" fillWidth gap="24" paddingY="16">
-      <Row className={styles.hero} fillWidth>
+      <DesktopPageHeading
+        eyebrow="THE MESSAGE WALL"
+        title={text.heading}
+        description={text.description}
+      />
+      <Row className={`${styles.hero} ${desktop.mobileHeading}`} fillWidth>
         <Column className={styles.heroContent} gap="12">
           <Text className={styles.eyebrow} variant="label-default-s">
             MESSAGE WALL
@@ -136,8 +148,22 @@ export function WallBoard() {
         </Column>
       </Row>
 
+      <DesktopWall
+        body={body}
+        setBody={setBody}
+        website={website}
+        setWebsite={setWebsite}
+        submissions={submissions}
+        loading={loading}
+        submitting={submitting}
+        reactingId={reactingId}
+        error={feedError}
+        onSubmit={submit}
+        onRefresh={loadSubmissions}
+        onReact={toggleReaction}
+      />
       <Row
-        className={styles.wallLayout}
+        className={`${styles.wallLayout} ${styles.mobileWallLayout}`}
         fillWidth
         gap="24"
         vertical="start"

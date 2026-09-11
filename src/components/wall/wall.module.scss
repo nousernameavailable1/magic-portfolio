@@ -375,3 +375,13 @@
     width: 100% !important;
   }
 }
+
+@media (min-width: 48.001rem) {
+  .board {
+    max-width: 76rem !important;
+    padding-top: clamp(3rem, 6vw, 5rem) !important;
+    gap: 0 !important;
+  }
+
+  .board .mobileWallLayout { display: none; }
+}

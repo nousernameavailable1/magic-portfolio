@@ -45,3 +45,11 @@
     padding-inline: var(--static-space-16) !important;
   }
 }
+
+@media (min-width: 48.001rem) {
+  .page { min-height: 65vh; padding: 4rem 0 !important; gap: 1rem; }
+  .code { color: var(--public-accent); font-size: clamp(8rem, 18vw, 15rem); font-weight: 500; letter-spacing: -0.08em; line-height: 1; }
+  .title { font-weight: 500; letter-spacing: -0.045em; }
+  .description { font-size: 1rem; }
+  .mobileAction { display: inline-flex !important; margin-top: 1.5rem; border-radius: 0.5rem; }
+}

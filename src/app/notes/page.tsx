@@ -1,3 +1,5 @@
+import { DesktopPageHeading } from "@/components/public/DesktopPageHeading";
+import desktop from "@/components/public/public-pages.module.scss";
 import { getPublicNotes } from "@/lib/notes";
 import { baseURL } from "@/resources";
 import { Meta } from "@once-ui-system/core";
@@ -31,7 +33,8 @@ export default async function NotesPage() {
 
   return (
     <main className={styles.page}>
-      <header className={styles.intro}>
+      <DesktopPageHeading eyebrow="THE NOTEBOOK" title="Notes" description={description} />
+      <header className={`${styles.intro} ${desktop.mobileHeading}`}>
         <span className={styles.eyebrow}>Notebook</span>
         <h1>Notes</h1>
         <p>{description}</p>
