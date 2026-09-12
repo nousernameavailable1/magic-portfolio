@@ -1,5 +1,7 @@
 "use client";
 
+import { AdminPageHeader } from "./AdminPageHeader";
+
 import Link from "next/link";
 import { useState } from "react";
 import styles from "./route-map-manager.module.scss";
@@ -31,8 +33,8 @@ const adminRoutes: AdminRoute[] = [
   { path: "/admin/fakemail", label: "Fakemail", parent: "/admin" },
   { path: "/admin/vpn", label: "VPN", parent: "/admin" },
   { path: "/admin/dashboard", label: "Dashboard", parent: "/admin" },
-  { path: "/admin/text", label: "Text", parent: "/admin" },
-  { path: "/admin/map", label: "Map", parent: "/admin" },
+  { path: "/admin/text", label: "Site content", parent: "/admin" },
+  { path: "/admin/map", label: "Site map", parent: "/admin" },
 ];
 
 function RouteBranch({
@@ -170,16 +172,16 @@ export function RouteMapManager({ initialRoutes }: { initialRoutes: PublicRouteS
 
   return (
     <section className={styles.manager} aria-labelledby="route-map-title">
-      <header>
-        <div className={styles.headingRow}>
-          <div>
-            <h1 id="route-map-title">Site map</h1>
-            <span>
-              {view === "public"
-                ? "Manage public access and map visibility. Changes take effect immediately for visitors without an active access session."
-                : "Browse every admin page and jump directly to it."}
-            </span>
-          </div>
+      <AdminPageHeader
+        id="route-map-title"
+        eyebrow="Tools / Access & visibility"
+        title="Site map"
+        description={
+          view === "public"
+            ? "Manage page access and discovery. Changes apply immediately to visitors without an active access session."
+            : "Your workspace directory. Jump directly to any admin page."
+        }
+        actions={
           <fieldset className={styles.viewToggle}>
             <legend className={styles.srOnly}>Map view</legend>
             <button
@@ -199,8 +201,8 @@ export function RouteMapManager({ initialRoutes }: { initialRoutes: PublicRouteS
               Admin pages
             </button>
           </fieldset>
-        </div>
-      </header>
+        }
+      />
       {view === "public" && error && <p className={styles.error}>{error}</p>}
       <div className={styles.routes}>
         {view === "public" ? (

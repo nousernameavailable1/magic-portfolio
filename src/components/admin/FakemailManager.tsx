@@ -43,6 +43,7 @@ export function FakemailManager() {
   const [localPart, setLocalPart] = useState("");
   const [expiresIn, setExpiresIn] = useState<Expiration>("1d");
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [busyAction, setBusyAction] = useState<"create" | string | null>(null);
   const { addToast } = useToast();
   const addToastRef = useRef(addToast);
@@ -50,6 +51,7 @@ export function FakemailManager() {
 
   const loadAliases = useCallback(async () => {
     setLoading(true);
+    setLoadError(null);
     try {
       const response = await fetch("/api/admin/fakemail", { cache: "no-store" });
       const data = (await response.json()) as Partial<FakemailSettings> & { error?: string };
@@ -59,6 +61,7 @@ export function FakemailManager() {
 
       setSettings({ aliases: data.aliases, configured: data.configured, domain: data.domain });
     } catch (error) {
+      setLoadError(error instanceof Error ? error.message : "Could not load fakemail aliases.");
       addToastRef.current({
         variant: "danger",
         message: error instanceof Error ? error.message : "Could not load fakemail aliases.",
@@ -151,7 +154,7 @@ export function FakemailManager() {
               Each alias forwards to your verified destination address through Cloudflare.
             </Text>
           </Column>
-          {!loading && !settings?.configured && (
+          {!loading && settings && !settings.configured && (
             <Text className={styles.configurationError} variant="body-default-s">
               Add the Fakemail environment variables before creating aliases.
             </Text>
@@ -226,8 +229,17 @@ export function FakemailManager() {
             Refresh
           </Button>
         </Row>
-        {!loading && settings?.aliases.length === 0 && (
-          <Text onBackground="neutral-weak">No aliases are currently forwarding mail.</Text>
+        {loadError && (
+          <div className={styles.emptyState} role="alert">
+            <strong>Aliases are unavailable.</strong>
+            <p>{loadError} Use Refresh to try again.</p>
+          </div>
+        )}
+        {!loading && !loadError && settings?.aliases.length === 0 && (
+          <div className={styles.emptyState}>
+            <strong>Your inbox, with a little privacy.</strong>
+            <p>Create an alias to start forwarding mail to your verified address.</p>
+          </div>
         )}
         {settings?.aliases.map((alias) => (
           <Row

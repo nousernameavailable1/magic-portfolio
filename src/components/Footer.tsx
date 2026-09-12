@@ -13,6 +13,8 @@ export const Footer = () => {
     (item) => item.link && !["LinkedIn", "Instagram", "Threads"].includes(item.name),
   );
 
+  if (pathname.startsWith("/admin")) return null;
+
   return (
     <Row
       as="footer"

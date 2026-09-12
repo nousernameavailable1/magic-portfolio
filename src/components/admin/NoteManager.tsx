@@ -59,7 +59,7 @@ function toDraft(note: Note): NoteDraft {
 }
 
 function noteSlug(value: string) {
-  return slugify(value, {
+  return slugify(value.toLowerCase(), {
     allowedChars: "a-z0-9-",
     lowercase: true,
     separator: "-",
@@ -70,16 +70,21 @@ function noteSlug(value: string) {
 }
 
 export function NoteManager() {
+  const [search, setSearch] = useState("");
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [draft, setDraft] = useState<NoteDraft>(emptyDraft);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [busyAction, setBusyAction] = useState<"save" | "delete" | null>(null);
   const [slugTouched, setSlugTouched] = useState(false);
   const { addToast } = useToast();
   const addToastRef = useRef(addToast);
   addToastRef.current = addToast;
 
+  const matchingNotes = notes.filter((note) =>
+    `${note.title} ${note.summary ?? ""}`.toLowerCase().includes(search.toLowerCase()),
+  );
   const selectedNote = notes.find((note) => note.id === selectedId) ?? null;
   const creating = selectedId === null;
   const dirty = selectedNote
@@ -88,6 +93,7 @@ export function NoteManager() {
 
   const loadNotes = useCallback(async () => {
     setLoading(true);
+    setLoadError(null);
     try {
       const response = await fetch("/api/admin/notes", { cache: "no-store" });
       const data = (await response.json()) as { notes?: Note[]; error?: string };
@@ -98,6 +104,7 @@ export function NoteManager() {
       setDraft(first ? toDraft(first) : emptyDraft);
       setSlugTouched(Boolean(data.notes.length));
     } catch (error) {
+      setLoadError(error instanceof Error ? error.message : "Could not load notes.");
       addToastRef.current({
         variant: "danger",
         message: error instanceof Error ? error.message : "Could not load notes.",
@@ -222,20 +229,55 @@ export function NoteManager() {
           <div>
             <Text variant="heading-strong-l">All notes</Text>
             <Text variant="body-default-s" onBackground="neutral-weak">
-              {loading ? "Loading…" : `${notes.length} ${notes.length === 1 ? "note" : "notes"}`}
+              {loading
+                ? "Loading…"
+                : loadError
+                  ? "Unavailable"
+                  : `${notes.length} ${notes.length === 1 ? "note" : "notes"}`}
             </Text>
           </div>
           <Button disabled={Boolean(busyAction)} onClick={startNewNote} size="s">
             New note
           </Button>
         </div>
+        <div className={styles.search}>
+          <label htmlFor="note-search">Search notes</label>
+          <input
+            id="note-search"
+            type="search"
+            placeholder="Search your notes…"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
+        </div>
+        {loadError && (
+          <div className={styles.emptyList} role="alert">
+            <Text onBackground="neutral-weak">{loadError}</Text>
+            <Button
+              disabled={loading || Boolean(busyAction)}
+              onClick={() => {
+                if (dirty && !window.confirm("Discard your unsaved changes?")) return;
+                void loadNotes();
+              }}
+              variant="secondary"
+              size="s"
+            >
+              Try again
+            </Button>
+          </div>
+        )}
         <div className={styles.notes}>
-          {!loading && notes.length === 0 && (
+          {!loading && !loadError && notes.length > 0 && matchingNotes.length === 0 && (
+            <Text className={styles.emptyList} onBackground="neutral-weak">
+              No matching notes. Try a different search.
+            </Text>
+          )}
+          {!loading && !loadError && notes.length === 0 && (
             <Text className={styles.emptyList} onBackground="neutral-weak">
               No notes yet. Create your first one.
             </Text>
           )}
-          {notes.map((note) => (
+          {matchingNotes.map((note) => (
             <button
               aria-current={selectedId === note.id ? "true" : undefined}
               className={`${styles.noteItem} ${selectedId === note.id ? styles.selectedNote : ""}`}

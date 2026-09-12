@@ -151,7 +151,7 @@ export default async function RootLayout({
               }}
             />
           </RevealFx>
-          <Flex fillWidth minHeight="16" s={{ hide: true }} />
+          <Flex className={styles.topSpacer} fillWidth minHeight="16" s={{ hide: true }} />
           <Header />
           <VisitorTracker />
           <Flex

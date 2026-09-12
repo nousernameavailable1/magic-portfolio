@@ -1,17 +1,12 @@
 "use client";
 
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import adminStyles from "@/components/admin/admin.module.scss";
+import Link from "next/link";
+
 import type { WallStatus, WallSubmission } from "@/lib/wall";
 import { person } from "@/resources";
-import {
-  Avatar,
-  Button,
-  Column,
-  Heading,
-  Row,
-  Text,
-  Textarea,
-  useToast,
-} from "@once-ui-system/core";
+import { Avatar, Button, Column, Row, Text, Textarea, useToast } from "@once-ui-system/core";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { WallBypassSettings } from "./WallBypassSettings";
 import styles from "./wall.module.scss";
@@ -35,6 +30,7 @@ export function WallModeration() {
   const [submissions, setSubmissions] = useState<WallSubmission[]>([]);
   const [approvalComments, setApprovalComments] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [busyAction, setBusyAction] = useState<{
     id: number;
     action: ModerationAction;
@@ -46,12 +42,14 @@ export function WallModeration() {
   const loadSubmissions = useCallback(
     async (nextStatus = status) => {
       setLoading(true);
+      setLoadError(null);
       try {
         const response = await fetch(`/api/admin/wall?status=${nextStatus}`, { cache: "no-store" });
         const data = (await response.json()) as { submissions?: WallSubmission[]; error?: string };
         if (!response.ok) throw new Error(data.error);
         setSubmissions(data.submissions ?? []);
       } catch (error) {
+        setLoadError(error instanceof Error ? error.message : "Could not load submissions.");
         addToastRef.current({
           variant: "danger",
           message: error instanceof Error ? error.message : "Could not load submissions.",
@@ -170,23 +168,17 @@ export function WallModeration() {
 
   return (
     <Column className={styles.moderationPage} fillWidth gap="xl" paddingY="24">
-      <Row
-        className={styles.moderationHeader}
-        fillWidth
-        horizontal="between"
-        vertical="center"
-        gap="20"
-        s={{ direction: "column", horizontal: "start", vertical: "start" }}
-      >
-        <Column flex={1} gap="8">
-          <Heading className={styles.pageTitle} as="h1" variant="display-strong-l">
-            Wall submissions
-          </Heading>
-          <Text className={styles.pageDescription} onBackground="neutral-weak">
-            Review posts before they appear publicly.
-          </Text>
-        </Column>
-        <WallBypassSettings />
+      <AdminPageHeader
+        eyebrow="Content / Community"
+        title="Wall moderation"
+        description="Keep the conversation thoughtful. Review messages and curate what appears on your wall."
+        actions={
+          <Link className={adminStyles.quickLink} href="/wall" target="_blank">
+            View wall <span aria-hidden="true">↗</span>
+          </Link>
+        }
+      />
+      <div className={styles.moderationToolbar}>
         <Row className={styles.moderationFilters} gap="8" wrap>
           {statuses.map((item) => (
             <Button
@@ -215,10 +207,30 @@ export function WallModeration() {
             Refresh
           </Button>
         </Row>
-      </Row>
+        <WallBypassSettings />
+      </div>
 
-      {!loading && submissions.length === 0 && (
-        <Text onBackground="neutral-weak">No {status} submissions.</Text>
+      {loadError && (
+        <div className={styles.moderationEmpty} role="alert">
+          <h2>Could not load the wall.</h2>
+          <p>{loadError}</p>
+          <Button variant="secondary" onClick={() => void loadSubmissions()}>
+            Try again
+          </Button>
+        </div>
+      )}
+      {!loading && !loadError && submissions.length === 0 && (
+        <div className={styles.moderationEmpty}>
+          <span className={styles.emptyMark} aria-hidden="true">
+            ✓
+          </span>
+          <h2>{status === "pending" ? "You’re all caught up." : `No ${status} messages.`}</h2>
+          <p>
+            {status === "pending"
+              ? "New submissions will appear here, ready for your review."
+              : "Messages you move to this category will appear here."}
+          </p>
+        </div>
       )}
       <Column fillWidth gap="12">
         {submissions.map((submission) => {
@@ -229,6 +241,7 @@ export function WallModeration() {
           return (
             <Column
               key={submission.id}
+              className={styles.submissionCard}
               fillWidth
               gap="16"
               padding="20"

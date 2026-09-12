@@ -2,7 +2,7 @@
 
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { AdminLogoutButton } from "@/components/wall/AdminLogoutButton";
-import { Column, Icon, Text, ToggleButton } from "@once-ui-system/core";
+import { Icon, Text } from "@once-ui-system/core";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -22,7 +22,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       "/admin/notes": "Notes",
       "/admin/fakemail": "Fakemail",
       "/admin/dashboard": "Dashboard",
-      "/admin/text": "Text editor",
+      "/admin/text": "Site content",
       "/admin/map": "Site map",
       "/admin/vpn": "VPN",
     }[pathname] ?? "Admin";
@@ -102,100 +102,96 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <div className={styles.dashboard}>
-      <Column
-        as="aside"
-        className={styles.sidebar}
-        background="surface"
-        border="neutral-alpha-weak"
-        radius="l"
-        padding="12"
-        gap="16"
-      >
-        <Text className={styles.sidebarTitle} variant="heading-strong-l">
-          Admin
-        </Text>
-        <Column gap="4">
-          <ToggleButton
-            aria-label="Wall moderation"
-            className={styles.navButton}
-            fillWidth
-            horizontal="start"
-            href="/admin/wall"
-            label="Wall moderation"
-            prefixIcon="mail"
-            selected={pathname === "/admin/wall"}
-          />
-          <ToggleButton
-            aria-label="Notes"
-            className={styles.navButton}
-            fillWidth
-            horizontal="start"
-            href="/admin/notes"
-            label="Notes"
-            prefixIcon="stickyNote"
-            selected={pathname === "/admin/notes"}
-          />
-          <ToggleButton
-            aria-label="Fakemail"
-            className={styles.navButton}
-            fillWidth
-            horizontal="start"
-            href="/admin/fakemail"
-            label="Fakemail"
-            prefixIcon="email"
-            selected={pathname === "/admin/fakemail"}
-          />
-          <ToggleButton
-            aria-label="VPN"
-            className={styles.navButton}
-            fillWidth
-            horizontal="start"
-            href="/admin/vpn"
-            label="VPN"
-            prefixIcon="openvpn"
-            selected={pathname === "/admin/vpn"}
-          />
-          <ToggleButton
-            aria-label="Dashboard"
-            className={styles.navButton}
-            fillWidth
-            horizontal="start"
-            href="/admin/dashboard"
-            label="Dashboard"
-            prefixIcon="globe"
-            selected={pathname === "/admin/dashboard"}
-          />
-          <ToggleButton
-            aria-label="Text"
-            className={styles.navButton}
-            fillWidth
-            horizontal="start"
-            href="/admin/text"
-            label="Text"
-            prefixIcon="text"
-            selected={pathname === "/admin/text"}
-          />
-          <ToggleButton
-            aria-label="Map"
-            className={styles.navButton}
-            fillWidth
-            horizontal="start"
-            href="/admin/map"
-            label="Map"
-            prefixIcon="map"
-            selected={pathname === "/admin/map"}
-          />
-        </Column>
-        <div className={styles.signOut}>
-          <div className={styles.desktopSignOut}>
-            <AdminLogoutButton />
-          </div>
-          <div className={styles.mobileSignOut}>
+    <div className={styles.dashboard} data-admin-site="">
+      <a className={styles.skipLink} href="#admin-content">
+        Skip to content
+      </a>
+      <aside className={styles.sidebar}>
+        <Link className={styles.brand} href="/admin/dashboard" aria-label="Admin dashboard">
+          <span className={styles.brandMark}>
+            tk<span>.</span>
+          </span>
+          <span>
+            Talal Kadli<small>CONTROL ROOM</small>
+          </span>
+        </Link>
+        <div className={styles.workspaceLabel}>
+          <span /> Personal workspace
+        </div>
+        <nav className={styles.desktopNav} aria-label="Admin navigation">
+          {[
+            {
+              label: "Overview",
+              links: [{ href: "/admin/dashboard", label: "Dashboard", icon: "globe" }],
+            },
+            {
+              label: "Content",
+              links: [
+                { href: "/admin/wall", label: "Wall moderation", icon: "mail" },
+                { href: "/admin/notes", label: "Notes", icon: "stickyNote" },
+                { href: "/admin/text", label: "Site content", icon: "text" },
+              ],
+            },
+            {
+              label: "Tools & access",
+              links: [
+                { href: "/admin/fakemail", label: "Fakemail", icon: "email" },
+                { href: "/admin/map", label: "Site map", icon: "map" },
+                { href: "/admin/vpn", label: "VPN", icon: "openvpn" },
+              ],
+            },
+          ].map((group) => (
+            <div className={styles.navGroup} key={group.label}>
+              <span className={styles.navLabel}>{group.label}</span>
+              {group.links.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={pathname === item.href ? "page" : undefined}
+                  className={`${styles.navButton} ${pathname === item.href ? styles.navSelected : ""}`}
+                >
+                  <Icon decorative name={item.icon} size="s" />
+                  <span>{item.label}</span>
+                  {item.href === "/admin/vpn" && <small>Soon</small>}
+                </Link>
+              ))}
+            </div>
+          ))}
+        </nav>
+        <div className={styles.sidebarBottom}>
+          <Link className={styles.siteLink} href="/">
+            View public site <span aria-hidden="true">↗</span>
+          </Link>
+          <div className={styles.account}>
+            <span className={styles.accountAvatar}>TK</span>
+            <div>
+              <strong>Talal Kadli</strong>
+              <span>Administrator</span>
+            </div>
             <AdminLogoutButton compact />
           </div>
         </div>
-      </Column>
+      </aside>
+      <div className={styles.workspace}>
+        <header className={styles.topBar}>
+          <div>
+            <span>Workspace</span>
+            <span aria-hidden="true">/</span>
+            <strong>{sectionName}</strong>
+          </div>
+          <div>
+            <span className={styles.privateLabel}>Private access</span>
+            <ThemeToggle />
+          </div>
+        </header>
+        <main className={styles.content} id="admin-content" tabIndex={-1}>
+          {children}
+        </main>
+        <footer className={styles.workspaceFooter}>
+          <span>TK / CONTROL ROOM</span>
+          <span>Built with intention.</span>
+        </footer>
+      </div>
 
       <header className={styles.mobileTopBar}>
         <Link href="/admin/dashboard" aria-label="Admin dashboard">
@@ -323,7 +319,6 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           <span>More</span>
         </button>
       </nav>
-      <main className={styles.content}>{children}</main>
     </div>
   );
 }

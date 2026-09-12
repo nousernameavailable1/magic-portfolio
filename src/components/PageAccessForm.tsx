@@ -8,9 +8,17 @@ import styles from "./PageAccessForm.module.scss";
 
 type PageAccessFormProps = {
   returnTo: string;
+  headline: string;
+  description: string;
+  formHeading: string;
 };
 
-export function PageAccessForm({ returnTo }: PageAccessFormProps) {
+export function PageAccessForm({
+  returnTo,
+  headline,
+  description,
+  formHeading,
+}: PageAccessFormProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string>();
   const [submitting, setSubmitting] = useState(false);
@@ -73,7 +81,7 @@ export function PageAccessForm({ returnTo }: PageAccessFormProps) {
             variant="display-strong-m"
             wrap="balance"
           >
-            This page is for invited eyes only.
+            {headline}
           </Heading>
           <Text
             className={styles.description}
@@ -81,7 +89,7 @@ export function PageAccessForm({ returnTo }: PageAccessFormProps) {
             variant="body-default-l"
             onBackground="neutral-weak"
           >
-            Don&apos;t have access? Womp womp.
+            {description}
           </Text>
           <Link className={styles.homeLink} href="/">
             <HiArrowLeft aria-hidden="true" /> Back to home
@@ -92,7 +100,7 @@ export function PageAccessForm({ returnTo }: PageAccessFormProps) {
             <span className={styles.lockIcon}>
               <HiOutlineLockClosed aria-hidden="true" />
             </span>
-            <h2>This page is intentionally restricted</h2>
+            <h2>{formHeading}</h2>
             <p>Enter the access password to continue.</p>
           </div>
           <Column fillWidth gap="16" horizontal="center">

@@ -1,49 +1,34 @@
-.mobileEyebrow {
-  display: none !important;
-}
-
-.backLink {
-  display: none;
-}
-
+.page { display: flex; flex-direction: column; min-height: 100dvh; width: 100%; padding: 0 clamp(1.5rem, 6vw, 7rem); }
+.header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; }
+.brand { color: inherit; text-decoration: none; font-size: 2.8rem; font-weight: 550; letter-spacing: -0.1em; line-height: 1; }
+.brand span { color: var(--public-accent); }
+.header > div { display: flex; align-items: center; gap: 1.5rem; }
+.backLink { color: var(--neutral-on-background-weak); display: flex; align-items: center; gap: 1rem; font-size: 0.75rem; text-decoration: none; }
+.backLink:hover { color: var(--public-accent); }
+.layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(20rem, 0.8fr); align-items: center; gap: clamp(3rem, 8vw, 10rem); flex: 1; width: 100%; max-width: 80rem; margin: 0 auto; padding-block: 4rem; }
+.intro { min-width: 0; }
+.eyebrow, .accessLabel { display: flex; align-items: center; gap: 0.65rem; color: var(--neutral-on-background-weak); font: 0.6rem var(--font-code); letter-spacing: 0.13em; }
+.eyebrow::before { content: ""; width: 0.3rem; height: 0.3rem; border-radius: 50%; background: var(--public-accent); }
+.intro h1 { font-size: clamp(4rem, 7vw, 7.5rem); font-weight: 450; line-height: 1.02; letter-spacing: -0.075em; margin: 2rem 0; }
+.intro h1 > span { color: var(--public-accent); }
+.intro p { font-size: 0.9rem; line-height: 1.9; color: var(--neutral-on-background-weak); }
+.index { display: flex; flex-wrap: wrap; gap: 1.5rem; border-top: 1px solid var(--neutral-alpha-medium); padding-top: 1.5rem; margin-top: 3.5rem; color: var(--neutral-on-background-weak); font: 0.55rem var(--font-code); letter-spacing: 0.08em; }
+.signIn { border: 1px solid var(--neutral-alpha-medium); border-radius: 0.75rem; padding: clamp(1.5rem, 3vw, 3rem); background: var(--admin-panel); min-width: 0; }
+.accessLabel { color: var(--public-accent); }
+.signIn h2 { font-size: 2rem; font-weight: 500; letter-spacing: -0.05em; margin: 1.5rem 0 0.5rem; }
+.signIn > p { margin: 0 0 2rem; color: var(--neutral-on-background-weak); font-size: 0.8rem; line-height: 1.7; }
+.footer { display: flex; justify-content: space-between; gap: 1rem; border-top: 1px solid var(--neutral-alpha-medium); padding: 1.5rem 0; font: 0.55rem var(--font-code); color: var(--neutral-on-background-weak); }
+@media (max-width: 60rem) { .layout { gap: 2rem; } .intro h1 { font-size: 4.5rem; } }
 @media (max-width: 48rem) {
-  .page {
-    justify-content: center;
-    min-height: clamp(30rem, calc(100dvh - 10rem), 44rem);
-    padding: var(--static-space-16) 0 var(--static-space-32) !important;
-  }
-
-  .intro {
-    gap: var(--static-space-4) !important;
-  }
-
-  .backLink {
-    align-items: center;
-    color: var(--neutral-on-background-weak);
-    display: inline-flex;
-    gap: var(--static-space-8);
-    left: calc(env(safe-area-inset-left) + var(--static-space-16));
-    min-height: var(--mobile-touch-target, 3rem);
-    position: fixed;
-    text-decoration: none;
-    top: calc(env(safe-area-inset-top) + var(--static-space-12));
-    z-index: 10;
-  }
-
-  .mobileEyebrow {
-    color: var(--brand-on-background-strong);
-    display: block !important;
-    letter-spacing: 0.14em;
-    margin-bottom: var(--static-space-4);
-  }
-
-  .title {
-    font-size: clamp(2.5rem, 14vw, 4rem) !important;
-    letter-spacing: -0.045em;
-    line-height: 1;
-  }
-
-  .description {
-    font-size: var(--font-size-body-m);
-  }
+  .header { padding: 1.25rem 0; }
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 2rem; padding: 2rem 0 3rem; max-width: 30rem; }
+  .intro h1 { font-size: clamp(3.5rem, 13vw, 5rem); margin-block: 1.25rem; }
+  .intro h1 br { display: none; }
+  .intro p, .index { display: none; }
+  .signIn { padding: 1.5rem; }
+  .footer { flex-wrap: wrap; line-height: 1.7; }
 }
+
+.page .brand { color: var(--neutral-on-background-strong); }
+.page .backLink { color: var(--neutral-on-background-weak); }
+.page .backLink:hover { color: var(--public-accent); }

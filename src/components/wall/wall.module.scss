@@ -385,3 +385,16 @@
 
   .board .mobileWallLayout { display: none; }
 }
+
+// Admin moderation workspace; public wall styles stay scoped above.
+.moderationPage { gap: 1.5rem !important; padding-block: 0 !important; }
+.moderationToolbar { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap; padding-bottom: 1.25rem; border-bottom: 1px solid var(--neutral-alpha-medium); }
+.moderationToolbar .bypassSettings { padding: 0.5rem 0.75rem !important; border-radius: 0.45rem; background: var(--admin-panel); }
+.submissionCard { border-radius: 0.6rem !important; padding: 1.5rem !important; background: var(--admin-panel) !important; border-left: 2px solid var(--brand-border-medium) !important; }
+.submissionCard .message { font-size: 1.15rem; line-height: 1.75; }
+.submissionCard .moderationActions { border-top: 1px solid var(--neutral-alpha-medium); padding-top: 1rem; flex-wrap: wrap; }
+.moderationEmpty { min-height: 20rem; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1rem; padding: 2rem; border: 1px dashed var(--neutral-alpha-medium); border-radius: 0.6rem; text-align: center; }
+.emptyMark { display: grid; place-items: center; width: 3rem; height: 3rem; border: 1px solid var(--brand-border-medium); border-radius: 50%; background: var(--brand-alpha-weak); color: var(--public-accent); font-size: 1.2rem; }
+.moderationEmpty h2 { font-size: 1.6rem; margin: 0; }
+.moderationEmpty p { font-size: 0.85rem; color: var(--neutral-on-background-weak); line-height: 1.7; margin: 0; }
+@media (max-width: 48rem) { .submissionCard { padding: 1rem !important; } }

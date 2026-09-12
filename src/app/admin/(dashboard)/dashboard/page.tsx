@@ -1,9 +1,11 @@
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { StatusRefreshButton } from "@/components/admin/StatusRefreshButton";
 import styles from "@/components/admin/admin.module.scss";
 import { getSiteStatus } from "@/lib/site-status";
 import { formatDubaiDateTime, formatDuration } from "@/utils/formatDate";
-import { Column, Heading, Row, StatusIndicator, Text } from "@once-ui-system/core";
+import { Column, Row, StatusIndicator, Text } from "@once-ui-system/core";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +22,7 @@ function StatusCard({
 }) {
   return (
     <Column
+      className={styles.statusCard}
       fillWidth
       gap="12"
       padding="20"
@@ -41,19 +44,43 @@ export default async function AdminDashboardPage() {
   const github = status.github;
 
   return (
-    <Column maxWidth="l" gap="24" paddingY="24">
-      <Row fillWidth horizontal="between" vertical="end" s={{ direction: "column", gap: "12" }}>
-        <Column gap="8">
-          <Heading as="h1" variant="display-strong-l">
-            Dashboard
-          </Heading>
-          <Text variant="heading-default-l" onBackground="neutral-weak">
-            A live snapshot of the website and its supporting services.
-          </Text>
-        </Column>
-        <StatusRefreshButton />
-      </Row>
-
+    <Column fillWidth gap="24">
+      <AdminPageHeader
+        eyebrow="Overview / Site operations"
+        title="Dashboard"
+        description="Your portfolio, at a glance. Keep an eye on the people, content, and services behind it."
+        actions={<StatusRefreshButton />}
+      />
+      <div className={styles.metricGrid}>
+        <div className={styles.metric}>
+          <span>Total visitors</span>
+          <strong>{database.available ? database.visitors.total.toLocaleString() : "—"}</strong>
+          <small>Across your public site</small>
+        </div>
+        <div className={styles.metric}>
+          <span>Visits today</span>
+          <strong>{database.available ? database.visitors.today.toLocaleString() : "—"}</strong>
+          <small>Asia/Dubai</small>
+        </div>
+        <div className={styles.metric}>
+          <span>Awaiting review</span>
+          <strong>
+            {database.available ? database.submissions.pending.toLocaleString() : "—"}
+          </strong>
+          <small>Wall submissions</small>
+        </div>
+      </div>
+      <div className={styles.quickLinks}>
+        <Link className={styles.quickLink} href="/admin/wall">
+          Review the wall <span aria-hidden="true">↗</span>
+        </Link>
+        <Link className={styles.quickLink} href="/admin/notes">
+          Open your notebook <span aria-hidden="true">↗</span>
+        </Link>
+        <Link className={styles.quickLink} href="/admin/text">
+          Edit site content <span aria-hidden="true">↗</span>
+        </Link>
+      </div>
       <div className={styles.statusGrid}>
         <StatusCard title="Database">
           <Row gap="8" vertical="center">

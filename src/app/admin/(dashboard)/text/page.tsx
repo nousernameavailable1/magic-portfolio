@@ -1,7 +1,7 @@
 import { TextManager } from "@/components/admin/TextManager";
 import { Column } from "@once-ui-system/core";
 
-export const metadata = { title: "Text" };
+export const metadata = { title: "Site content" };
 
 export default function AdminTextPage() {
   return (

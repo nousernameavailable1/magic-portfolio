@@ -1,19 +1,17 @@
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { FakemailManager } from "@/components/admin/FakemailManager";
-import { Column, Heading, Text } from "@once-ui-system/core";
+import { Column } from "@once-ui-system/core";
 
 export const metadata = { title: "Fakemail" };
 
-export default function FakemailPage() {
+export default function AdminPage() {
   return (
-    <Column maxWidth="l" fillWidth gap="24" paddingY="24">
-      <Column gap="8">
-        <Heading as="h1" variant="display-strong-l">
-          Fakemail
-        </Heading>
-        <Text variant="heading-default-l" onBackground="neutral-weak">
-          Create temporary email aliases that forward to you.
-        </Text>
-      </Column>
+    <Column fillWidth gap="24">
+      <AdminPageHeader
+        eyebrow="Tools / Email aliases"
+        title="Fakemail"
+        description="A little distance between your inbox and the internet."
+      />
       <FakemailManager />
     </Column>
   );

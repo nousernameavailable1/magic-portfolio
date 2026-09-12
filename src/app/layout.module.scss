@@ -46,3 +46,29 @@
   :global([data-theme="light"]) .siteBody:has([data-public-site]) { --public-accent: #3b6094; --brand-on-solid-strong: #fff; }
   .siteBody:has([data-public-site]) :is(a, button, input, textarea):focus-visible { outline: 2px solid var(--public-accent); outline-offset: 4px; }
 }
+
+// Admin uses the same muted blue palette as the public desktop pages.
+.siteBody:has([data-admin-site]) {
+  --public-accent: #a3bce8;
+  --admin-panel: color-mix(in srgb, var(--page-background) 94%, var(--neutral-on-background-strong));
+  --brand-on-background-medium: var(--public-accent);
+  --brand-on-background-strong: var(--public-accent);
+  --brand-on-background-weak: var(--public-accent);
+  --brand-border-strong: var(--public-accent);
+  --brand-border-medium: color-mix(in srgb, var(--public-accent) 32%, transparent);
+  --brand-alpha-weak: color-mix(in srgb, var(--public-accent) 6%, transparent);
+  --brand-alpha-medium: color-mix(in srgb, var(--public-accent) 12%, transparent);
+  --brand-background-strong: var(--public-accent);
+  --brand-solid-strong: var(--public-accent);
+  --brand-solid-medium: color-mix(in srgb, var(--public-accent) 85%, var(--page-background));
+  --brand-on-solid-strong: #10151d;
+}
+:global([data-theme="light"]) .siteBody:has([data-admin-site]) {
+  --public-accent: #3b6094;
+  --brand-on-solid-strong: #fff;
+  --admin-panel: color-mix(in srgb, var(--page-background) 98%, var(--neutral-on-background-strong));
+}
+.siteBody:has([data-admin-site]) > .siteBackground,
+.siteBody:has([data-admin-site]) > .topSpacer { display: none; }
+.siteBody:has([data-admin-site]) .siteMain { padding: 0 !important; }
+.siteBody:has([data-admin-site]) :is(a, button, input, textarea, select):focus-visible { outline: 2px solid var(--public-accent); outline-offset: 3px; }

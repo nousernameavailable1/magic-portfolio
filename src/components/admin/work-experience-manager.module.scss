@@ -1,11 +1,11 @@
 .section {
-  background: color-mix(in srgb, var(--surface-background) 88%, transparent);
+  background: var(--admin-panel);
   border: 1px solid var(--neutral-border-medium);
-  border-radius: 1rem;
+  border-radius: 0.6rem;
   display: grid;
   gap: 1rem;
   min-width: 0;
-  padding: 1.25rem;
+  padding: 1.75rem;
 }
 
 .sectionHeader,
@@ -29,14 +29,14 @@
 .manager {
   display: grid;
   gap: 1rem;
-  grid-template-columns: minmax(13rem, 0.65fr) minmax(24rem, 1.35fr);
+  grid-template-columns: minmax(12rem, 0.65fr) minmax(0, 1.6fr);
   min-width: 0;
 }
 
 .entryPanel,
 .editor {
   border: 1px solid var(--neutral-alpha-weak);
-  border-radius: 0.875rem;
+  border-radius: 0.4rem;
   min-width: 0;
 }
 
@@ -66,7 +66,7 @@
   appearance: none;
   background: transparent;
   border: 1px solid transparent;
-  border-radius: 0.7rem;
+  border-radius: 0.3rem;
   color: inherit;
   cursor: pointer;
   display: grid;
@@ -183,9 +183,9 @@
   padding-top: 1rem;
 }
 
-@media (max-width: 68rem) {
+@media (max-width: 80rem) {
   .manager {
-    grid-template-columns: minmax(11rem, 0.55fr) minmax(20rem, 1.45fr);
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -284,3 +284,7 @@
     transition: none;
   }
 }
+
+.sectionHeader { border-bottom: 1px solid var(--neutral-alpha-medium); padding-bottom: 1.25rem; }
+.selectedEntry { box-shadow: inset 2px 0 var(--public-accent); }
+@media (max-width: 68rem) { .tagRow, .primaryFields { grid-template-columns: minmax(0, 1fr); } }

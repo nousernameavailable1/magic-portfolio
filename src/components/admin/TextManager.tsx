@@ -1,5 +1,7 @@
 "use client";
 
+import { AdminPageHeader } from "./AdminPageHeader";
+
 import { FinanceVisibilityToggle } from "@/components/admin/FinanceVisibilityToggle";
 import { StudyManager } from "@/components/admin/StudyManager";
 import { TechnicalSkillsManager } from "@/components/admin/TechnicalSkillsManager";
@@ -29,12 +31,13 @@ type TextField = {
 };
 
 type TextAction = "save" | "set-default" | "reset";
-type PageFilter = "home" | "about" | "wall" | "all";
+type PageFilter = "home" | "about" | "wall" | "access" | "all";
 
 const pageFilters: { value: PageFilter; label: string }[] = [
   { value: "home", label: "Home" },
   { value: "about", label: "About" },
   { value: "wall", label: "Wall" },
+  { value: "access", label: "Access" },
   { value: "all", label: "All pages" },
 ];
 
@@ -250,42 +253,39 @@ export function TextManager() {
 
   return (
     <Column className={styles.manager} fillWidth gap="16">
-      <Row className={styles.pageHeader} fillWidth horizontal="between" vertical="end" gap="24">
-        <Column className={styles.pageHeading} gap="8">
-          <Heading as="h1" variant="display-strong-l">
-            Text
-          </Heading>
-          <Text variant="heading-default-l" onBackground="neutral-weak">
-            Edit the copy shown across your site.
-          </Text>
-        </Column>
-        <div className={styles.pagePicker}>
-          <Select
-            aria-label="Filter text editors by page"
-            id="text-page-filter"
-            label="Page"
-            maxWidth={18}
-            minWidth={14}
-            onSelect={(value) => {
-              if (!Array.isArray(value) && pageFilters.some((page) => page.value === value)) {
-                const nextPage = value as PageFilter;
-                const hidesAboutEditors = nextPage !== "about" && nextPage !== "all";
-                if (
-                  (workExperienceDirty || studiesDirty || technicalSkillsDirty) &&
-                  hidesAboutEditors &&
-                  !window.confirm("Discard your unsaved About page changes?")
-                ) {
-                  return;
+      <AdminPageHeader
+        eyebrow="Content / Portfolio"
+        title="Site content"
+        description="Make it sound like you. Manage page copy, profile details, and the story your site tells."
+        actions={
+          <div className={styles.pagePicker}>
+            <Select
+              aria-label="Filter text editors by page"
+              id="text-page-filter"
+              label="Page"
+              maxWidth={18}
+              minWidth={14}
+              onSelect={(value) => {
+                if (!Array.isArray(value) && pageFilters.some((page) => page.value === value)) {
+                  const nextPage = value as PageFilter;
+                  const hidesAboutEditors = nextPage !== "about" && nextPage !== "all";
+                  if (
+                    (workExperienceDirty || studiesDirty || technicalSkillsDirty) &&
+                    hidesAboutEditors &&
+                    !window.confirm("Discard your unsaved About page changes?")
+                  ) {
+                    return;
+                  }
+                  setPageFilter(nextPage);
                 }
-                setPageFilter(nextPage);
-              }
-            }}
-            options={pageOptions}
-            placement="bottom-end"
-            value={pageFilter}
-          />
-        </div>
-      </Row>
+              }}
+              options={pageOptions}
+              placement="bottom-end"
+              value={pageFilter}
+            />
+          </div>
+        }
+      />
 
       <Row
         className={styles.filterSummary}

@@ -1,3 +1,13 @@
+.manager { display: grid !important; grid-template-columns: minmax(17rem, 0.9fr) minmax(0, 1.4fr); align-items: start; gap: 1.5rem !important; }
+.manager > form { position: sticky; top: 1.5rem; min-width: 0; }
+.createCard { padding: 1.5rem !important; border-radius: 0.6rem !important; background: var(--admin-panel) !important; gap: 1.5rem !important; }
+.formActions { flex-direction: column; align-items: stretch !important; gap: 1rem !important; }
+.createButton { width: 100%; min-height: 2.75rem; }
+.listHeader { padding: 0.25rem 0 1rem; border-bottom: 1px solid var(--neutral-alpha-medium); }
+.emptyState { display: grid; gap: 0.6rem; padding: 3rem 1.5rem; border: 1px dashed var(--neutral-alpha-medium); border-radius: 0.6rem; text-align: center; }
+.emptyState strong { font-size: 1rem; font-weight: 500; }
+.emptyState p { margin: 0; color: var(--neutral-on-background-weak); font-size: 0.8rem; line-height: 1.7; }
+@media (max-width: 75rem) { .manager { grid-template-columns: minmax(0, 1fr); } .manager > form { position: static; } }
 .configurationError {
   background: color-mix(in srgb, #f59e0b 18%, transparent);
   border: 1px solid color-mix(in srgb, #f59e0b 60%, transparent);
@@ -17,9 +27,9 @@
 }
 
 .alias {
-  background: color-mix(in srgb, var(--surface-background) 88%, transparent);
+  background: var(--admin-panel);
   border: 1px solid var(--neutral-border-medium);
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
 }
 
 .address {

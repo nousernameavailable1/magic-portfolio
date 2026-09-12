@@ -1,19 +1,21 @@
 .manager {
   display: grid;
   gap: 1rem;
-  grid-template-columns: minmax(15rem, 0.7fr) minmax(24rem, 1.3fr);
+  grid-template-columns: minmax(14rem, 0.65fr) minmax(0, 1.6fr);
   min-width: 0;
 }
 
 .noteList,
 .editor {
-  background: color-mix(in srgb, var(--surface-background) 88%, transparent);
+  background: var(--admin-panel);
   border: 1px solid var(--neutral-border-medium);
-  border-radius: 1rem;
+  border-radius: 0.6rem;
   min-width: 0;
 }
 
 .noteList {
+  display: flex;
+  flex-direction: column;
   align-self: start;
   max-height: calc(100dvh - 8rem);
   overflow: hidden;
@@ -43,6 +45,7 @@
 }
 
 .notes {
+  min-height: 0;
   display: grid;
   gap: 0.4rem;
   max-height: calc(100dvh - 13rem);
@@ -54,7 +57,7 @@
   appearance: none;
   background: transparent;
   border: 1px solid transparent;
-  border-radius: 0.75rem;
+  border-radius: 0.4rem;
   color: inherit;
   cursor: pointer;
   display: grid;
@@ -106,8 +109,8 @@
 }
 
 .publicBadge {
-  background: color-mix(in srgb, #10b981 18%, transparent);
-  color: #34d399;
+  background: var(--brand-alpha-medium);
+  color: var(--public-accent);
 }
 
 .privateBadge {
@@ -120,8 +123,8 @@
 
 .editor {
   display: grid;
-  gap: 1.1rem;
-  padding: 1.25rem;
+  gap: 1.5rem;
+  padding: 1.75rem;
 }
 
 .editorHeader {
@@ -139,13 +142,22 @@
 .visibilityField {
   background: var(--neutral-alpha-weak);
   border: 1px solid var(--neutral-alpha-weak);
-  border-radius: 0.75rem;
+  border-radius: 0.4rem;
   padding: 0.9rem;
 }
 
 @media (max-width: 68rem) {
   .manager {
-    grid-template-columns: minmax(13rem, 0.65fr) minmax(20rem, 1.35fr);
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .noteList {
+    position: static;
+    max-height: 22rem;
+  }
+
+  .notes {
+    max-height: 16rem;
   }
 }
 
@@ -200,3 +212,15 @@
     width: 100% !important;
   }
 }
+
+.listHeader { padding: 1.25rem; }
+.noteItem { padding: 1rem; }
+.selectedNote { box-shadow: inset 2px 0 var(--public-accent); }
+.editorHeader { padding-bottom: 1.25rem; }
+.editorActions { border-top: 1px solid var(--neutral-alpha-medium); padding-top: 1.25rem; }
+.search { padding: 0.75rem 1rem; border-bottom: 1px solid var(--neutral-alpha-weak); }
+.search input { width: 100%; background: transparent; border: 0; color: inherit; font: inherit; font-size: 0.8rem; padding: 0.5rem 0; }
+.search input::placeholder { color: var(--neutral-on-background-weak); }
+.search label { position: absolute; width: 1px; height: 1px; clip-path: inset(50%); overflow: hidden; }
+
+.listHeader, .search { flex-shrink: 0; }
