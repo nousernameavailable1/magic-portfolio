@@ -1,0 +1,101 @@
+.figure {
+  width: 100%;
+  min-width: 0;
+  margin: 1.5rem 0;
+  overflow: hidden;
+  border: 1px solid var(--neutral-border-medium);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--brand-background-strong) 6%, var(--page-background));
+  color: var(--neutral-on-background-strong);
+
+  figcaption {
+    display: grid;
+    gap: 0.4rem;
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--neutral-border-medium);
+    strong { font-size: 1.05rem; }
+    span { font-size: 0.8rem; color: var(--neutral-on-background-weak); }
+  }
+}
+
+.flow {
+  list-style: none;
+  display: grid;
+  margin: 0;
+  padding: 1.25rem;
+
+  li {
+    position: relative;
+    display: grid;
+    gap: 0.4rem;
+    padding: 1rem;
+    border: 1px solid var(--neutral-border-medium);
+    border-radius: 0.6rem;
+    background: var(--surface-background);
+    overflow-wrap: anywhere;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  li + li {
+    margin-top: 2rem;
+    &::before {
+      content: "↓";
+      position: absolute;
+      top: -1.9rem;
+      left: calc(50% - 0.4rem);
+      color: var(--brand-on-background-strong);
+      font-size: 1.25rem;
+    }
+  }
+}
+
+.label {
+  color: var(--brand-on-background-strong);
+  font-family: var(--font-code);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.footer {
+  margin: 0;
+  padding: 0 1.25rem 1.25rem;
+  color: var(--neutral-on-background-weak);
+  font-size: 0.8rem;
+  line-height: 1.65;
+}
+
+.tableScroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  &:focus-visible { outline: 2px solid var(--brand-border-strong); outline-offset: -3px; }
+}
+
+.table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  text-align: left;
+  th, td { padding: 0.9rem; vertical-align: top; border-bottom: 1px solid var(--neutral-border-medium); }
+  thead { background: color-mix(in srgb, var(--brand-background-strong) 12%, transparent); }
+  tbody th { color: var(--brand-on-background-strong); min-width: 125px; }
+  tbody tr:last-child > * { border-bottom: 0; }
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .figure figcaption, .flow { padding: 1rem; }
+  .footer { padding-inline: 1rem; }
+}

@@ -1,0 +1,100 @@
+---
+title: "Self hosted VPN"
+publishedAt: "2026-09-12"
+summary: "A self hosted VPN on OCI: OpenVPN with a DCO-capable UDP path and TCP fallback, WireGuard for speed, and strongSwan IKEv2 for native device setup."
+images:
+  - "/images/projects/self-hosted-vpn/cover.svg"
+team:
+  - name: "Talal Kadli"
+    role: "Infrastructure and configuration"
+    avatar: "/images/profilepic.png"
+    linkedIn: "https://github.com/nousernameavailable1"
+---
+
+<AiGeneratedNotice />
+
+## One server, several ways to connect
+
+This VPN runs on an Ubuntu virtual machine in Oracle Cloud Infrastructure (OCI). Three protocols cover different needs: OpenVPN for everyday use and restrictive networks, WireGuard for speed, and IKEv2 through strongSwan for easy setup in native device settings.
+
+The server is an Arm-based OCI Flex VM with 2 OCPUs and 12 GB of memory. OpenVPN runs as two separate processes: UDP on port 1194 and TCP on port 443. WireGuard runs alongside them, while strongSwan provides the IKEv2/IPsec endpoint in Docker.
+
+<VpnProtocolChart />
+
+## The network path
+
+A device encrypts its traffic before sending it across the local network. The VPN gateway decrypts it, applies firewall rules and forwards permitted traffic to the Internet. VPN encryption protects the connection between the device and the gateway; HTTPS continues to protect application traffic all the way to the destination website.
+
+<VpnDiagram kind="network" />
+
+Traffic passes through two firewall layers: OCI security lists or network security groups, and Ubuntu's host firewall. Opening a port in OCI does not automatically open it on Ubuntu or allow VPN clients to reach the Internet. The cloud network also needs a route through an Internet gateway, as described in [OCI's public-subnet networking model](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/scenarioa.htm).
+
+## OpenVPN: flexible connectivity
+
+OpenVPN uses separate services for each transport: `openvpn@server.service` for UDP and `openvpn@server-tcp.service` for TCP. Each has its own address pool, status file, logs and client configuration directory. The UDP pool is `10.8.0.0/24`; the TCP pool is `10.9.0.0/24`.
+
+This separation makes connection issues easier to trace and allows each service to be tuned independently. Systemd orders startup so the TCP service starts after UDP.
+
+A shared client profile includes both connection options, allowing compatible client apps to select a transport without importing a second profile. The address below is a placeholder:
+
+```conf
+remote 203.0.113.10 1194 udp
+remote 203.0.113.10 443 tcp
+```
+
+Both services require TLS 1.3 to establish and authenticate connections, with AES-128-GCM protecting the tunneled data. They also use `tls-crypt`, server certificates and a certificate revocation list. Clients receive DNS settings and an IPv4 default route through the VPN.
+
+OpenVPN offers broad device support, certificate-based access control and a choice of UDP or TCP. UDP is the everyday option because it avoids adding another layer of TCP retransmissions. TCP/443 provides a fallback where UDP is blocked, although packet loss can make TCP-over-TCP connections slow or stall. Using port 443 can improve reachability, but does not make OpenVPN traffic identical to HTTPS or guarantee access on every network. The [OpenVPN manual](https://openvpn.net/community-docs/community-articles/openvpn-2-6-manual.html) covers these transport options.
+
+## DCO: faster packet processing
+
+Data channel offload (DCO) reduces the work involved in moving packets between OpenVPN and the operating system. The server runs OpenVPN 2.6.19 on Arm with the DCO module installed.
+
+<VpnDiagram kind="dco" />
+
+The UDP service is configured for DCO, while the TCP service explicitly uses `disable-dco`. TCP also has separate packet-size and queue settings suited to its role as a fallback connection.
+
+With DCO, supported data traffic is encrypted and decrypted in the Linux kernel. OpenVPN still handles authentication, connection setup and keys. This reduces processing overhead while keeping OpenVPN's connection-management features. Offload depends on compatible configuration options and ciphers; see the [DCO architecture notes](https://github.com/OpenVPN/openvpn/blob/master/README.dco.md).
+
+## WireGuard: the speed-focused option
+
+WireGuard provides a lightweight tunnel for connections where speed is the priority and UDP is available. It runs on the `wg0` interface, managed by `wg-quick@wg0.service`.
+
+Its compact design and Linux kernel implementation keep packet processing efficient. Devices connect using public and private keys, making a small deployment straightforward to manage. The [WireGuard protocol paper](https://www.wireguard.com/papers/wireguard.pdf) explains the design.
+
+There are a few tradeoffs:
+
+- **No built-in TCP fallback.** Networks that block UDP can prevent WireGuard from connecting.
+- **No built-in traffic disguise.** WireGuard does not try to look like ordinary web traffic.
+- **Separate access management.** Distributing keys and managing users require tools or configuration outside the protocol. It does not include OpenVPN's certificate and revocation workflow.
+- **An app is needed on iPhone.** WireGuard uses its own app and imported configuration, while IKEv2 is available directly in Settings.
+
+These limits are part of WireGuard's intended scope, described in its [known limitations](https://www.wireguard.com/known-limitations/).
+
+## IKEv2: native setup through strongSwan
+
+strongSwan runs in Docker and provides IKEv2/IPsec connectivity. On an iPhone, setup is available directly in the native Settings app: add an IKEv2 VPN, enter the server address, remote identity and login details, then connect. No additional VPN app is needed.
+
+The server certificate must be trusted and match the identity configured on the device. IKEv2 normally uses UDP/500 to establish the connection and UDP/4500 when passing through NAT, while IPsec protects the tunneled traffic. This makes client setup convenient, though certificate maintenance and UDP reachability still matter. strongSwan documents the [Apple IKEv2 settings and certificate requirements](https://docs.strongswan.org/docs/latest/interop/appleIkev2Profile.html).
+
+## Ubuntu iptables: allow, forward, translate
+
+The firewall handles two types of traffic: connections addressed to the VPN server itself, and decrypted client traffic passing through it. Allowing a VPN connection does not automatically allow that client's traffic to reach the Internet.
+
+<VpnDiagram kind="firewall" />
+
+The `INPUT` chain controls access to local services. The `FORWARD` chain controls traffic passing through the VM. For private IPv4 client addresses, source NAT in `POSTROUTING` allows Internet-bound traffic to leave using the VM's address.
+
+IPsec needs an extra consideration: traffic that should enter an outbound IPsec tunnel must be excluded from broad masquerading rules. Otherwise, changing its source address can stop it matching the correct IPsec policy. The strongSwan [forwarding guide](https://docs.strongswan.org/docs/latest/howtos/forwarding.html) explains this rule ordering.
+
+Rules also need to account for client address pools, the network interface, allowed destinations and Docker's firewall chains. Order matters: an earlier `DROP` or `REJECT` can stop traffic before it reaches a later allow rule.
+
+## Service management and maintenance
+
+Separate OpenVPN logs and status files make it easier to monitor UDP and TCP connections. Operational scripts collect interface counters, WireGuard transfer totals and service resource usage, then archive them before a scheduled monthly reboot for kernel updates. Saving these values before restarting matters because interface and service counters can reset.
+
+OpenVPN client profiles are managed with the [angristan/openvpn-install script](https://github.com/angristan/openvpn-install) and a customized client template. The server configuration, Easy-RSA certificate authority, client keys and revocation list hold the state needed to manage access. Keeping these files backed up and the profile template aligned with both services makes the setup easier to maintain.
+
+## Choosing a connection
+
+OpenVPN UDP covers everyday use, TCP/443 provides a fallback for restrictive networks, WireGuard focuses on speed, and IKEv2 offers convenient native setup. Together, they provide several ways to reach the same gateway without relying on one protocol to suit every device and network.

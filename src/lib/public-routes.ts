@@ -56,8 +56,8 @@ export const publicRoutes: PublicRoute[] = [
   { path: "/blog/work", label: "Blog post: Work", parent: "/blog", lockedByDefault: true },
   { path: "/projects", label: "Projects", lockedByDefault: true },
   {
-    path: "/projects/automate-design-handovers-with-a-figma-to-code-pipeline",
-    label: "Project: Figma handovers",
+    path: "/projects/self-hosted-vpn",
+    label: "Project: Self hosted VPN",
     parent: "/projects",
     lockedByDefault: true,
   },

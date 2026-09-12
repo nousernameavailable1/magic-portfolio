@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Self hosted VPN</title>
+  <desc id="desc">OpenVPN, WireGuard and IKEv2 connect devices to one Ubuntu virtual machine on Oracle Cloud Infrastructure.</desc>
+  <defs>
+    <radialGradient id="glow"><stop stop-color="#203859"/><stop offset="1" stop-color="#10151e"/></radialGradient>
+    <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M50 0H0V50" fill="none" stroke="#a3bce8" stroke-opacity=".045"/></pattern>
+  </defs>
+  <rect width="1600" height="900" fill="#10151e"/>
+  <rect width="1600" height="900" fill="url(#glow)"/>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+  <g font-family="Arial, sans-serif">
+    <text x="110" y="130" fill="#a3bce8" font-size="22" letter-spacing="6">INFRASTRUCTURE / PERSONAL PROJECT</text>
+    <text x="105" y="242" fill="#f1f4fa" font-size="88" font-weight="600">Self hosted VPN</text>
+    <text x="110" y="306" fill="#b6c2d5" font-size="30">Three protocols. One Ubuntu VM. A connection for every network.</text>
+    <g fill="none" stroke="#a3bce8" stroke-width="3"><path d="M420 470H700V610H850M420 610H850M420 750H700V610"/></g>
+    <g fill="#172438" stroke="#465e82" stroke-width="2">
+      <rect x="110" y="422" width="310" height="96" rx="16"/>
+      <rect x="110" y="562" width="310" height="96" rx="16"/>
+      <rect x="110" y="702" width="310" height="96" rx="16"/>
+      <rect x="850" y="450" width="630" height="320" rx="24"/>
+    </g>
+    <g fill="#eef3fb" font-size="30"><text x="150" y="482">OpenVPN</text><text x="150" y="622">WireGuard</text><text x="150" y="762">IKEv2</text></g>
+    <circle cx="700" cy="610" r="8" fill="#bdd3fa"/>
+    <text x="905" y="520" fill="#a3bce8" font-size="22" letter-spacing="3">ORACLE CLOUD INFRASTRUCTURE</text>
+    <text x="905" y="594" fill="#f1f4fa" font-size="46">VPN gateway</text>
+    <text x="905" y="650" fill="#b6c2d5" font-size="27">Decrypt · filter · route</text>
+  </g>
+</svg>

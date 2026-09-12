@@ -11,6 +11,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: "/projects/automate-design-handovers-with-a-figma-to-code-pipeline",
+        destination: "/projects/self-hosted-vpn",
+        permanent: true,
+      },
+      {
         source: "/work/:path*",
         destination: "/projects/:path*",
         permanent: true,

@@ -1,7 +1,7 @@
 import type { PoolClient } from "pg";
 import { Pool } from "pg";
 
-const CURRENT_SCHEMA_VERSION = 11;
+const CURRENT_SCHEMA_VERSION = 12;
 
 declare global {
   var portfolioDatabasePool: Pool | undefined;
@@ -240,6 +240,22 @@ async function applyMigrations(pool: Pool) {
       `
         ALTER TABLE notes
         ADD COLUMN IF NOT EXISTS private_password_hash TEXT;
+      `,
+    );
+
+    await applyMigration(
+      client,
+      "012_rename_self_hosted_vpn_project",
+      "public_route_locks",
+      `
+        INSERT INTO public_route_locks (path, locked, listed, updated_at)
+        SELECT '/projects/self-hosted-vpn', locked, listed, updated_at
+        FROM public_route_locks
+        WHERE path = '/projects/automate-design-handovers-with-a-figma-to-code-pipeline'
+        ON CONFLICT (path) DO NOTHING;
+
+        DELETE FROM public_route_locks
+        WHERE path = '/projects/automate-design-handovers-with-a-figma-to-code-pipeline';
       `,
     );
 

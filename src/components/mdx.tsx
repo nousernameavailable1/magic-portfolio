@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { slugify as transliterate } from "transliteration";
 import { AiGeneratedNotice } from "./projects/AiGeneratedNotice";
 import { MagicPortfolioArchitecture } from "./projects/MagicPortfolioArchitecture";
+import { VpnDiagram, VpnProtocolChart } from "./projects/SelfHostedVpnDiagrams";
 
 import {
   Accordion,
@@ -237,6 +238,8 @@ const components = {
   SmartLink,
   AiGeneratedNotice,
   MagicPortfolioArchitecture,
+  VpnDiagram,
+  VpnProtocolChart,
   // Once UI components intentionally accept a wider prop surface than MDX intrinsic elements.
   // This boundary keeps that mapping explicit without weakening the individual component types.
 } as unknown as MDXComponents;
