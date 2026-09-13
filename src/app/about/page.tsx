@@ -109,7 +109,10 @@ export default async function About() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
-      <DesktopAboutHero introduction={text["about.introduction"]} />
+      <DesktopAboutHero
+        introduction={text["about.introduction"]}
+        currentlyDoing={text["about.currentlyDoing"]}
+      />
       {about.tableOfContent.display && (
         <aside className={styles.contentsContainer}>
           <TableOfContents structure={structure} about={about} />

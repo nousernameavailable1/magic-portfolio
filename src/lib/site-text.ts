@@ -81,6 +81,14 @@ export const siteTextDefinitions = [
     lines: 2,
   },
   {
+    key: "about.currentlyDoing",
+    label: "Currently doing",
+    description: "The current status shown on the back of the profile card.",
+    defaultValue: "Currently busy with something new.",
+    maxLength: 280,
+    lines: 3,
+  },
+  {
     key: "about.introduction",
     label: "About introduction",
     description: "The introductory paragraph beneath the profile details on the About page.",

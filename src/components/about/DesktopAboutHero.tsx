@@ -4,7 +4,13 @@ import { HiArrowUpRight } from "react-icons/hi2";
 import styles from "./DesktopAbout.module.scss";
 import ProfileCard from "./ProfileCard";
 
-export default function DesktopAboutHero({ introduction }: { introduction: string }) {
+export default function DesktopAboutHero({
+  introduction,
+  currentlyDoing,
+}: {
+  introduction: string;
+  currentlyDoing: string;
+}) {
   return (
     <section id="about-overview" className={styles.hero} aria-labelledby="desktop-about-title">
       <div className={styles.intro}>
@@ -36,6 +42,7 @@ export default function DesktopAboutHero({ introduction }: { introduction: strin
           avatar={person.avatar}
           location={person.location}
           languages={person.languages ?? []}
+          currentlyDoing={currentlyDoing}
         />
       )}
     </section>
