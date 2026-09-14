@@ -71,3 +71,11 @@
   .backLink { font-size: 0.8rem; font-weight: 400; }
   .card button[type="submit"] { background: var(--neutral-on-background-strong); color: var(--page-background); border-radius: 0.5rem; }
 }
+
+@media (max-width: 48rem) {
+ .card { border: 1px solid var(--neutral-alpha-medium); border-radius: 0.85rem; box-shadow: none; background: color-mix(in srgb, var(--neutral-on-background-strong) 3%, var(--page-background)) !important; }
+ .card::before { display: none; }
+ .card h1 { font-weight: 500; letter-spacing: -0.055em; }
+ .eyebrow { font: 0.65rem var(--font-code); }
+ .card button[type="submit"] { border-radius: 0.5rem; }
+}

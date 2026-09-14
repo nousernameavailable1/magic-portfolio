@@ -115,3 +115,11 @@
         height: calc(var(--mobile-dock-height, 4.5rem) + var(--mobile-dock-offset, 0.75rem) + env(safe-area-inset-bottom) + 0.75rem) !important;
     }
 }
+
+// Responsive composition for the shared public design.
+
+@media (max-width: 48rem) {
+  .mobile { max-width: none; border-top-color: var(--neutral-alpha-medium); gap: 0.75rem !important; }
+  .footerCopy { font-size: 0.7rem; line-height: 1.8; }
+  .mobileActionLink { color: var(--neutral-on-background-weak); }
+}

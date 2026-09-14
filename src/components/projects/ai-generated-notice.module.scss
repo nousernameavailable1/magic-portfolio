@@ -27,3 +27,5 @@
 @media (min-width: 48.001rem) {
   .notice { background: var(--brand-alpha-weak); border-color: var(--brand-border-medium); border-radius: 0.65rem; font-size: 0.85rem; line-height: 1.6; }
 }
+
+@media (max-width: 48rem) { .notice { background: var(--brand-alpha-weak); border-color: var(--brand-border-medium); border-radius: 0.65rem; font-size: 0.85rem; line-height: 1.6; } }

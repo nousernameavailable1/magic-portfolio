@@ -398,3 +398,10 @@
 .moderationEmpty h2 { font-size: 1.6rem; margin: 0; }
 .moderationEmpty p { font-size: 0.85rem; color: var(--neutral-on-background-weak); line-height: 1.7; margin: 0; }
 @media (max-width: 48rem) { .submissionCard { padding: 1rem !important; } }
+
+// Responsive composition for the shared public design.
+
+@media (max-width: 48rem) {
+  .board { padding-top: 2.5rem !important; gap: 0 !important; }
+  .board .mobileWallLayout { display: none; }
+}

@@ -139,7 +139,7 @@ export async function DesktopHome({
           </div>
           <span className={styles.directoryNote}>Pick a direction. Have a look around.</span>
         </div>
-        <nav aria-label="Desktop site map">
+        <nav aria-label="Site map">
           <ol className={styles.routes}>
             {topLevelRoutes.map((route, index) => {
               const children = routes.filter((child) => child.parent === route.path);

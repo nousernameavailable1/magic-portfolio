@@ -33,3 +33,5 @@
   .page { display: block; max-width: 76rem; padding-top: 1.5rem; }
   .video { width: 100%; border: 1px solid var(--neutral-alpha-medium); border-radius: 0.85rem; box-shadow: none; }
 }
+
+@media (max-width: 48rem) { .video { border: 1px solid var(--neutral-alpha-medium); border-radius: 0.85rem; box-shadow: none; } }

@@ -44,3 +44,5 @@
   .button { border-radius: 0.5rem; border-color: var(--neutral-alpha-medium); background: transparent; color: var(--public-accent); }
   .button:hover { background: var(--brand-alpha-weak); }
 }
+
+@media (max-width: 48rem) { .share { border-radius: 0.75rem; border-color: var(--neutral-alpha-medium); background: transparent; } .label { font: 0.7rem var(--font-code); } .button { border-radius: 0.5rem; color: var(--public-accent); } }

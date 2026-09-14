@@ -1,19 +1,7 @@
-import { PublicRouteMap } from "@/components/PublicRouteMap";
 import { DesktopHome } from "@/components/home/DesktopHome";
 import { getSiteText } from "@/lib/site-text";
 import { about, baseURL, home, person } from "@/resources";
-import {
-  Avatar,
-  Badge,
-  Button,
-  Column,
-  Heading,
-  Meta,
-  Row,
-  Schema,
-  Text,
-  // Line,
-} from "@once-ui-system/core";
+import { Column, Meta, Schema } from "@once-ui-system/core";
 import styles from "./page.module.scss";
 // import { Projects } from "@/components/projects/Projects";
 // import { Posts } from "@/components/blog/Posts";
@@ -49,9 +37,6 @@ export default async function Home() {
   const subline = afterHours ? text["home.afterHoursDescription"] : text["home.subline"];
   return (
     <div className={styles.page}>
-      <div className={styles.map}>
-        <PublicRouteMap />
-      </div>
       <Column className={styles.content} maxWidth="m" gap="xl" paddingY="12" horizontal="center">
         <Schema
           as="webPage"
@@ -68,63 +53,6 @@ export default async function Home() {
         />
         <Column fillWidth horizontal="center" gap="m">
           <DesktopHome headline={headline} subline={subline} afterHours={afterHours} />
-          <Column
-            className={`${styles.hero} ${styles.mobileHero}`}
-            hide
-            s={{ hide: false }}
-            fillWidth
-            horizontal="center"
-            align="center"
-            gap="20"
-          >
-            {home.featured.display && (
-              <Badge
-                className={styles.mobileFeaturedLink}
-                background="brand-alpha-weak"
-                paddingX="12"
-                paddingY="4"
-                onBackground="neutral-strong"
-                textVariant="label-default-s"
-                arrow={false}
-                href={home.featured.href}
-              >
-                <Row paddingY="2">{home.featured.title}</Row>
-              </Badge>
-            )}
-            <Heading className={styles.heroHeading} wrap="balance" variant="display-strong-l">
-              {headline}
-            </Heading>
-            <Text
-              className={styles.heroCopy}
-              wrap="balance"
-              onBackground="neutral-weak"
-              variant="heading-default-xl"
-            >
-              {subline}
-            </Text>
-            <Button
-              className={styles.mobileAboutLink}
-              id="about-mobile"
-              data-border="rounded"
-              href={about.path}
-              variant="secondary"
-              size="m"
-              weight="default"
-              arrowIcon
-            >
-              <Row gap="8" vertical="center" paddingRight="4">
-                {about.avatar.display && (
-                  <Avatar
-                    marginRight="8"
-                    style={{ marginLeft: "-0.75rem" }}
-                    src={person.avatar}
-                    size="m"
-                  />
-                )}
-                {about.title}
-              </Row>
-            </Button>
-          </Column>
         </Column>
         {/* Disabled template sections below also need their commented imports restored. */}
         {/* --- PROJECTS (FIRST SECTION) --- */}

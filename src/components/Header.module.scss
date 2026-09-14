@@ -277,3 +277,20 @@
         transition: none;
     }
 }
+
+// Responsive composition for the shared public design.
+
+@media (max-width: 48rem) {
+  .mobileNavigation { border-color: var(--neutral-alpha-medium); border-radius: 0.85rem; box-shadow: 0 4px 24px #00000018; backdrop-filter: blur(1.25rem); }
+  .mobileNavItem { border-radius: 0.5rem; font-weight: 450; gap: 0.35rem; }
+  .mobileNavItemSelected { background: var(--brand-alpha-medium); color: var(--public-accent); }
+  .mobileMenuBackdrop { visibility: hidden; }
+  .mobileMenuBackdropVisible { visibility: visible; }
+  .mobileMenuSheet { border-radius: 0.85rem; border-color: var(--neutral-alpha-medium); background: var(--page-background); padding: 1.25rem; }
+  .mobileMenuHeading span, .mobileThemeRow span { font: 0.6rem/1.7 var(--font-code); }
+  .mobileMenuHeading strong { font-size: 1.6rem; font-weight: 500; letter-spacing: -0.045em; }
+  .mobileThemeRow strong { font-size: 0.85rem; font-weight: 400; }
+  .mobileMenuClose { border-radius: 0.5rem; background: transparent; }
+  .mobileMenuLink { border-radius: 0.5rem; font-size: 0.85rem; background: transparent; border-color: var(--neutral-alpha-medium); min-height: 3.25rem; }
+  .mobileMenuLinkSelected { background: var(--brand-alpha-weak); border-color: var(--brand-border-medium); }
+}

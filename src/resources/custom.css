@@ -9,7 +9,7 @@
 
 @media (max-width: 48rem) {
   :root {
-    --mobile-gutter: 1rem;
+    --mobile-gutter: clamp(1.25rem, 5vw, 2rem);
     --mobile-touch-target: 3rem;
     --mobile-dock-height: 4.1rem;
     --mobile-dock-offset: 0.75rem;

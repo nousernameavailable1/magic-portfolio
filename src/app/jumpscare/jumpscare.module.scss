@@ -64,3 +64,5 @@
     width: 100vw;
   }
 }
+
+@media (max-width: 48rem) { .exit { display: inline-flex; align-items: center; position: absolute; bottom: calc(1.25rem + env(safe-area-inset-bottom)); left: 1.25rem; min-height: 3rem; padding: 0.75rem 1rem; border: 1px solid #a3bce840; border-radius: 0.5rem; background: #111; color: #a3bce8; font: 0.8rem var(--font-code); text-decoration: none; } }

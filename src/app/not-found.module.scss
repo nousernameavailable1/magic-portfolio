@@ -53,3 +53,10 @@
   .description { font-size: 1rem; }
   .mobileAction { display: inline-flex !important; margin-top: 1.5rem; border-radius: 0.5rem; }
 }
+
+@media (max-width: 48rem) {
+ .page { background: transparent; border: 0; border-radius: 0; padding: 3rem 0 !important; }
+ .code { color: var(--public-accent); font-weight: 500; }
+ .title { font-weight: 500; letter-spacing: -0.045em; }
+ .mobileAction { border-radius: 0.5rem; }
+}

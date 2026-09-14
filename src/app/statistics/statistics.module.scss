@@ -133,3 +133,5 @@
   .structureMetrics { border-left: 0; border-top: 1px solid var(--neutral-alpha-medium); padding: 1rem 0 0; }
   .updated { padding: 2rem 0; font-family: var(--font-code); }
 }
+
+@media (max-width: 48rem) { .page { padding-top: 2.5rem !important; gap: 0 !important; } }

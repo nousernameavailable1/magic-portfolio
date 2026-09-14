@@ -31,9 +31,10 @@
   }
 }
 
-@media (min-width: 48.001rem) {
+
   .siteBody:has([data-public-site]) {
     --public-accent: #a3bce8;
+    --brand-on-background-medium: var(--public-accent);
     --brand-on-background-strong: var(--public-accent);
     --brand-on-background-weak: var(--public-accent);
     --brand-border-strong: var(--public-accent);
@@ -45,8 +46,6 @@
   }
   :global([data-theme="light"]) .siteBody:has([data-public-site]) { --public-accent: #3b6094; --brand-on-solid-strong: #fff; }
   .siteBody:has([data-public-site]) :is(a, button, input, textarea):focus-visible { outline: 2px solid var(--public-accent); outline-offset: 4px; }
-}
-
 // Admin uses the same muted blue palette as the public desktop pages.
 .siteBody:has([data-admin-site]) {
   --public-accent: #a3bce8;
@@ -72,3 +71,11 @@
 .siteBody:has([data-admin-site]) > .topSpacer { display: none; }
 .siteBody:has([data-admin-site]) .siteMain { padding: 0 !important; }
 .siteBody:has([data-admin-site]) :is(a, button, input, textarea, select):focus-visible { outline: 2px solid var(--public-accent); outline-offset: 3px; }
+
+// Responsive composition for the shared public design.
+
+@media (max-width: 48rem) {
+  .siteBody:has([data-public-site]) > .siteBackground { display: none; }
+  .siteBody:has([data-public-site]) .siteMain { padding: 0 var(--mobile-gutter) 2rem !important; }
+  .siteContent { width: 100%; }
+}
