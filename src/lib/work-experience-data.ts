@@ -39,8 +39,8 @@ export const defaultWorkExperiences: WorkExperience[] = [
     ],
     images: [
       {
-        src: "/images/projects/project-01/cover-01.jpg",
-        alt: "Once UI Project",
+        src: "/images/about/sales-outreach.jpg",
+        alt: "Hands typing on a laptop showing an email marketing dashboard",
         width: 16,
         height: 9,
       },

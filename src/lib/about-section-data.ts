@@ -85,14 +85,14 @@ export const defaultTechnicalSkills: TechnicalSkillEntry[] = [
     tags: [{ id: "oci", name: "OCI", icon: "oracle" }],
     images: [
       {
-        src: "/images/projects/project-01/cover-02.jpg",
-        alt: "Project image",
+        src: "/images/about/oci-dashboard.png",
+        alt: "Oracle Cloud Console home dashboard with Build and Resources widgets",
         width: 16,
         height: 9,
       },
       {
-        src: "/images/projects/project-01/cover-03.jpg",
-        alt: "Project image",
+        src: "/images/about/oci-console.png",
+        alt: "Oracle Cloud Console virtual machine instance configuration",
         width: 16,
         height: 9,
       },
@@ -112,8 +112,8 @@ export const defaultTechnicalSkills: TechnicalSkillEntry[] = [
     ],
     images: [
       {
-        src: "/images/projects/project-01/cover-04.jpg",
-        alt: "Project image",
+        src: "/images/about/linux-terminal.png",
+        alt: "Linux terminal running htop with CPU, memory, and process statistics",
         width: 16,
         height: 9,
       },
