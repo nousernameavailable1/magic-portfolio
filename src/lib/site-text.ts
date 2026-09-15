@@ -1,5 +1,6 @@
 import "server-only";
 
+import { connection } from "next/server";
 import { cache } from "react";
 import { database } from "./database";
 
@@ -260,6 +261,10 @@ function defaultSiteText(): SiteTextValues {
 }
 
 export const getSiteTextState = cache(async (): Promise<SiteTextState> => {
+  // Read runtime data only after a request arrives: Docker builds have no database.
+  // Keep this outside the fallback catch so Next.js can stop prerendering.
+  await connection();
+
   const defaults = defaultSiteText();
   const values = { ...defaults };
 
