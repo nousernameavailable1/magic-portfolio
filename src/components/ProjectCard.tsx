@@ -19,7 +19,7 @@ interface ProjectCardProps {
   title: string;
   content: string;
   description: string;
-  avatars: { src: string }[];
+  avatars: { src: string; unoptimized?: boolean }[];
   link: string;
   desktopPreview?: ReactNode;
 }

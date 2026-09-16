@@ -317,6 +317,7 @@ export function WallBoard() {
                         aria-label={`Comment by ${person.name}`}
                         size="s"
                         src={person.avatar}
+                        unoptimized
                       />
                       <Text className={styles.commentLabel} variant="label-default-s">
                         Comment

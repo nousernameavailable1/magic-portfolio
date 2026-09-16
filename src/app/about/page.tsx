@@ -139,7 +139,7 @@ export default async function About() {
             flex={3}
             horizontal="center"
           >
-            <Avatar src={person.avatar} size="xl" />
+            <Avatar src={person.avatar} size="xl" unoptimized />
             <Row className={styles.location} gap="8" vertical="center">
               <Icon onBackground="accent-weak" name="globe" />
               {person.location}
@@ -301,7 +301,8 @@ export default async function About() {
                             <Media
                               enlarge
                               radius="m"
-                              sizes={image.width.toString()}
+                              sizes="(max-width: 768px) 100vw, 50vw"
+                              unoptimized
                               alt={image.alt}
                               src={image.src}
                             />
@@ -389,7 +390,8 @@ export default async function About() {
                             <Media
                               enlarge
                               radius="m"
-                              sizes={image.width.toString()}
+                              sizes="(max-width: 768px) 100vw, 50vw"
+                              unoptimized
                               alt={image.alt}
                               src={image.src}
                             />

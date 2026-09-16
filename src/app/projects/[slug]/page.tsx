@@ -73,6 +73,7 @@ export default async function Project({
   const avatars =
     post.metadata.team?.map((person) => ({
       src: person.avatar,
+      unoptimized: person.avatar === "/images/profilepic.png",
     })) || [];
   const relatedProjectExclusions =
     post.slug === "magic-portfolio" ? [post.slug, "simple-portfolio-builder"] : [post.slug];

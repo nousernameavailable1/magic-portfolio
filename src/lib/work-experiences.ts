@@ -1,4 +1,5 @@
 import "server-only";
+import { resolveAboutImages } from "@/lib/about-images";
 
 import { database } from "@/lib/database";
 import { type WorkExperience, defaultWorkExperiences } from "@/lib/work-experience-data";
@@ -52,7 +53,10 @@ export async function getStoredWorkExperiences() {
   const result = await db.query<{ value: string }>("SELECT value FROM site_text WHERE key = $1", [
     STORE_KEY,
   ]);
-  return parseStoredExperiences(result.rows[0]?.value);
+  return parseStoredExperiences(result.rows[0]?.value).map((experience) => ({
+    ...experience,
+    images: resolveAboutImages(experience.images),
+  }));
 }
 
 export const getWorkExperiences = cache(async () => {

@@ -39,7 +39,7 @@ export default function ProfileCard({
         <div className={styles.cardFace} aria-hidden={flipped} inert={flipped}>
           <div className={styles.portrait}>
             <span className={styles.portraitRing} aria-hidden="true" />
-            <Avatar src={avatar} size="xl" />
+            <Avatar src={avatar} size="xl" unoptimized />
             <span className={styles.portraitCaption}>{name}</span>
           </div>
           <dl className={styles.facts}>

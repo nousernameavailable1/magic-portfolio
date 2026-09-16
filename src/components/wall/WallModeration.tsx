@@ -287,7 +287,12 @@ export function WallModeration() {
                   radius="s"
                 >
                   <Row className={styles.commentHeader} gap="8" vertical="center">
-                    <Avatar aria-label={`Comment by ${person.name}`} size="s" src={person.avatar} />
+                    <Avatar
+                      aria-label={`Comment by ${person.name}`}
+                      size="s"
+                      src={person.avatar}
+                      unoptimized
+                    />
                     <Text className={styles.commentLabel} variant="label-default-s">
                       Comment
                     </Text>

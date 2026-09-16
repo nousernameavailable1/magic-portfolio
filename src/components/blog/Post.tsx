@@ -52,7 +52,7 @@ export default function Post({ post, thumbnail, direction }: PostProps) {
         >
           <Row className={styles.meta} gap="24" vertical="center">
             <Row className={styles.author} vertical="center" gap="16">
-              <Avatar src={person.avatar} size="s" />
+              <Avatar src={person.avatar} size="s" unoptimized />
               <Text variant="label-default-s">{person.name}</Text>
             </Row>
             <Text variant="body-default-xs" onBackground="neutral-weak">

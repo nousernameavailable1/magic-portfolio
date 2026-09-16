@@ -75,7 +75,7 @@ export async function DesktopHome({
           <p className={styles.description}>{subline}</p>
           <div className={styles.actions}>
             <Link id="about" className={styles.aboutLink} href={about.path}>
-              {about.avatar.display && <Avatar src={person.avatar} size="s" />}
+              {about.avatar.display && <Avatar src={person.avatar} size="s" unoptimized />}
               <span>{about.title}</span>
               <HiArrowUpRight aria-hidden="true" />
             </Link>

@@ -36,7 +36,12 @@ export function Projects({ range, exclude, portfolioPreview }: ProjectsProps) {
           title={post.metadata.title}
           description={post.metadata.summary}
           content={post.content}
-          avatars={post.metadata.team?.map((member) => ({ src: member.avatar })) || []}
+          avatars={
+            post.metadata.team?.map((member) => ({
+              src: member.avatar,
+              unoptimized: member.avatar === "/images/profilepic.png",
+            })) || []
+          }
           link={post.metadata.link || ""}
           desktopPreview={post.slug === "magic-portfolio" ? portfolioPreview : undefined}
         />

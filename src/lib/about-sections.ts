@@ -1,4 +1,5 @@
 import "server-only";
+import { resolveAboutImages } from "@/lib/about-images";
 
 import {
   type StudyEntry,
@@ -122,7 +123,7 @@ export async function getStoredTechnicalSkills() {
     await getStoredValue(TECHNICAL_SKILLS_STORE_KEY),
     isTechnicalSkill,
     copyTechnicalSkills(),
-  );
+  ).map((skill) => ({ ...skill, images: resolveAboutImages(skill.images) }));
 }
 
 export const getTechnicalSkills = cache(async () => {
