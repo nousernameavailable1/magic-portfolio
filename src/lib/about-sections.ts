@@ -1,5 +1,5 @@
 import "server-only";
-import { resolveAboutImages } from "@/lib/about-images";
+import { resolveTechnicalSkillImages } from "@/lib/about-images";
 
 import {
   type StudyEntry,
@@ -21,7 +21,7 @@ function copyTechnicalSkills(skills = defaultTechnicalSkills) {
   return skills.map((skill) => ({
     ...skill,
     tags: skill.tags.map((tag) => ({ ...tag })),
-    images: skill.images.map((image) => ({ ...image })),
+    images: resolveTechnicalSkillImages(skill).map((image) => ({ ...image })),
   }));
 }
 
@@ -123,7 +123,7 @@ export async function getStoredTechnicalSkills() {
     await getStoredValue(TECHNICAL_SKILLS_STORE_KEY),
     isTechnicalSkill,
     copyTechnicalSkills(),
-  ).map((skill) => ({ ...skill, images: resolveAboutImages(skill.images) }));
+  ).map((skill) => ({ ...skill, images: resolveTechnicalSkillImages(skill) }));
 }
 
 export const getTechnicalSkills = cache(async () => {

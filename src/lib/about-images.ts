@@ -32,3 +32,25 @@ export function resolveAboutImages<T extends { src: string; alt: string }>(image
     return replacement ? { ...image, ...replacement } : image;
   });
 }
+
+export function resolveTechnicalSkillImages(skill: TechnicalSkillEntry) {
+  const images = resolveAboutImages(skill.images);
+  const identity = `${skill.id} ${skill.title}`.replace(/[-_]/g, " ");
+  const isIosSideloading =
+    /\bsidestore\b/i.test(identity) ||
+    (/\bios\b/i.test(identity) && /\bsideload(?:ing)?\b/i.test(identity));
+
+  if (isIosSideloading && images.length === 0) {
+    return [
+      {
+        src: "/images/about/sidestore-homepage.png",
+        alt: "SideStore homepage preview with its logo and iPhone app management interface",
+        width: 16,
+        height: 9,
+      },
+    ];
+  }
+
+  return images;
+}
+import type { TechnicalSkillEntry } from "@/lib/about-section-data";

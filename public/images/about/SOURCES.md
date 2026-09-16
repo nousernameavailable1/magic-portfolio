@@ -13,3 +13,10 @@ These illustrate the surrounding topics, not Talal's own accounts or equipment.
 
 Oracle screenshots are official product illustrations, not stock photos or
 Creative Commons assets. All product names and trademarks belong to their owners.
+
+## SideStore (added 2026-09-16)
+
+`sidestore-homepage.png` is the unmodified official social preview image from the
+[SideStore homepage](https://sidestore.io/), showing the SideStore logo and app
+interface. Source: [SideStore website repository asset](https://raw.githubusercontent.com/SideStore/sidestore.github.io/master/src/assets/embed_card.png).
+Artwork and branding belong to the SideStore project and its contributors.
