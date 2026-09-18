@@ -16,9 +16,15 @@ services:
       ADMIN_SESSION_SECRET: ${ADMIN_SESSION_SECRET}
       CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN}
       CLOUDFLARE_ZONE_ID: ${CLOUDFLARE_ZONE_ID}
-      FAKEMAIL_DOMAIN: ${FAKEMAIL_DOMAIN}
+      FAKEMAIL_DOMAIN: ${FAKEMAIL_DOMAIN:-temp.kadli.org}
       FAKEMAIL_FORWARD_TO: ${FAKEMAIL_FORWARD_TO}
       FAKEMAIL_CLEANUP_SECRET: ${FAKEMAIL_CLEANUP_SECRET}
+      # Optional host controls: see deploy/host-agent/README.md before enabling.
+      # HOST_AGENT_URL: http://host-bridge:8080
+      # HOST_AGENT_TOKEN: ${HOST_AGENT_TOKEN}
+    # networks:
+    #   - default
+    #   - host_control
     expose:
       - "3000"
     depends_on:
@@ -90,3 +96,9 @@ volumes:
   caddy_data:
   caddy_config:
   portfolio_postgres_data:
+
+# Enable with the optional portfolio networks block above, after starting the bridge.
+# networks:
+#   host_control:
+#     external: true
+#     name: portfolio-host-control

@@ -1,0 +1,14 @@
+.host { display: grid; gap: 24px; min-width: 0; }
+.status { display: block; margin: 16px 0; }
+.panel {
+  min-width: 0;
+  padding: clamp(16px, 3vw, 28px);
+  border: 1px solid var(--neutral-alpha-medium);
+  border-radius: 16px;
+  background: var(--surface-background);
+  h2 { margin-top: 0; }
+  p { line-height: 1.6; overflow-wrap: anywhere; }
+  button { padding: 12px 18px; border-radius: 8px; border: 1px solid var(--neutral-alpha-medium); background: var(--brand-solid-strong); color: var(--brand-on-solid-strong); cursor: pointer; font: inherit; }
+  button:disabled { opacity: 0.55; cursor: default; }
+  pre { max-height: 440px; overflow: auto; padding: 16px; background: var(--neutral-alpha-weak); border-radius: 8px; font-size: 12px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+}

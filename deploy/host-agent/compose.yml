@@ -1,0 +1,63 @@
+# Keep this project separate from the site so it survives site replacement.
+name: portfolio-host
+
+services:
+  host-bridge:
+    build: .
+    restart: unless-stopped
+    init: true
+    read_only: true
+    cap_drop: [ALL]
+    # Read administrator-owned .env files through the read-only deployment mount.
+    cap_add: [DAC_OVERRIDE]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+    mem_limit: 256m
+    environment:
+      HOST_AGENT_TOKEN: ${HOST_AGENT_TOKEN:?Generate a token with openssl rand -hex 32}
+      COMPOSE_DIRECTORY: ${HOST_COMPOSE_DIRECTORY:?Set the absolute VM deployment directory}
+      COMPOSE_PROJECT_NAME: ${HOST_COMPOSE_PROJECT_NAME:?Set the existing site Compose project name}
+      DOCKER_HOST: unix:///var/run/docker.sock
+      DOCKER_CONFIG: /registry
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+        bind:
+          create_host_path: false
+      # Matching absolute paths preserve relative host mounts such as ./Caddyfile.
+      - type: bind
+        source: ${HOST_COMPOSE_DIRECTORY}
+        target: ${HOST_COMPOSE_DIRECTORY}
+        read_only: true
+        bind:
+          create_host_path: false
+      - bridge_state:/var/lib/portfolio-host
+      - registry_auth:/registry
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+    networks:
+      - default
+      - host_control
+    healthcheck:
+      test: [CMD, python3, /app/healthcheck.py]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: 5m
+        max-file: "2"
+    # Deliberately no published ports and no privileged/host networking.
+
+networks:
+  host_control:
+    name: portfolio-host-control
+    internal: true
+
+volumes:
+  bridge_state:
+  registry_auth:

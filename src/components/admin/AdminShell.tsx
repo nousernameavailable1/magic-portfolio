@@ -25,8 +25,14 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       "/admin/text": "Site content",
       "/admin/map": "Site map",
       "/admin/vpn": "VPN",
+      "/admin/host": "Host",
     }[pathname] ?? "Admin";
-  const overflowRouteSelected = ["/admin/fakemail", "/admin/map", "/admin/vpn"].includes(pathname);
+  const overflowRouteSelected = [
+    "/admin/fakemail",
+    "/admin/map",
+    "/admin/vpn",
+    "/admin/host",
+  ].includes(pathname);
 
   useEffect(() => {
     if (pathname) setMobileMenuOpen(false);
@@ -138,6 +144,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                 { href: "/admin/fakemail", label: "Fakemail", icon: "email" },
                 { href: "/admin/map", label: "Site map", icon: "map" },
                 { href: "/admin/vpn", label: "VPN", icon: "openvpn" },
+                { href: "/admin/host", label: "Host", icon: "globe" },
               ],
             },
           ].map((group) => (
@@ -237,6 +244,15 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           </button>
         </div>
         <nav className={styles.mobileMenuGrid} aria-label="Secondary admin navigation">
+          <Link
+            aria-current={pathname === "/admin/host" ? "page" : undefined}
+            className={`${styles.mobileMenuLink} ${pathname === "/admin/host" ? styles.mobileMenuLinkSelected : ""}`}
+            href="/admin/host"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <Icon decorative name="globe" size="m" />
+            <span>Host</span>
+          </Link>
           <Link className={styles.mobileMenuLink} href="/" onClick={() => setMobileMenuOpen(false)}>
             <Icon decorative name="home" size="m" />
             <span>View site</span>

@@ -131,7 +131,7 @@ export function FakemailManager() {
     }
   };
 
-  const domain = settings?.domain ?? "kadli.org";
+  const domain = settings?.domain ?? "temp.kadli.org";
   const isBusy = busyAction !== null;
   const canCreate =
     settings?.configured && !isBusy && (mode === "random" || Boolean(localPart.trim()));
@@ -151,7 +151,7 @@ export function FakemailManager() {
           <Column gap="4">
             <Text variant="heading-strong-l">Create alias</Text>
             <Text onBackground="neutral-weak">
-              Each alias forwards to your verified destination address through Cloudflare.
+              New aliases use @{domain} and forward to your verified inbox.
             </Text>
           </Column>
           {!loading && settings && !settings.configured && (
@@ -218,7 +218,7 @@ export function FakemailManager() {
           gap="12"
           wrap
         >
-          <Text variant="heading-strong-l">Active aliases</Text>
+          <Text variant="heading-strong-l">Saved aliases</Text>
           <Button
             disabled={loading || isBusy}
             loading={loading}
@@ -254,6 +254,12 @@ export function FakemailManager() {
           >
             <Column gap="4">
               <code className={styles.address}>{alias.email}</code>
+              {!alias.email.toLowerCase().endsWith(`@${domain}`) && (
+                <Text variant="body-default-s" onBackground="neutral-weak">
+                  Previous domain — this address has not been migrated. Create a replacement using @
+                  {domain}. Deleting this entry does not change delivery through iCloud.
+                </Text>
+              )}
               <Text variant="body-default-s" onBackground="neutral-weak">
                 Created {formatDubaiDateTime(alias.createdAt)} ·{" "}
                 {alias.expiresAt

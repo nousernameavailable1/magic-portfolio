@@ -68,9 +68,15 @@ cp .env.example .env
 docker compose up -d
 ```
 
-Set strong values in `.env` and confirm the hostname in `Caddyfile` before starting the stack. The
-Fakemail feature additionally requires the Cloudflare Email Routing values documented in
-`.env.example`.
+Set strong values in `.env` and confirm the hostname in `Caddyfile` before starting the stack.
+Fakemail uses Cloudflare Email Routing on `temp.kadli.org`, while personal `@kadli.org`
+mail stays on iCloud. Follow the [Fakemail setup and migration guide](docs/fakemail.md)
+and configure the values in `.env.example`.
+
+For read-only container logs and a fixed **Pull latest & deploy** button in the admin
+sidebar, follow the [Docker host bridge setup](deploy/host-agent/README.md). The bridge
+runs in a separate Compose project and accepts authenticated requests over a private
+Docker network. No systemd service or Docker socket mount in the site is required.
 
 ## Credits and license
 

@@ -3,7 +3,8 @@ import "server-only";
 
 import { database } from "./database";
 
-const DEFAULT_DOMAIN = "kadli.org";
+// Personal @kadli.org mail is hosted by iCloud; disposable mail uses Cloudflare.
+const DEFAULT_DOMAIN = "temp.kadli.org";
 const EXPIRATION_DURATIONS = {
   "1h": 60 * 60 * 1000,
   "1d": 24 * 60 * 60 * 1000,
@@ -54,7 +55,7 @@ export class FakemailError extends Error {
 }
 
 function getFakemailDomain() {
-  const domain = (process.env.FAKEMAIL_DOMAIN ?? DEFAULT_DOMAIN).trim().toLowerCase();
+  const domain = (process.env.FAKEMAIL_DOMAIN?.trim() || DEFAULT_DOMAIN).toLowerCase();
   if (
     !domain ||
     domain.length > 253 ||
