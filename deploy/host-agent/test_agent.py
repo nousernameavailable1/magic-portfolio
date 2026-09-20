@@ -45,7 +45,7 @@ class AgentTests(unittest.TestCase):
     def test_subprocess_has_no_shell_or_stdin_and_output_is_bounded(self):
         process = Mock(stdout=io.BytesIO(b"x" * (agent.LIMIT * 2) + b"tail"))
         process.wait.return_value = 0
-        with patch.dict(os.environ, {"COMPOSE_DIRECTORY": "/opt/site", "COMPOSE_PROJECT_NAME": "site"}):
+        with patch.dict(os.environ, {"COMPOSE_DIRECTORY": "/opt/site", "COMPOSE_PROJECT_NAME": "site", "COMPOSE_PROFILES": "host"}):
             with patch.object(agent.subprocess, "Popen", return_value=process) as popen:
                 code, output = agent.run(["pull"], 900)
         self.assertEqual(code, 0)
@@ -53,6 +53,7 @@ class AgentTests(unittest.TestCase):
         self.assertTrue(output.endswith("tail"))
         self.assertFalse(popen.call_args.kwargs.get("shell", False))
         self.assertEqual(popen.call_args.kwargs["stdin"], agent.subprocess.DEVNULL)
+        self.assertEqual(popen.call_args.kwargs["env"]["COMPOSE_PROFILES"], "")
 
     def test_pull_then_up_and_persist_success(self):
         agent.UPDATE_LOCK.acquire()

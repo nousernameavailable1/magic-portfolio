@@ -1,0 +1,165 @@
+name: portfolio-site
+
+services:
+  portfolio:
+    image: ghcr.io/nousernameavailable1/magic-portfolio:latest
+    container_name: magic-portfolio
+    restart: unless-stopped
+    init: true
+    mem_limit: 450m
+    environment:
+      PAGE_ACCESS_PASSWORD: ${PAGE_ACCESS_PASSWORD}
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_NAME: portfolio
+      DB_USER: portfolio
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      ADMIN_SESSION_SECRET: ${ADMIN_SESSION_SECRET}
+      GITHUB_REPOSITORY: ${GITHUB_REPOSITORY}
+      CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN}
+      CLOUDFLARE_ZONE_ID: ${CLOUDFLARE_ZONE_ID}
+      FAKEMAIL_DOMAIN: ${FAKEMAIL_DOMAIN}
+      FAKEMAIL_FORWARD_TO: ${FAKEMAIL_FORWARD_TO}
+      FAKEMAIL_CLEANUP_SECRET: ${FAKEMAIL_CLEANUP_SECRET}
+      HOST_AGENT_URL: http://host-bridge:8080
+      HOST_AGENT_TOKEN: ${HOST_AGENT_TOKEN}
+    networks:
+      - default
+      - host_control
+    expose:
+      - "3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  fakemail-cleanup:
+    image: curlimages/curl:8.21.0
+    container_name: magic-portfolio-fakemail-cleanup
+    restart: unless-stopped
+    init: true
+    environment:
+      FAKEMAIL_CLEANUP_SECRET: ${FAKEMAIL_CLEANUP_SECRET}
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        while true; do
+          curl --fail --silent --show-error \
+            --header "Authorization: Bearer $$FAKEMAIL_CLEANUP_SECRET" \
+            http://portfolio:3000/api/internal/fakemail/cleanup || true
+          sleep 300
+        done
+    depends_on:
+      - portfolio
+
+  db:
+    image: postgres:16-alpine
+    container_name: portfolio-postgres
+    restart: unless-stopped
+    init: true
+    mem_limit: 256m
+    command:
+      - postgres
+      - -c
+      - shared_buffers=64MB
+      - -c
+      - max_connections=20
+    environment:
+      POSTGRES_DB: portfolio
+      POSTGRES_USER: portfolio
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - portfolio_postgres_data:/var/lib/postgresql/data
+    expose:
+      - "5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: portfolio-caddy
+    restart: unless-stopped
+    init: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - portfolio
+
+  host-bridge:
+    profiles: [host]
+    image: ghcr.io/nousernameavailable1/magic-portfolio-host-bridge:latest
+    restart: unless-stopped
+    init: true
+    read_only: true
+    cap_drop: [ALL]
+    # Read administrator-owned .env files through the read-only deployment mount.
+    cap_add: [DAC_OVERRIDE]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+    mem_limit: 256m
+    environment:
+      HOST_AGENT_TOKEN: ${HOST_AGENT_TOKEN:?Generate a token with openssl rand -hex 32}
+      COMPOSE_DIRECTORY: ${HOST_COMPOSE_DIRECTORY:?Set the absolute VM deployment directory}
+      COMPOSE_PROJECT_NAME: ${HOST_COMPOSE_PROJECT_NAME:?Set the existing site Compose project name}
+      DOCKER_HOST: unix:///var/run/docker.sock
+      DOCKER_CONFIG: /registry
+      COMPOSE_PROFILES: ""
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+        bind:
+          create_host_path: false
+      # Matching absolute paths preserve relative host mounts such as ./Caddyfile.
+      - type: bind
+        source: ${HOST_COMPOSE_DIRECTORY}
+        target: ${HOST_COMPOSE_DIRECTORY}
+        read_only: true
+        bind:
+          create_host_path: false
+      - bridge_state:/var/lib/portfolio-host
+      - registry_auth:/registry
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+    networks:
+      - default
+      - host_control
+    healthcheck:
+      test: [CMD, python3, /app/healthcheck.py]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: 5m
+        max-file: "2"
+    # Deliberately no published ports and no privileged/host networking.
+
+volumes:
+  caddy_data:
+  caddy_config:
+  portfolio_postgres_data:
+
+  bridge_state:
+    external: true
+    name: portfolio-host_bridge_state
+  registry_auth:
+    external: true
+    name: portfolio-host_registry_auth
+
+networks:
+  host_control:
+    external: true
+    name: portfolio-host-control

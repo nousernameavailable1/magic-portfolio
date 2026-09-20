@@ -1,5 +1,8 @@
 # Docker host bridge setup
 
+For a single Compose file on the VM, use the [unified deployment and migration guide](../../docs/host-unified.md).
+The instructions below retain the separately managed, two-file option.
+
 The **Host** admin page provides read-only container logs and one **Pull latest &
 deploy** button. `/host` redirects to `/admin/host`. The bridge runs as a small Docker
 container in its own Compose project. GitHub Actions builds and publishes its image;
@@ -86,9 +89,10 @@ There is no socket or deployment-directory mount to add to the site container.
 
 ### 3. Start the bridge, then deploy the updated site once
 
-Wait for the GitHub workflow's **build-and-push-bridge** job to finish on `main`.
+Wait for the GitHub workflow's **Publish bridge (AMD64 + ARM64)** job to finish on `main`.
 It publishes `ghcr.io/nousernameavailable1/magic-portfolio-host-bridge:latest` and
-a commit-SHA tag for Linux AMD64 and ARM64. Only the workflow's built-in
+a commit-SHA tag for Linux AMD64 and ARM64. Each architecture builds on a native
+GitHub runner without QEMU; a publish job combines the resulting images. Only the workflow's built-in
 `GITHUB_TOKEN` is used; no VM credentials or deployment token are sent to GitHub.
 
 If the new GHCR bridge package is private, either make the package public in GitHub

@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import secrets
 import subprocess
+import sys
 import tempfile
 import time
 import uuid
@@ -57,6 +58,8 @@ def wait_for_job():
 
 
 def main():
+    unified = "--unified" in sys.argv
+    bridge_project = PROJECT if unified else BRIDGE
     docker("version", "--format", "{{.Server.Version}}")
     docker("build", "-t", IMAGE, str(ROOT / "deploy/host-agent"))
     print("PASS: real bridge image build", flush=True)
@@ -64,32 +67,44 @@ def main():
         folder = Path(temporary).resolve()
         assert folder.is_relative_to(Path(tempfile.gettempdir()).resolve())
         empty_env = folder / ".env"
-        empty_env.write_text("")
+        empty_env.write_text("COMPOSE_PROFILES=host\n" if unified else "")
         environment = dict(os.environ, HOST_AGENT_TOKEN=TOKEN,
                            HOST_COMPOSE_DIRECTORY="/smoke-project", HOST_COMPOSE_PROJECT_NAME=PROJECT)
-        model = json.loads(docker("compose", "-p", BRIDGE, "--env-file", str(empty_env),
+        model = json.loads(docker("compose", "-p", bridge_project, "--env-file", str(empty_env),
                                   "-f", str(ROOT / "deploy/host-agent/compose.yml"),
                                   "config", "--format", "json", env=environment))
         service = model["services"]["host-bridge"]
         assert "build" not in service, "VM installation must use a prebuilt image"
         assert service["image"] == "ghcr.io/nousernameavailable1/magic-portfolio-host-bridge:latest"
         service["image"] = IMAGE
+        if unified:
+            service["profiles"] = ["host"]
+            service["environment"]["COMPOSE_PROFILES"] = "host"
         # Docker Desktop cannot mount a native Windows path at the same Linux path.
         # A fixture volume substitutes only for the read-only deployment bind mount.
         service["volumes"][1] = {"type": "volume", "source": "fixture",
                                  "target": "/smoke-project", "read_only": True}
         model["volumes"]["fixture"] = {"external": True, "name": VOLUME}
         model["networks"]["host_control"]["name"] = PREFIX + "-control"
-        compose_file = folder / "bridge.json"
+        compose_file = folder / ("docker-compose.yml" if unified else "bridge.json")
         compose_file.write_text(json.dumps(model))
-        compose = ["compose", "-p", BRIDGE, "-f", str(compose_file)]
+        compose = ["compose", "-p", bridge_project, "-f", str(compose_file)]
         fixture = folder / "docker-compose.yml"
 
         def write_fixture(version, image="alpine:3.22"):
-            fixture.write_text(json.dumps({"services": {"site": {
+            fixture_model = json.loads(json.dumps(model)) if unified else {"services": {}}
+            fixture_model["services"]["site"] = {
                 "image": image,
                 "command": ["sh", "-c", f"echo smoke-{version}; exec sleep 3600"],
-            }}}))
+            }
+            if unified:
+                # A profile accidentally enabled by .env/inheritance would pull this
+                # nonexistent image and/or recreate the running bridge on v2.
+                fixture_model["services"]["profile-canary"] = {
+                    "image": "alpine:codex-host-smoke-tag-does-not-exist", "profiles": ["host"],
+                }
+                fixture_model["services"]["host-bridge"]["labels"] = {"smoke-version": version}
+            fixture.write_text(json.dumps(fixture_model))
             docker("cp", str(fixture), CLIENT + ":/smoke-project/docker-compose.yml")
 
         try:
@@ -98,7 +113,7 @@ def main():
                    "--entrypoint", "python3", IMAGE, "-c", "import time; time.sleep(1200)")
             docker("cp", str(empty_env), CLIENT + ":/smoke-project/.env")
             write_fixture("v1")
-            docker(*compose, "up", "-d", "--wait", "--wait-timeout", "60")
+            docker(*compose, "up", "-d", "--wait", "--wait-timeout", "60", "host-bridge")
             bridge_id = docker(*compose, "ps", "-q", "host-bridge")
             docker("network", "connect", PREFIX + "-control", CLIENT)
             details = json.loads(docker("inspect", bridge_id))[0]
@@ -118,35 +133,39 @@ def main():
             result = wait_for_job()
             assert result["state"] == "succeeded", result
             assert "smoke-v1" in status()["logs"]
-            original_site = docker("ps", "-q", "--filter", f"label=com.docker.compose.project={PROJECT}")
+            original_site = docker("ps", "-q", "--filter", f"label=com.docker.compose.project={PROJECT}", "--filter", "label=com.docker.compose.service=site")
             print("PASS: real compose pull + up and read-only container logs", flush=True)
             write_fixture("v2")
             assert request("POST", "/update")["status"] == 202
             result = wait_for_job()
             assert result["state"] == "succeeded", result
-            replacement = docker("ps", "-q", "--filter", f"label=com.docker.compose.project={PROJECT}")
+            replacement = docker("ps", "-q", "--filter", f"label=com.docker.compose.project={PROJECT}", "--filter", "label=com.docker.compose.service=site")
             assert replacement and replacement != original_site
             assert docker(*compose, "ps", "-q", "host-bridge") == bridge_id
             assert "smoke-v2" in status()["logs"]
             print("PASS: site container replaced while bridge remained running", flush=True)
+            if unified:
+                assert not docker("ps", "-aq", "--filter", f"label=com.docker.compose.project={PROJECT}", "--filter", "label=com.docker.compose.service=profile-canary")
+                print("PASS: unified stack excludes host profile despite parent and .env settings", flush=True)
             docker(*compose, "restart", "host-bridge")
-            docker(*compose, "up", "-d", "--wait", "--wait-timeout", "60")
+            docker(*compose, "up", "-d", "--wait", "--wait-timeout", "60", "host-bridge")
             assert status()["state"] == "succeeded"
             print("PASS: job history persists across bridge restart", flush=True)
             write_fixture("must-not-deploy", "alpine:codex-host-smoke-tag-does-not-exist")
             assert request("POST", "/update")["status"] == 202
             result = wait_for_job()
             assert result["state"] == "failed" and "pull failed" in result["phase"], result
-            assert docker("ps", "-q", "--filter", f"label=com.docker.compose.project={PROJECT}") == replacement
+            assert docker("ps", "-q", "--filter", f"label=com.docker.compose.project={PROJECT}", "--filter", "label=com.docker.compose.service=site") == replacement
             print("PASS: failed image pull leaves existing site container untouched", flush=True)
         finally:
             # Every resource is scoped to this invocation's randomly generated project names.
-            for container in docker("ps", "-aq", "--filter", f"label=com.docker.compose.project={PROJECT}", check=False).split():
-                docker("rm", "-f", container)
-            for network in docker("network", "ls", "-q", "--filter", f"label=com.docker.compose.project={PROJECT}", check=False).split():
-                docker("network", "rm", network)
             docker("rm", "-f", CLIENT, check=False)
-            docker(*compose, "down", "--volumes")
+            for container in docker("ps", "-aq", "--filter", f"label=com.docker.compose.project={PROJECT}", "--filter", "label=com.docker.compose.service=site", check=False).split():
+                docker("rm", "-f", container)
+            docker(*compose, "--profile", "host", "down", "--volumes")
+            if not unified:
+                for network in docker("network", "ls", "-q", "--filter", f"label=com.docker.compose.project={PROJECT}", check=False).split():
+                    docker("network", "rm", network)
             docker("volume", "rm", VOLUME)
             print("Cleaned up disposable containers, networks and volumes.", flush=True)
 

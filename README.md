@@ -61,8 +61,11 @@ The production build also generates the code metrics consumed by the Statistics 
 
 The image workflow publishes both the website and host bridge for `linux/amd64` and
 `linux/arm64`. The same image tags work on x86 hosts and ARM hosts such as OCI A1;
-Docker selects the matching architecture when pulling. Dependency installation and
-the website build run separately for each target architecture.
+Docker selects the matching architecture when pulling. Website and bridge builds run
+in parallel on native `ubuntu-24.04` (AMD64) and `ubuntu-24.04-arm` (ARM64) runners,
+without QEMU. Separate caches are kept per image and architecture. After all builds
+succeed, publish jobs combine their digests, verify both platforms, and update the
+commit-SHA and `latest` tags.
 
 The production examples use Docker, PostgreSQL, and Caddy:
 
@@ -84,6 +87,10 @@ runs in a separate Compose project and accepts authenticated requests over a pri
 Docker network. GitHub Actions publishes its prebuilt image to GHCR, so the VM only
 needs the bridge Compose file and environment settings. No systemd service or Docker
 socket mount in the site is required.
+
+For an existing `portfolio-site` deployment, the [unified Compose migration](docs/host-unified.md)
+combines the site and bridge in one file while preserving existing volumes. The
+bridge uses a profile so it remains running during updates it performs.
 
 ## Credits and license
 

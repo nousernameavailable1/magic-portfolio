@@ -41,7 +41,10 @@ def run(action, timeout, publish=False):
     output = bytearray()
     process = subprocess.Popen(compose_command(action), stdout=subprocess.PIPE,
                                stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL,
-                               start_new_session=True, cwd=os.environ["COMPOSE_DIRECTORY"])
+                               start_new_session=True, cwd=os.environ["COMPOSE_DIRECTORY"],
+                               # Override inherited settings AND the deployment .env. A profiled
+                               # bridge must never be included in the update it is executing.
+                               env=dict(os.environ, COMPOSE_PROFILES=""))
 
     def read():
         while chunk := process.stdout.read1(4096):
