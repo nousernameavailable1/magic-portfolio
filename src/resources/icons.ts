@@ -5,6 +5,7 @@ import {
   HiArrowTopRightOnSquare,
   HiArrowUpRight,
   HiEnvelope,
+  HiOutlineChatBubbleBottomCenterText,
   HiOutlineDocument,
   HiOutlineEye,
   HiOutlineEyeSlash,
@@ -12,6 +13,7 @@ import {
   HiOutlineLink,
   HiOutlineMap,
   HiOutlineRocketLaunch,
+  HiOutlineServerStack,
 } from "react-icons/hi2";
 
 import {
@@ -57,7 +59,9 @@ export const iconLibrary: Record<string, IconType> = {
   arrowUpRight: HiArrowUpRight,
   arrowRight: HiArrowRight,
   email: HiEnvelope,
+  messages: HiOutlineChatBubbleBottomCenterText,
   globe: HiOutlineGlobeAsiaAustralia,
+  server: HiOutlineServerStack,
   map: HiOutlineMap,
   person: PiUserCircleDuotone,
   grid: PiGridFourDuotone,

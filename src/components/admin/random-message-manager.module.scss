@@ -1,0 +1,354 @@
+.page {
+  display: grid;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.overview {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(20rem, 0.9fr) minmax(0, 1.35fr);
+}
+
+.metrics,
+.previewCard,
+.messageList,
+.editor {
+  background: var(--admin-panel);
+  border: 1px solid var(--neutral-border-medium);
+  border-radius: 0.6rem;
+  min-width: 0;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  overflow: hidden;
+}
+
+.metrics > div {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1.25rem;
+}
+
+.metrics > div + div {
+  border-left: 1px solid var(--neutral-alpha-weak);
+}
+
+.metrics span,
+.previewHeading > span,
+.itemMeta,
+.messageItem small {
+  color: var(--neutral-on-background-weak);
+  font-size: var(--font-size-label-xs);
+}
+
+.metrics strong {
+  font-size: var(--font-size-heading-l);
+  font-weight: 600;
+}
+
+.previewCard {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.previewHeading,
+.editorHeader,
+.availabilityField,
+.editorActions,
+.editorActions > div {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+.previewHeading > span {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.previewCard blockquote {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0;
+}
+
+.previewCard blockquote p {
+  font-size: var(--font-size-body-l);
+  line-height: 1.6;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.previewCard blockquote footer {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.previewCard blockquote footer span {
+  background: var(--brand-alpha-weak);
+  border: 1px solid var(--brand-border-medium);
+  border-radius: 999px;
+  color: var(--public-accent);
+  font-size: var(--font-size-label-xs);
+  font-weight: 700;
+  padding: 0.25rem 0.55rem;
+}
+
+.previewCard cite {
+  color: var(--neutral-on-background-weak);
+  font-size: var(--font-size-body-s);
+  font-style: normal;
+}
+
+.manager {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(16rem, 0.72fr) minmax(0, 1.45fr);
+  min-width: 0;
+}
+
+.messageList {
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 6rem);
+  overflow: hidden;
+  position: sticky;
+  top: 1rem;
+}
+
+.listHeader {
+  border-bottom: 1px solid var(--neutral-alpha-weak);
+  padding: 1.25rem;
+}
+
+.listHeader > div,
+.editorHeader > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.filters {
+  border-bottom: 1px solid var(--neutral-alpha-weak);
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem 1rem;
+}
+
+.filters > label {
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
+  clip-path: inset(50%);
+}
+
+.filters > input {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--neutral-alpha-medium);
+  color: inherit;
+  font: inherit;
+  font-size: var(--font-size-body-s);
+  outline: none;
+  padding: 0.55rem 0;
+  width: 100%;
+}
+
+.filters > input:focus {
+  border-color: var(--public-accent);
+}
+
+.filters > input::placeholder {
+  color: var(--neutral-on-background-weak);
+}
+
+.entries {
+  display: grid;
+  gap: 0.4rem;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.messageItem {
+  appearance: none;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.4rem;
+  color: inherit;
+  cursor: pointer;
+  display: grid;
+  font: inherit;
+  gap: 0.55rem;
+  padding: 0.9rem;
+  text-align: left;
+  transition: background 160ms ease, border-color 160ms ease;
+  width: 100%;
+}
+
+.messageItem:hover {
+  background: var(--neutral-alpha-weak);
+}
+
+.messageItem:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.messageItem strong {
+  display: -webkit-box;
+  font-size: var(--font-size-body-s);
+  font-weight: 500;
+  line-height: 1.5;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.itemMeta {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  text-transform: uppercase;
+}
+
+.activeState,
+.pausedState {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.3rem;
+}
+
+.activeState::before,
+.pausedState::before {
+  background: var(--public-accent);
+  border-radius: 50%;
+  content: "";
+  height: 0.35rem;
+  width: 0.35rem;
+}
+
+.pausedState::before {
+  background: var(--neutral-on-background-weak);
+}
+
+.selectedMessage {
+  background: var(--brand-alpha-weak);
+  border-color: var(--brand-border-medium);
+  box-shadow: inset 2px 0 var(--public-accent);
+}
+
+.emptyList {
+  padding: 1rem;
+}
+
+.editor {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.75rem;
+}
+
+.editorHeader {
+  border-bottom: 1px solid var(--neutral-alpha-weak);
+  padding-bottom: 1rem;
+}
+
+.fieldGrid {
+  align-items: start;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
+}
+
+.availabilityField {
+  background: var(--neutral-alpha-weak);
+  border: 1px solid var(--neutral-alpha-weak);
+  border-radius: 0.4rem;
+  padding: 0.9rem;
+}
+
+.availabilityField > div:first-child {
+  display: grid;
+  gap: 0.2rem;
+  max-width: 30rem;
+}
+
+.editorActions {
+  border-top: 1px solid var(--neutral-alpha-medium);
+  padding-top: 1.25rem;
+}
+
+@media (max-width: 72rem) {
+  .overview,
+  .manager {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .messageList {
+    max-height: 30rem;
+    position: static;
+  }
+}
+
+@media (max-width: 48rem) {
+  .metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .metrics > div + div {
+    border-left: 0;
+    border-top: 1px solid var(--neutral-alpha-weak);
+  }
+
+  .messageList {
+    max-height: none;
+  }
+
+  .entries {
+    display: flex;
+    overflow-x: auto;
+    padding: 0.6rem;
+  }
+
+  .messageItem {
+    flex: 0 0 min(18rem, 82vw);
+    min-height: var(--mobile-touch-target, 3rem);
+  }
+
+  .editor {
+    padding: 1rem;
+  }
+
+  .fieldGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .availabilityField,
+  .editorActions,
+  .editorActions > div {
+    align-items: stretch;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .editorActions button {
+    min-height: var(--mobile-touch-target, 3rem);
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .messageItem {
+    transition: none;
+  }
+}

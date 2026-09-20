@@ -20,6 +20,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     {
       "/admin/wall": "Wall moderation",
       "/admin/notes": "Notes",
+      "/admin/messages": "Random message pool",
       "/admin/fakemail": "Fakemail",
       "/admin/dashboard": "Dashboard",
       "/admin/text": "Site content",
@@ -29,6 +30,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     }[pathname] ?? "Admin";
   const overflowRouteSelected = [
     "/admin/fakemail",
+    "/admin/messages",
     "/admin/map",
     "/admin/vpn",
     "/admin/host",
@@ -94,7 +96,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   const mobileLink = (
     href: string,
     label: string,
-    icon: "mail" | "email" | "globe" | "stickyNote" | "text",
+    icon: "mail" | "email" | "globe" | "messages" | "server" | "stickyNote" | "text",
     selected: boolean,
   ) => (
     <Link
@@ -135,6 +137,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               links: [
                 { href: "/admin/wall", label: "Wall moderation", icon: "mail" },
                 { href: "/admin/notes", label: "Notes", icon: "stickyNote" },
+                { href: "/admin/messages", label: "Messages", icon: "messages" },
                 { href: "/admin/text", label: "Site content", icon: "text" },
               ],
             },
@@ -144,7 +147,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                 { href: "/admin/fakemail", label: "Fakemail", icon: "email" },
                 { href: "/admin/map", label: "Site map", icon: "map" },
                 { href: "/admin/vpn", label: "VPN", icon: "openvpn" },
-                { href: "/admin/host", label: "Host", icon: "globe" },
+                { href: "/admin/host", label: "Host", icon: "server" },
               ],
             },
           ].map((group) => (
@@ -245,12 +248,23 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         </div>
         <nav className={styles.mobileMenuGrid} aria-label="Secondary admin navigation">
           <Link
+            aria-current={pathname === "/admin/messages" ? "page" : undefined}
+            className={`${styles.mobileMenuLink} ${
+              pathname === "/admin/messages" ? styles.mobileMenuLinkSelected : ""
+            }`}
+            href="/admin/messages"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <Icon decorative name="messages" size="m" />
+            <span>Messages</span>
+          </Link>
+          <Link
             aria-current={pathname === "/admin/host" ? "page" : undefined}
             className={`${styles.mobileMenuLink} ${pathname === "/admin/host" ? styles.mobileMenuLinkSelected : ""}`}
             href="/admin/host"
             onClick={() => setMobileMenuOpen(false)}
           >
-            <Icon decorative name="globe" size="m" />
+            <Icon decorative name="server" size="m" />
             <span>Host</span>
           </Link>
           <Link className={styles.mobileMenuLink} href="/" onClick={() => setMobileMenuOpen(false)}>

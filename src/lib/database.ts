@@ -1,7 +1,7 @@
 import type { PoolClient } from "pg";
 import { Pool } from "pg";
 
-const CURRENT_SCHEMA_VERSION = 12;
+const CURRENT_SCHEMA_VERSION = 13;
 
 declare global {
   var portfolioDatabasePool: Pool | undefined;
@@ -256,6 +256,26 @@ async function applyMigrations(pool: Pool) {
 
         DELETE FROM public_route_locks
         WHERE path = '/projects/automate-design-handovers-with-a-figma-to-code-pipeline';
+      `,
+    );
+
+    await applyMigration(
+      client,
+      "013_create_random_messages",
+      "random_messages",
+      `
+        CREATE TABLE IF NOT EXISTS random_messages (
+          id BIGSERIAL PRIMARY KEY,
+          body TEXT NOT NULL CHECK (char_length(body) BETWEEN 1 AND 2000),
+          category TEXT NOT NULL CHECK (category IN ('quote', 'fact', 'joke', 'prompt', 'other')),
+          source TEXT CHECK (source IS NULL OR char_length(source) <= 300),
+          active BOOLEAN NOT NULL DEFAULT TRUE,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+
+        CREATE INDEX IF NOT EXISTS random_messages_active_category_idx
+          ON random_messages (active, category, id);
       `,
     );
 
