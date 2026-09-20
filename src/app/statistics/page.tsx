@@ -5,6 +5,7 @@ import { getPortfolioSourceMetrics } from "@/lib/portfolio-case-study";
 import desktop from "@/components/public/public-pages.module.scss";
 
 import { getPublicSiteStats } from "@/lib/site-stats";
+import { getSiteText } from "@/lib/site-text";
 
 import { formatDubaiDateTime, formatDuration } from "@/utils/formatDate";
 
@@ -59,9 +60,10 @@ function StatCard({
 }
 
 export default async function StatsPage() {
-  const [stats, source] = await Promise.all([
+  const [stats, source, text] = await Promise.all([
     getPublicSiteStats(),
     getPortfolioSourceMetrics().catch(() => null),
+    getSiteText(),
   ]);
 
   const sourceDetail = stats.source.available
@@ -86,7 +88,11 @@ export default async function StatsPage() {
 
   return (
     <Column className={styles.page} maxWidth="l" fillWidth gap="24" paddingY="24">
-      <DesktopStatistics stats={stats} source={source} />
+      <DesktopStatistics
+        stats={stats}
+        source={source}
+        description={text["statistics.description"]}
+      />
       <div className={statisticsDesktop.mobile}>
         <Column className={`${styles.hero} ${desktop.mobileHeading}`} gap="8">
           <Text className={styles.mobileEyebrow} variant="label-strong-s">

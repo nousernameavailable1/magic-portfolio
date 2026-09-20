@@ -52,7 +52,14 @@ export default async function Home() {
           }}
         />
         <Column fillWidth horizontal="center" gap="m">
-          <DesktopHome headline={headline} subline={subline} afterHours={afterHours} />
+          <DesktopHome
+            headline={headline}
+            subline={subline}
+            afterHours={afterHours}
+            directoryHeading={text["home.directoryHeading"]}
+            directoryDescription={text["home.directoryDescription"]}
+            featuredDescription={text["home.featuredDescription"]}
+          />
         </Column>
         {/* Disabled template sections below also need their commented imports restored. */}
         {/* --- PROJECTS (FIRST SECTION) --- */}

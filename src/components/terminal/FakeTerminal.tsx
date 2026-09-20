@@ -8,7 +8,7 @@ const PROMPT = "ubuntu@scriptbridge:~$";
 const REDIRECTS = ["/rickroll", "/jumpscare"] as const;
 type HistoryEntry = { id: number; command: string };
 
-export function FakeTerminal() {
+export function FakeTerminal({ description }: { description: string }) {
   const [command, setCommand] = useState("");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -40,7 +40,7 @@ export function FakeTerminal() {
       <DesktopPageHeading
         eyebrow="A LITTLE EXPERIMENT"
         title="Terminal"
-        description="A familiar prompt. A few unexpected turns. Try a command and see where it takes you."
+        description={description}
       />
       <section
         aria-label="Simulated Linux terminal"

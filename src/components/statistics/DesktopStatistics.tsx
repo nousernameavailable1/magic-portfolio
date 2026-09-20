@@ -20,7 +20,8 @@ type Stats = Awaited<ReturnType<typeof getPublicSiteStats>>;
 export function DesktopStatistics({
   stats,
   source,
-}: { stats: Stats; source: PortfolioSourceMetrics | null }) {
+  description,
+}: { stats: Stats; source: PortfolioSourceMetrics | null; description: string }) {
   const router = useRouter();
   const [refreshing, startRefresh] = useTransition();
   const seconds = stats.processUptimeSeconds;
@@ -53,7 +54,7 @@ export function DesktopStatistics({
         </div>
         <div className={styles.heroAside}>
           <p>A look under the surface.</p>
-          <span>The running process, the source it serves, and how the pieces add up.</span>
+          <span>{description}</span>
           <div className={styles.snapshot}>
             <span>
               <i /> SERVER SNAPSHOT

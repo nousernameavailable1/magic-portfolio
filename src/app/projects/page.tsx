@@ -39,7 +39,7 @@ export default async function ProjectsPage() {
       <DesktopPageHeading
         eyebrow="SELECTED WORK"
         title="Projects"
-        description="A closer look at the things I build, how they work, and what goes into them."
+        description={text["projects.description"]}
       />
       <Heading
         className={desktop.mobileHeading}
@@ -50,6 +50,7 @@ export default async function ProjectsPage() {
         {work.title}
       </Heading>
       <Projects
+        text={text}
         portfolioPreview={
           <PortfolioPreview
             headline={text["home.headline"]}

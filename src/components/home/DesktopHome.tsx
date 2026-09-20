@@ -46,7 +46,17 @@ export async function DesktopHome({
   headline,
   subline,
   afterHours,
-}: { headline: string; subline: string; afterHours: boolean }) {
+  directoryHeading,
+  directoryDescription,
+  featuredDescription,
+}: {
+  headline: string;
+  subline: string;
+  afterHours: boolean;
+  directoryHeading: string;
+  directoryDescription: string;
+  featuredDescription: string;
+}) {
   const routes = (await getPublicRouteStates()).filter((route) => route.listed);
   const topLevelRoutes = routes.filter((route) => route.path === "/" || !route.parent);
   const featuredProject = home.featured.display
@@ -110,9 +120,7 @@ export async function DesktopHome({
                 {featuredProject?.metadata.title ?? "Featured project"}
               </h2>
               <p className={styles.featuredDescription} id="featured-project-description">
-                {isPortfolio
-                  ? "The website you’re exploring. A personal space for projects, writing, and experiments."
-                  : featuredProject?.metadata.summary}
+                {isPortfolio ? featuredDescription : featuredProject?.metadata.summary}
               </p>
               <span className={styles.featuredCta}>
                 {isPortfolio && (
@@ -135,9 +143,9 @@ export async function DesktopHome({
         <div className={styles.directoryHeading}>
           <div>
             <p className={styles.eyebrow}>The directory</p>
-            <h2 id="desktop-directory-title">A few places to start.</h2>
+            <h2 id="desktop-directory-title">{directoryHeading}</h2>
           </div>
-          <span className={styles.directoryNote}>Pick a direction. Have a look around.</span>
+          <span className={styles.directoryNote}>{directoryDescription}</span>
         </div>
         <nav aria-label="Site map">
           <ol className={styles.routes}>

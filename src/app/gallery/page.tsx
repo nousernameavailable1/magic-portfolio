@@ -1,5 +1,6 @@
 import GalleryView from "@/components/gallery/GalleryView";
 import styles from "@/components/gallery/gallery.module.scss";
+import { getSiteText } from "@/lib/site-text";
 import { baseURL, gallery, person } from "@/resources";
 import { Column, Flex, Heading, Meta, Schema, Text } from "@once-ui-system/core";
 
@@ -13,7 +14,8 @@ export async function generateMetadata() {
   });
 }
 
-export default function Gallery() {
+export default async function Gallery() {
+  const text = await getSiteText();
   return (
     <Flex className={styles.page} maxWidth="l" data-desktop-gallery>
       <Schema
@@ -38,9 +40,8 @@ export default function Gallery() {
             Gallery<span>.</span>
           </h1>
         </div>
-        <p className={styles.desktopDescription}>
-          Places, textures, and passing moments.
-          <br />A few things worth looking at twice.
+        <p className={styles.desktopDescription} style={{ whiteSpace: "pre-line" }}>
+          {text["gallery.description"]}
         </p>
       </header>
       <Column className={styles.mobileIntro} gap="8">

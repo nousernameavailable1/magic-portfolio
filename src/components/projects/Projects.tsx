@@ -1,4 +1,5 @@
 import { ProjectCard } from "@/components";
+import { type SiteTextValues, getProjectSummary } from "@/lib/site-text";
 import { getProjectPosts } from "@/utils/utils";
 import { Column } from "@once-ui-system/core";
 import type { ReactNode } from "react";
@@ -8,9 +9,10 @@ interface ProjectsProps {
   range?: [number, number?];
   exclude?: string[];
   portfolioPreview?: ReactNode;
+  text?: SiteTextValues;
 }
 
-export function Projects({ range, exclude, portfolioPreview }: ProjectsProps) {
+export function Projects({ range, exclude, portfolioPreview, text }: ProjectsProps) {
   let allProjects = getProjectPosts();
 
   // Exclude by slug (exact match)
@@ -34,7 +36,9 @@ export function Projects({ range, exclude, portfolioPreview }: ProjectsProps) {
           href={`/projects/${post.slug}`}
           images={post.metadata.images}
           title={post.metadata.title}
-          description={post.metadata.summary}
+          description={
+            text ? getProjectSummary(text, post.slug, post.metadata.summary) : post.metadata.summary
+          }
           content={post.content}
           avatars={
             post.metadata.team?.map((member) => ({

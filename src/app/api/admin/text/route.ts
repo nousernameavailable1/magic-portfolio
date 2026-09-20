@@ -22,8 +22,20 @@ function unauthorized() {
 }
 
 function revalidateAffectedPage(key: string) {
-  if (key.startsWith("about.")) {
-    revalidatePath("/about");
+  if (key.startsWith("home.")) revalidatePath("/");
+  if (key.startsWith("about.")) revalidatePath("/about");
+  if (key.startsWith("blog.")) revalidatePath("/blog");
+  if (key.startsWith("notes.")) revalidatePath("/notes");
+  if (key.startsWith("gallery.")) revalidatePath("/gallery");
+  if (key.startsWith("terminal.")) revalidatePath("/terminal");
+  if (key.startsWith("statistics.")) revalidatePath("/statistics");
+  if (key.startsWith("wall.")) revalidatePath("/wall");
+  if (key.startsWith("access.")) revalidatePath("/access");
+  if (key.startsWith("notFound.")) revalidatePath("/not-found");
+  if (key.startsWith("projects.")) {
+    revalidatePath("/projects");
+    revalidatePath("/projects/magic-portfolio");
+    revalidatePath("/projects/self-hosted-vpn");
   }
 }
 

@@ -1,6 +1,7 @@
 import { DesktopPageHeading } from "@/components/public/DesktopPageHeading";
 import desktop from "@/components/public/public-pages.module.scss";
 import { getPublicNotes } from "@/lib/notes";
+import { getSiteText } from "@/lib/site-text";
 import { baseURL } from "@/resources";
 import { Meta } from "@once-ui-system/core";
 import Link from "next/link";
@@ -9,12 +10,11 @@ import styles from "./notes.module.scss";
 export const dynamic = "force-dynamic";
 
 const title = "Notes";
-const description = "Short ideas, observations, and things worth keeping.";
-
-export function generateMetadata() {
+export async function generateMetadata() {
+  const text = await getSiteText();
   return Meta.generate({
     title,
-    description,
+    description: text["notes.description"],
     baseURL,
     path: "/notes",
     image: `/api/og/generate?title=${encodeURIComponent(title)}`,
@@ -29,20 +29,24 @@ function formatDate(value: string) {
 }
 
 export default async function NotesPage() {
-  const notes = await getPublicNotes();
+  const [notes, text] = await Promise.all([getPublicNotes(), getSiteText()]);
 
   return (
     <main className={styles.page}>
-      <DesktopPageHeading eyebrow="THE NOTEBOOK" title="Notes" description={description} />
+      <DesktopPageHeading
+        eyebrow="THE NOTEBOOK"
+        title="Notes"
+        description={text["notes.description"]}
+      />
       <header className={`${styles.intro} ${desktop.mobileHeading}`}>
         <span className={styles.eyebrow}>Notebook</span>
         <h1>Notes</h1>
-        <p>{description}</p>
+        <p>{text["notes.description"]}</p>
       </header>
 
       <section className={styles.notes} aria-label="Published notes">
         {notes.length === 0 ? (
-          <p className={styles.empty}>No public notes yet.</p>
+          <p className={styles.empty}>{text["notes.emptyDescription"]}</p>
         ) : (
           notes.map((note) => (
             <Link className={styles.noteCard} href={`/notes/${note.slug}`} key={note.id}>

@@ -41,6 +41,116 @@ export const siteTextDefinitions = [
     lines: 4,
   },
   {
+    key: "home.directoryHeading",
+    label: "Directory heading",
+    description: "The heading above the directory of public pages on the home page.",
+    defaultValue: "A few places to start.",
+    maxLength: 120,
+    lines: 2,
+  },
+  {
+    key: "home.directoryDescription",
+    label: "Directory description",
+    description: "The short note beside the directory heading on the home page.",
+    defaultValue: "Pick a direction. Have a look around.",
+    maxLength: 300,
+    lines: 3,
+  },
+  {
+    key: "home.featuredDescription",
+    label: "Featured project description",
+    description: "The description displayed in the featured-project card on the home page.",
+    defaultValue:
+      "The website you’re exploring. A personal space for projects, writing, and experiments.",
+    maxLength: 400,
+    lines: 4,
+  },
+  {
+    key: "projects.description",
+    label: "Projects description",
+    description: "The introductory description beside the Projects page title.",
+    defaultValue: "A closer look at the things I build, how they work, and what goes into them.",
+    maxLength: 400,
+    lines: 4,
+  },
+  {
+    key: "projects.magicPortfolio.summary",
+    label: "Magic Portfolio summary",
+    description:
+      "The descriptive summary shown for the Magic Portfolio project. Its title and URL stay fixed.",
+    defaultValue:
+      "A containerized Next.js portfolio with MDX content, route controls, an admin area, and services deployed to an OCI virtual machine.",
+    maxLength: 600,
+    lines: 5,
+  },
+  {
+    key: "projects.selfHostedVpn.summary",
+    label: "Self hosted VPN summary",
+    description:
+      "The descriptive summary shown for the Self hosted VPN project. Its title and URL stay fixed.",
+    defaultValue:
+      "A self hosted VPN on OCI: OpenVPN with a DCO-capable UDP path and TCP fallback, WireGuard for speed, and strongSwan IKEv2 for native device setup.",
+    maxLength: 600,
+    lines: 5,
+  },
+  {
+    key: "blog.description",
+    label: "Blog description",
+    description: "The introductory description beside the Blog page title.",
+    defaultValue: "Ideas, notes on building, and things learned along the way.",
+    maxLength: 400,
+    lines: 4,
+  },
+  {
+    key: "notes.description",
+    label: "Notes description",
+    description: "The introductory description beside the Notes page title.",
+    defaultValue: "Short ideas, observations, and things worth keeping.",
+    maxLength: 400,
+    lines: 4,
+  },
+  {
+    key: "notes.emptyDescription",
+    label: "Empty notes message",
+    description: "The message shown when there are no public notes.",
+    defaultValue: "No public notes yet.",
+    maxLength: 240,
+    lines: 3,
+  },
+  {
+    key: "gallery.description",
+    label: "Gallery description",
+    description: "The descriptive copy beside the Gallery page title.",
+    defaultValue: "Places, textures, and passing moments.\nA few things worth looking at twice.",
+    maxLength: 400,
+    lines: 4,
+  },
+  {
+    key: "terminal.description",
+    label: "Terminal description",
+    description: "The introductory description beside the Terminal page title.",
+    defaultValue:
+      "A familiar prompt. A few unexpected turns. Try a command and see where it takes you.",
+    maxLength: 400,
+    lines: 4,
+  },
+  {
+    key: "statistics.description",
+    label: "Statistics description",
+    description: "The introductory description beside the Statistics page title.",
+    defaultValue: "The running process, the source it serves, and how the pieces add up.",
+    maxLength: 400,
+    lines: 4,
+  },
+  {
+    key: "notFound.description",
+    label: "Not-found description",
+    description: "The explanatory text on the public 404 page.",
+    defaultValue: "The page you are looking for does not exist.",
+    maxLength: 240,
+    lines: 3,
+  },
+  {
     key: "wall.heading",
     label: "Wall heading",
     description: "The main heading at the top of the Wall.",
@@ -323,6 +433,16 @@ export async function getCryptoDetails() {
     solana: text["about.crypto.solana"],
     tether: text["about.crypto.tether"],
   };
+}
+
+const projectSummaryKeys = {
+  "magic-portfolio": "projects.magicPortfolio.summary",
+  "self-hosted-vpn": "projects.selfHostedVpn.summary",
+} as const;
+
+export function getProjectSummary(text: SiteTextValues, slug: string, fallback: string) {
+  const key = projectSummaryKeys[slug as keyof typeof projectSummaryKeys];
+  return key ? text[key] : fallback;
 }
 
 export async function saveSiteText(key: SiteTextKey, value: string) {

@@ -16,7 +16,7 @@ import {
   Textarea,
   useToast,
 } from "@once-ui-system/core";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import styles from "./text-manager.module.scss";
 
 type TextField = {
@@ -31,13 +31,32 @@ type TextField = {
 };
 
 type TextAction = "save" | "set-default" | "reset";
-type PageFilter = "home" | "about" | "wall" | "access" | "all";
+type PageFilter =
+  | "home"
+  | "about"
+  | "projects"
+  | "blog"
+  | "notes"
+  | "gallery"
+  | "terminal"
+  | "statistics"
+  | "wall"
+  | "access"
+  | "notFound"
+  | "all";
 
 const pageFilters: { value: PageFilter; label: string }[] = [
   { value: "home", label: "Home" },
   { value: "about", label: "About" },
+  { value: "projects", label: "Projects" },
+  { value: "blog", label: "Blog" },
+  { value: "notes", label: "Notes" },
+  { value: "gallery", label: "Gallery" },
+  { value: "terminal", label: "Terminal" },
+  { value: "statistics", label: "Statistics" },
   { value: "wall", label: "Wall" },
   { value: "access", label: "Access" },
+  { value: "notFound", label: "Not found" },
   { value: "all", label: "All pages" },
 ];
 
@@ -108,42 +127,19 @@ function TextFieldEditor({
   );
 }
 
-export function TextManager() {
-  const [fields, setFields] = useState<TextField[]>([]);
-  const [values, setValues] = useState<Record<string, string>>({});
+export function TextManager({ initialFields }: { initialFields: TextField[] }) {
+  const [fields, setFields] = useState(initialFields);
+  const [values, setValues] = useState<Record<string, string>>(() =>
+    Object.fromEntries(initialFields.map((field) => [field.key, field.value])),
+  );
   const [pageFilter, setPageFilter] = useState<PageFilter>("home");
   const [workExperienceDirty, setWorkExperienceDirty] = useState(false);
   const [studiesDirty, setStudiesDirty] = useState(false);
   const [technicalSkillsDirty, setTechnicalSkillsDirty] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [busyAction, setBusyAction] = useState<{ key: string; action: TextAction } | null>(null);
   const { addToast } = useToast();
   const addToastRef = useRef(addToast);
   addToastRef.current = addToast;
-
-  const loadFields = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await fetch("/api/admin/text", { cache: "no-store" });
-      const data = (await response.json()) as { fields?: TextField[]; error?: string };
-      if (!response.ok) throw new Error(data.error);
-
-      const nextFields = data.fields ?? [];
-      setFields(nextFields);
-      setValues(Object.fromEntries(nextFields.map((field) => [field.key, field.value])));
-    } catch (error) {
-      addToastRef.current({
-        variant: "danger",
-        message: error instanceof Error ? error.message : "Could not load text settings.",
-      });
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    void loadFields();
-  }, [loadFields]);
 
   const saveField = async (field: TextField) => {
     setBusyAction({ key: field.key, action: "save" });
@@ -218,7 +214,7 @@ export function TextManager() {
     }
   };
 
-  if (!loading && fields.length === 0) {
+  if (fields.length === 0) {
     return <Text onBackground="neutral-weak">No editable text fields are configured.</Text>;
   }
 
@@ -243,11 +239,9 @@ export function TextManager() {
     return {
       value: page.value,
       label: page.label,
-      description: loading
-        ? "Loading editors…"
-        : `${pageFieldCount} ${pageFieldCount === 1 ? "text field" : "text fields"}${
-            page.value === "about" || page.value === "all" ? " + 3 block editors" : ""
-          }`,
+      description: `${pageFieldCount} ${pageFieldCount === 1 ? "text field" : "text fields"}${
+        page.value === "about" || page.value === "all" ? " + 3 block editors" : ""
+      }`,
     };
   });
 
@@ -297,9 +291,7 @@ export function TextManager() {
         <div>
           <Text variant="label-strong-m">{selectedPage.label}</Text>
           <Text variant="body-default-s" onBackground="neutral-weak">
-            {loading
-              ? "Loading text editors…"
-              : `${visibleEditorGroupCount} ${visibleEditorGroupCount === 1 ? "editor group" : "editor groups"}`}
+            {`${visibleEditorGroupCount} ${visibleEditorGroupCount === 1 ? "editor group" : "editor groups"}`}
           </Text>
         </div>
         {pageFilter !== "all" && (

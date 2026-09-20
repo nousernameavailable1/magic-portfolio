@@ -1,6 +1,7 @@
 import { Posts } from "@/components/blog/Posts";
 import { DesktopPageHeading } from "@/components/public/DesktopPageHeading";
 import desktop from "@/components/public/public-pages.module.scss";
+import { getSiteText } from "@/lib/site-text";
 import { baseURL, blog, person } from "@/resources";
 import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
 
@@ -14,7 +15,8 @@ export async function generateMetadata() {
   });
 }
 
-export default function Blog() {
+export default async function Blog() {
+  const text = await getSiteText();
   return (
     <Column className={desktop.page} maxWidth="m" paddingTop="24">
       <Schema
@@ -33,7 +35,7 @@ export default function Blog() {
       <DesktopPageHeading
         eyebrow="THE JOURNAL"
         title="Blog"
-        description="Ideas, notes on building, and things learned along the way."
+        description={text["blog.description"]}
       />
       <Heading
         className={desktop.mobileHeading}

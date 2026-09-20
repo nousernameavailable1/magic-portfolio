@@ -4,6 +4,7 @@ import { Projects } from "@/components/projects/Projects";
 import caseStudyStyles from "@/components/projects/magic-portfolio-case-study.module.scss";
 import desktop from "@/components/public/public-pages.module.scss";
 import { getPortfolioSourceMetrics } from "@/lib/portfolio-case-study";
+import { getProjectSummary, getSiteText } from "@/lib/site-text";
 import { about, baseURL, person, work } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
 import { getProjectPosts } from "@/utils/utils";
@@ -44,9 +45,12 @@ export async function generateMetadata({
 
   if (!post) return {};
 
+  const text = await getSiteText();
+  const summary = getProjectSummary(text, post.slug, post.metadata.summary);
+
   return Meta.generate({
     title: post.metadata.title,
-    description: post.metadata.summary,
+    description: summary,
     baseURL: baseURL,
     image:
       post.metadata.image || `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`,
@@ -78,7 +82,11 @@ export default async function Project({
   const relatedProjectExclusions =
     post.slug === "magic-portfolio" ? [post.slug, "simple-portfolio-builder"] : [post.slug];
   const isMagicPortfolio = post.slug === "magic-portfolio";
-  const sourceMetrics = isMagicPortfolio ? await getPortfolioSourceMetrics() : null;
+  const [sourceMetrics, text] = await Promise.all([
+    isMagicPortfolio ? getPortfolioSourceMetrics() : null,
+    getSiteText(),
+  ]);
+  const summary = getProjectSummary(text, post.slug, post.metadata.summary);
 
   return (
     <Column
@@ -93,7 +101,7 @@ export default async function Project({
         baseURL={baseURL}
         path={`${work.path}/${post.slug}`}
         title={post.metadata.title}
-        description={post.metadata.summary}
+        description={summary}
         datePublished={post.metadata.publishedAt}
         dateModified={post.metadata.publishedAt}
         image={
@@ -162,7 +170,7 @@ export default async function Project({
         <Heading as="h2" variant="heading-strong-xl" marginBottom="24">
           Related projects
         </Heading>
-        <Projects exclude={relatedProjectExclusions} range={[1, 2]} />
+        <Projects exclude={relatedProjectExclusions} range={[1, 2]} text={text} />
       </Column>
       <ScrollToHash />
     </Column>
