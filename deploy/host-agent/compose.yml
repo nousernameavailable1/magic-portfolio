@@ -3,7 +3,7 @@ name: portfolio-host
 
 services:
   host-bridge:
-    build: .
+    image: ghcr.io/nousernameavailable1/magic-portfolio-host-bridge:latest
     restart: unless-stopped
     init: true
     read_only: true

@@ -59,6 +59,11 @@ The production build also generates the code metrics consumed by the Statistics 
 
 ## Self-hosted deployment
 
+The image workflow publishes both the website and host bridge for `linux/amd64` and
+`linux/arm64`. The same image tags work on x86 hosts and ARM hosts such as OCI A1;
+Docker selects the matching architecture when pulling. Dependency installation and
+the website build run separately for each target architecture.
+
 The production examples use Docker, PostgreSQL, and Caddy:
 
 ```sh
@@ -76,7 +81,9 @@ and configure the values in `.env.example`.
 For read-only container logs and a fixed **Pull latest & deploy** button in the admin
 sidebar, follow the [Docker host bridge setup](deploy/host-agent/README.md). The bridge
 runs in a separate Compose project and accepts authenticated requests over a private
-Docker network. No systemd service or Docker socket mount in the site is required.
+Docker network. GitHub Actions publishes its prebuilt image to GHCR, so the VM only
+needs the bridge Compose file and environment settings. No systemd service or Docker
+socket mount in the site is required.
 
 ## Credits and license
 

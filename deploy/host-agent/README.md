@@ -2,8 +2,9 @@
 
 The **Host** admin page provides read-only container logs and one **Pull latest &
 deploy** button. `/host` redirects to `/admin/host`. The bridge runs as a small Docker
-container in its own Compose project. No systemd service, SSH keys, GitHub connection,
-or host Python installation is required.
+container in its own Compose project. GitHub Actions builds and publishes its image;
+the VM only pulls it. No systemd service, SSH keys shared with GitHub, remote deployment
+connection, local build, or host Python installation is required.
 
 The site backend calls the bridge over a private Docker network using a shared
 secret. The bridge has no published ports and accepts only authenticated health/log
@@ -20,12 +21,21 @@ Python and the Docker CLI/Compose plugin. Commands below assume the existing sit
 lives at `/opt/magic-portfolio`; substitute its real absolute path. Keep the existing
 Compose project name to preserve the site's containers, networks and named volumes.
 
-### 1. Copy the bridge files and configure the secret
+### 1. Download the bridge Compose file and configure the secret
 
-Copy this repository's `deploy/host-agent` folder into your existing deployment
-folder, giving `/opt/magic-portfolio/deploy/host-agent`. You can copy these files
-manually; the VM does not need a Git checkout or GitHub integration. Keep the existing
-`docker-compose.yml`, `.env` and `Caddyfile`.
+Only `deploy/host-agent/compose.yml` is needed on the VM. Keep the existing
+`docker-compose.yml`, `.env` and `Caddyfile`. From your deployment folder:
+
+```sh
+cd /opt/magic-portfolio
+sudo mkdir -p deploy/host-agent
+sudo curl -fsSL \
+  https://raw.githubusercontent.com/nousernameavailable1/magic-portfolio/main/deploy/host-agent/compose.yml \
+  -o deploy/host-agent/compose.yml
+```
+
+Alternatively copy that single file from your checkout. The VM does not need the
+bridge's Dockerfile, Python files, or a Git checkout.
 
 Find the running site's Compose project name and generate a new secret:
 
@@ -76,16 +86,28 @@ There is no socket or deployment-directory mount to add to the site container.
 
 ### 3. Start the bridge, then deploy the updated site once
 
+Wait for the GitHub workflow's **build-and-push-bridge** job to finish on `main`.
+It publishes `ghcr.io/nousernameavailable1/magic-portfolio-host-bridge:latest` and
+a commit-SHA tag for Linux AMD64 and ARM64. Only the workflow's built-in
+`GITHUB_TOKEN` is used; no VM credentials or deployment token are sent to GitHub.
+
+If the new GHCR bridge package is private, either make the package public in GitHub
+or authenticate Docker **on the VM** with a registry credential that can read it:
+
+```sh
+sudo docker login ghcr.io
+```
+
 From the deployment directory:
 
 ```sh
-sudo docker compose --env-file .env -f deploy/host-agent/compose.yml up -d --build
+sudo docker compose --env-file .env -f deploy/host-agent/compose.yml pull &&
+sudo docker compose --env-file .env -f deploy/host-agent/compose.yml up -d
 sudo docker compose --env-file .env -f deploy/host-agent/compose.yml ps
 ```
 
-The bridge creates the private `portfolio-host-control` network, builds its image
-locally, and restarts automatically after VM reboots. Wait for it to report healthy.
-The first build needs access to Docker Hub and Alpine's package repository.
+The bridge creates the private `portfolio-host-control` network and restarts
+automatically after VM reboots. Wait for it to report healthy. There is no VM build.
 
 If the site's image is private, log in once **inside the bridge**, using a registry
 credential with image read permission when prompted:
@@ -129,9 +151,9 @@ or controls updates; the VM only contacts the registry to download images.
   for any external files. Consolidate any Compose overrides into `docker-compose.yml`
   first; this bridge deliberately does not accept selectable Compose files.
 - Keep deployment files administrator-controlled and do not mount them into the site.
-  Updating image tags does not update the VM's Compose file, Caddyfile, `.env`, or
-  bridge code. Those still need a maintenance step. Local source builds are not part
-  of the button's operation; it deploys prebuilt images.
+  Updating the site does not update the VM's Compose file, Caddyfile, `.env`, or the
+  separately managed bridge. Pull and recreate the bridge separately for bridge-code
+  updates, as described below. The button deploys prebuilt site-stack images only.
 - Your current `latest` tag is published by the repository's image-build workflow.
   Wait until that image exists before clicking. There is no automatic rollback.
 
@@ -153,6 +175,16 @@ Skip this section if you never installed the old agent.
    `/etc/portfolio-host.env`, and `/opt/portfolio-host/agent.py` installation files can
    be removed. Run `sudo systemctl daemon-reload` after removing the unit.
 
+## Migrating an existing locally built bridge
+
+Keep your `.env`, site Compose configuration, bridge project name, networks and volumes.
+After the first bridge image has been published, replace only
+`deploy/host-agent/compose.yml` using the download command in step 1. Then run the
+bridge `pull` and `up -d` commands below. Do this when no site update is in progress.
+The same named volumes retain job history and registry credentials. No `down` or
+volume removal is needed. The old Dockerfile and Python files can remain; they are
+no longer used on the VM.
+
 ## Maintenance and troubleshooting
 
 Run these from the deployment directory:
@@ -162,14 +194,17 @@ Run these from the deployment directory:
 sudo docker compose --env-file .env -f deploy/host-agent/compose.yml ps
 sudo docker compose --env-file .env -f deploy/host-agent/compose.yml logs --tail 100 host-bridge
 
-# Rebuild after copying updated bridge files; wait for any deployment to finish first
-sudo docker compose --env-file .env -f deploy/host-agent/compose.yml up -d --build
+# Update the bridge after its image is published; wait for any deployment to finish first
+sudo docker compose --env-file .env -f deploy/host-agent/compose.yml pull &&
+sudo docker compose --env-file .env -f deploy/host-agent/compose.yml up -d
 ```
 
 - **Unavailable:** check bridge health, the shared token, site network attachment,
   deployment path and project name. Startup rejects missing files or an invalid token.
-- **Pull denied:** use the bridge's `docker login` command above. A login on the host
-  alone does not configure the bridge.
+- **Bridge image pull denied:** use `sudo docker login ghcr.io` on the VM or make the
+  bridge package public. If the tag is missing, wait for the workflow to publish it.
+- **Site image pull denied from the button:** use the bridge's `docker login` command
+  above. A login on the host alone does not configure the bridge.
 - **Docker permission/API errors:** this setup assumes standard rootful Docker.
   Rootless Docker or user namespace remapping needs corresponding socket permissions
   and mount changes. Update the bridge CLI image if the Engine requires a newer API.

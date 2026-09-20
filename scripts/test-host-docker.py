@@ -71,7 +71,8 @@ def main():
                                   "-f", str(ROOT / "deploy/host-agent/compose.yml"),
                                   "config", "--format", "json", env=environment))
         service = model["services"]["host-bridge"]
-        service.pop("build")
+        assert "build" not in service, "VM installation must use a prebuilt image"
+        assert service["image"] == "ghcr.io/nousernameavailable1/magic-portfolio-host-bridge:latest"
         service["image"] = IMAGE
         # Docker Desktop cannot mount a native Windows path at the same Linux path.
         # A fixture volume substitutes only for the read-only deployment bind mount.
