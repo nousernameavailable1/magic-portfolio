@@ -22,7 +22,25 @@ async function handle(request: NextRequest, operation: "status" | "update") {
     ) {
       return json({ error: "Same-origin browser request required." }, 403);
     }
-    if (request.body !== null) return json({ error: "A request body is not accepted." }, 400);
+    // Next's Node adapter supplies a stream even for a bodyless POST. Reject
+    // actual bytes, not the existence of that stream, without buffering input.
+    if (request.body) {
+      const reader = request.body.getReader();
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          if (value.byteLength) {
+            await reader.cancel();
+            return json({ error: "A request body is not accepted." }, 400);
+          }
+        }
+      } catch {
+        return json({ error: "Could not read the update request." }, 400);
+      } finally {
+        reader.releaseLock();
+      }
+    }
   }
   try {
     const result = await hostAgent(operation);

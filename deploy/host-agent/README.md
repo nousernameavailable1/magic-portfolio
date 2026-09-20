@@ -147,8 +147,14 @@ or controls updates; the VM only contacts the registry to download images.
 - Job status survives site replacement and bridge restarts in a Docker volume.
   A bridge restart marks an unfinished job as interrupted; it does not retry it.
   Success means Compose finished successfully, not that all services are healthy.
-- Container logs show the last 200 lines per service, capped at 128 KiB. Deployment
-  output retains a bounded tail of the current/last command. Neither is editable.
+- Container log polls read the last 200 lines per service, capped at 128 KiB. The
+  browser appends only unseen records and retains up to 2,000 lines / 512 KiB of
+  text in the current page session. Existing rows do not reorder between polls.
+  Search, service filtering, wrapping and follow-latest controls affect the preview.
+- Deployment output is the transcript of updates started by this console, separate
+  from service logs. It retains a 128 KiB tail across both pull and restart phases,
+  including command headings and exit codes; live progress is persisted. Updates
+  run manually on the VM do not produce a deployment transcript here.
 - The deployment directory is mounted read-only into the bridge at **the same absolute
   path as on the VM**. This preserves host bind mounts such as `./Caddyfile`. Keep
   referenced env/config files in that directory, or add matching read-only mounts

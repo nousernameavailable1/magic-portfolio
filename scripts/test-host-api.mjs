@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { test } from "node:test";
 import vm from "node:vm";
+import { Readable } from "node:stream";
 import ts from "typescript";
 
 const require = createRequire(import.meta.url);
@@ -52,9 +53,21 @@ test("updates require same-origin custom header and reject all input", async () 
   for (const headers of [new Headers(), new Headers({ "x-host-action": "update", "sec-fetch-site": "cross-site" })]) {
     assert.equal((await exports.POST(request({ headers }))).status, 403);
   }
-  assert.equal((await exports.POST(request({ body: "command=id" }))).status, 400);
+  assert.equal((await exports.POST(request({ body: new Request("https://portfolio.test", { method: "POST", body: "command=id" }).body }))).status, 400);
   assert.equal((await exports.POST(request({ nextUrl: new URL("https://portfolio.test/api/admin/host?command=id") }))).status, 400);
   assert.equal(calls.length, 0);
+});
+
+test("Next's Node adapter empty POST stream starts the deployment", async () => {
+  const { NextRequestAdapter } = require("next/dist/server/web/spec-extension/adapters/next-request");
+  const { exports, calls, request } = fixture();
+  const adapted = NextRequestAdapter.fromNodeNextRequest({
+    url: "https://portfolio.test/api/admin/host", method: "POST",
+    headers: { "content-length": "0" }, body: Readable.from([]),
+  }, new AbortController().signal);
+  assert.notEqual(adapted.body, null, "Reproduce the stream supplied for an empty incoming POST");
+  assert.equal((await exports.POST(request({ body: adapted.body }))).status, 202);
+  assert.deepEqual(calls, ["update"]);
 });
 
 test("authenticated requests forward only fixed operations and disable caching", async () => {

@@ -62,6 +62,27 @@ class AgentTests(unittest.TestCase):
         self.assertEqual([call.args[0] for call in run.call_args_list], [["pull"], ["up", "-d"]])
         self.assertEqual(agent.status["state"], "succeeded")
         self.assertIn('"succeeded"', agent.STATE.read_text())
+        self.assertIn("$ docker compose pull", agent.status["output"])
+        self.assertIn("$ docker compose up -d", agent.status["output"])
+        self.assertEqual(agent.status["output"].count("done"), 2)
+
+    def test_live_output_preserves_previous_phase_and_is_persisted(self):
+        agent.status["output"] = "pull complete\n$ docker compose up -d\n"
+        process = Mock(stdout=io.BytesIO(b"container started\n"))
+        process.wait.return_value = 0
+        with patch.dict(os.environ, {"COMPOSE_DIRECTORY": "/opt/site", "COMPOSE_PROJECT_NAME": "site"}):
+            with patch.object(agent.subprocess, "Popen", return_value=process):
+                agent.run(["up", "-d"], 900, publish=True)
+        self.assertIn("pull complete", agent.status["output"])
+        self.assertIn("container started", agent.STATE.read_text())
+
+    def test_truncated_logs_never_emit_partial_first_record(self):
+        process = Mock(stdout=io.BytesIO(b"x" * agent.LIMIT + b"\napp | complete record\n"))
+        process.wait.return_value = 0
+        with patch.dict(os.environ, {"COMPOSE_DIRECTORY": "/opt/site", "COMPOSE_PROJECT_NAME": "site"}):
+            with patch.object(agent.subprocess, "Popen", return_value=process):
+                _, output = agent.run(["logs"], 8)
+        self.assertEqual(output, "app | complete record\n")
 
     def test_up_failure_and_exception_release_lock(self):
         for result in [[(0, "pulled"), (2, "up failed")], RuntimeError("Docker unavailable")]:

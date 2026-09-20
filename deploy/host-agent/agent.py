@@ -39,6 +39,9 @@ def save(**values):
 
 def run(action, timeout, publish=False):
     output = bytearray()
+    truncated = False
+    with LOCK:
+        previous_output = status["output"] if publish else ""
     process = subprocess.Popen(compose_command(action), stdout=subprocess.PIPE,
                                stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL,
                                start_new_session=True, cwd=os.environ["COMPOSE_DIRECTORY"],
@@ -47,12 +50,15 @@ def run(action, timeout, publish=False):
                                env=dict(os.environ, COMPOSE_PROFILES=""))
 
     def read():
+        nonlocal truncated
         while chunk := process.stdout.read1(4096):
             output.extend(chunk)
+            truncated = truncated or len(output) > LIMIT
             del output[:-LIMIT]
             if publish:
-                with LOCK:
-                    status["output"] = output.decode("utf-8", errors="replace")
+                # Persist progress too, so an agent restart retains the last
+                # command output, including output from earlier phases.
+                save(output=bounded(previous_output + output.decode("utf-8", errors="replace")))
 
     reader = threading.Thread(target=read, daemon=True)
     reader.start()
@@ -64,23 +70,37 @@ def run(action, timeout, publish=False):
         code = -1
     reader.join(timeout=5)
     text = output.decode("utf-8", errors="replace")
+    if action[0] == "logs" and truncated:
+        # The byte cap may cut through a record. Never emit that changing
+        # fragment as a new log line on the next snapshot.
+        text = text.partition("\n")[2]
     if code == -1:
         text += "\nCommand timed out. Inspect the VM before retrying."
     return code, text
 
 
+def bounded(text):
+    return text.encode("utf-8")[-LIMIT:].decode("utf-8", errors="replace")
+
+
 def update():
     try:
         for phase, action in [("pull", ["pull"]), ("up", ["up", "-d"])]:
-            save(state="running", phase=phase, output="")
+            with LOCK:
+                transcript = status["output"]
+            transcript = bounded(transcript + f"\n$ docker compose {' '.join(action)}\n")
+            save(state="running", phase=phase, output=transcript)
             code, output = run(action, 900, publish=True)
-            save(output=output)
+            save(output=bounded(transcript + output + f"\n[Process exited with code {code}]\n"))
             if code:
                 save(state="failed", phase=f"{phase} failed (exit {code})")
                 return
         save(state="succeeded", phase="Compose completed; verify site health")
     except Exception:
-        save(state="failed", phase="Bridge error; inspect bridge configuration and Docker access")
+        with LOCK:
+            transcript = status["output"]
+        message = "Bridge error; inspect bridge configuration and Docker access"
+        save(state="failed", phase=message, output=bounded(transcript + f"\n{message}\n"))
     finally:
         UPDATE_LOCK.release()
 
@@ -147,7 +167,7 @@ class Handler(BaseHTTPRequestHandler):
             return
         # Persist acceptance before responding; execution is independent of the app connection.
         try:
-            save(state="running", phase="Queued", output="")
+            save(state="running", phase="Queued", output="Deployment accepted. Waiting for Docker Compose…\n")
             threading.Thread(target=update, daemon=True).start()
         except Exception:
             UPDATE_LOCK.release()
